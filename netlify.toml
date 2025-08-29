@@ -1,0 +1,33 @@
+[build]
+  # No build command needed - this is a static site
+  publish = "."
+
+[[redirects]]
+  # Redirect root to dashboard
+  from = "/"
+  to = "/dashboard.html"
+  status = 200
+
+[[headers]]
+  # Add CORS headers for ICS files
+  for = "/*.ics"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET"
+    Access-Control-Allow-Headers = "Content-Type"
+
+[[headers]]
+  # Cache ICS files for 5 minutes to avoid excessive requests
+  for = "/ics/*.ics"
+  [headers.values]
+    Cache-Control = "public, max-age=300"
+
+[[headers]]
+  # Add security headers
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+

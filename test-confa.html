@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test ConfA Parsing</title>
+</head>
+<body>
+    <h1>ConfA Room Parsing Test</h1>
+    <div id="results"></div>
+
+    <script src="ics-parser.js"></script>
+    <script>
+        function testConfAParsing() {
+            const parser = new ICSParser();
+            const results = document.getElementById('results');
+            
+            // Test cases
+            const testCases = [
+                'FBS-ConfA-L014',
+                'Conference Room A',
+                'FBS-ConfA-L014; https://virginia.zoom.us/j/94378477128',
+                'Some other text FBS-ConfA-L014 more text'
+            ];
+            
+            results.innerHTML = '<h2>Test Results:</h2>';
+            
+            testCases.forEach((testCase, index) => {
+                console.log(`Testing: "${testCase}"`);
+                const extracted = parser.extractRoom(testCase);
+                const resultDiv = document.createElement('div');
+                resultDiv.style.margin = '10px 0';
+                resultDiv.style.padding = '10px';
+                resultDiv.style.border = '1px solid #ccc';
+                
+                resultDiv.innerHTML = `
+                    <strong>Test ${index + 1}:</strong><br>
+                    Input: "${testCase}"<br>
+                    Output: "${extracted}"<br>
+                    Expected: "Conference Room A L014"<br>
+                    Status: ${extracted === 'Conference Room A L014' ? '✅ PASS' : '❌ FAIL'}
+                `;
+                
+                results.appendChild(resultDiv);
+            });
+            
+            // Test with full ICS content
+            const sampleICSContent = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Test//Test//EN
+BEGIN:VEVENT
+UID:test1@example.com
+DTSTART:20250829T103000
+DTEND:20250829T120000
+SUMMARY:Batten Academics
+LOCATION:FBS-ConfA-L014
+DESCRIPTION:Test event
+END:VEVENT
+END:VCALENDAR`;
+
+            const parseResult = parser.parseICS(sampleICSContent);
+            const fullResultDiv = document.createElement('div');
+            fullResultDiv.style.margin = '20px 0';
+            fullResultDiv.style.padding = '15px';
+            fullResultDiv.style.border = '2px solid #0066cc';
+            fullResultDiv.style.backgroundColor = '#f0f8ff';
+            
+            fullResultDiv.innerHTML = `
+                <h3>Full ICS Parsing Test:</h3>
+                Events parsed: ${parseResult.events.length}<br>
+                Rooms found: ${parseResult.rooms.join(', ')}<br>
+                Event room assignment: "${parseResult.events[0]?.room}"<br>
+                Debug info: ${JSON.stringify(parser.getDebugInfo(), null, 2)}
+            `;
+            
+            results.appendChild(fullResultDiv);
+        }
+        
+        // Run test when page loads
+        window.onload = testConfAParsing;
+    </script>
+</body>
+</html>

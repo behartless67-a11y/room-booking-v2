@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UVA Batten School Room Availability Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>UVA Batten School Room Availability</h1>
+            <div class="controls">
+                <div class="control-group">
+                    <label for="roomSelect">Select Room:</label>
+                    <select id="roomSelect">
+                        <option value="">All Rooms</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="viewPeriod">View Period:</label>
+                    <select id="viewPeriod">
+                        <option value="day">Day View</option>
+                        <option value="week">Week View</option>
+                        <option value="month">Month View</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="dateSelect">Date:</label>
+                    <input type="date" id="dateSelect">
+                </div>
+                <div class="control-group">
+                    <label for="icsFile">Upload .ics file:</label>
+                    <input type="file" id="icsFile" accept=".ics" multiple>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div id="loadingMessage" class="loading hidden">Loading calendar data...</div>
+            <div id="errorMessage" class="error hidden"></div>
+            
+            <div class="view-toggle">
+                <button id="gridViewBtn" class="view-btn active">Grid View</button>
+                <button id="listViewBtn" class="view-btn">List View</button>
+                <button id="debugBtn" class="view-btn">Debug Info</button>
+            </div>
+
+            <div id="gridView" class="view-content">
+                <div id="dashboard" class="dashboard">
+                    <div class="time-grid">
+                        <div class="time-header">
+                            <div class="room-label">Room</div>
+                            <div class="time-slots">
+                                <!-- Time slots will be generated dynamically -->
+                            </div>
+                        </div>
+                        <div id="roomGrid" class="room-grid">
+                            <!-- Room rows will be generated dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="listView" class="view-content hidden">
+                <div id="eventsList" class="events-list">
+                    <!-- Events will be listed here -->
+                </div>
+            </div>
+
+            <div id="debugView" class="view-content hidden">
+                <div id="debugInfo" class="debug-info">
+                    <!-- Debug information will be shown here -->
+                </div>
+            </div>
+
+            <div id="eventDetails" class="event-details hidden">
+                <div class="event-details-content">
+                    <h3>Event Details</h3>
+                    <div id="eventInfo"></div>
+                    <button id="closeDetails">Close</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="ics-parser.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>

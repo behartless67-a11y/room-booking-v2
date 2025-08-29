@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UVA Calendar Data Loader</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #232d4b;
+            text-align: center;
+        }
+        .instruction {
+            background: #e8f4fd;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .step {
+            margin: 15px 0;
+            padding: 15px;
+            border-left: 4px solid #e57200;
+            background: #f8f9fa;
+        }
+        .step strong {
+            color: #232d4b;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            margin: 10px 0;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+        button {
+            background: #e57200;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #d55a00;
+        }
+        .output {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            border: 1px solid #ddd;
+        }
+        .success {
+            background: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏛️ UVA Calendar Data Loader</h1>
+        
+        <div class="instruction">
+            <strong>Since PHP isn't available, let's load your calendar data manually:</strong>
+        </div>
+        
+        <div class="step">
+            <strong>Step 1:</strong> Open your UVA calendar URL in a new tab:<br>
+            <a href="https://outlook.office365.com/owa/calendar/cf706332e50c45009e2b3164e0b68ca0@virginia.edu/6960c19164584f9cbb619329600a490a16019380931273154626/calendar.ics" target="_blank">
+                Click here to open UVA calendar
+            </a>
+        </div>
+        
+        <div class="step">
+            <strong>Step 2:</strong> Copy ALL the calendar data from that page and paste it below:
+        </div>
+        
+        <textarea id="icsData" placeholder="Paste your .ics calendar data here...
+
+It should start with:
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:...
+
+And contain your events with:
+BEGIN:VEVENT
+DTSTART:...
+DTEND:...
+SUMMARY:...
+LOCATION:Great Hall
+END:VEVENT"></textarea>
+        
+        <button onclick="processCalendarData()">Load Calendar Data</button>
+        
+        <div id="output" class="output" style="display: none;"></div>
+        
+        <div class="step">
+            <strong>Step 3:</strong> After processing, click below to open your dashboard with real data:
+            <br><br>
+            <button id="openDashboard" onclick="openDashboard()" style="display: none; background: #232d4b;">
+                Open Dashboard with Live Data
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let processedEvents = null;
+
+        function processCalendarData() {
+            const icsData = document.getElementById('icsData').value.trim();
+            const output = document.getElementById('output');
+            
+            if (!icsData) {
+                output.textContent = 'Please paste your calendar data first.';
+                output.className = 'output error';
+                output.style.display = 'block';
+                return;
+            }
+
+            if (!icsData.includes('BEGIN:VCALENDAR')) {
+                output.textContent = 'Invalid calendar data. Make sure you copied the complete .ics file content.';
+                output.className = 'output error';
+                output.style.display = 'block';
+                return;
+            }
+
+            try {
+                const events = parseICSData(icsData);
+                const greatHallEvents = events.filter(event => 
+                    event.location && event.location.toLowerCase().includes('great hall')
+                );
+
+                processedEvents = greatHallEvents;
+                
+                let resultText = `Successfully processed calendar data!\n\n`;
+                resultText += `Total events found: ${events.length}\n`;
+                resultText += `Great Hall events: ${greatHallEvents.length}\n\n`;
+                
+                if (greatHallEvents.length > 0) {
+                    resultText += `Great Hall Events:\n`;
+                    greatHallEvents.slice(0, 10).forEach(event => {
+                        const date = event.startTime.toDateString();
+                        const time = event.startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        resultText += `• ${event.summary} - ${date} at ${time}\n`;
+                    });
+                    
+                    if (greatHallEvents.length > 10) {
+                        resultText += `... and ${greatHallEvents.length - 10} more events\n`;
+                    }
+                } else {
+                    resultText += `No Great Hall events found in the calendar data.\n`;
+                    resultText += `Events found in other locations:\n`;
+                    events.slice(0, 5).forEach(event => {
+                        resultText += `• ${event.summary} - ${event.location || 'No location'}\n`;
+                    });
+                }
+
+                output.textContent = resultText;
+                output.className = 'output success';
+                output.style.display = 'block';
+
+                // Store data for dashboard
+                localStorage.setItem('uvaCalendarData', JSON.stringify(processedEvents));
+                document.getElementById('openDashboard').style.display = 'inline-block';
+
+            } catch (error) {
+                output.textContent = `Error processing calendar data: ${error.message}`;
+                output.className = 'output error';
+                output.style.display = 'block';
+            }
+        }
+
+        function parseICSData(icsData) {
+            const events = [];
+            const lines = icsData.split(/\r?\n/);
+            let currentEvent = null;
+
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+
+                if (line === 'BEGIN:VEVENT') {
+                    currentEvent = {};
+                } else if (line === 'END:VEVENT' && currentEvent) {
+                    if (currentEvent.startTime && currentEvent.endTime) {
+                        events.push(currentEvent);
+                    }
+                    currentEvent = null;
+                } else if (currentEvent) {
+                    if (line.startsWith('SUMMARY:')) {
+                        currentEvent.summary = line.substring(8);
+                    } else if (line.startsWith('LOCATION:')) {
+                        currentEvent.location = line.substring(9);
+                    } else if (line.startsWith('DTSTART:')) {
+                        const dateStr = line.substring(8);
+                        currentEvent.startTime = parseICSDate(dateStr);
+                    } else if (line.startsWith('DTEND:')) {
+                        const dateStr = line.substring(6);
+                        currentEvent.endTime = parseICSDate(dateStr);
+                    }
+                }
+            }
+
+            return events;
+        }
+
+        function parseICSDate(dateStr) {
+            if (dateStr.includes('T')) {
+                const year = parseInt(dateStr.substring(0, 4));
+                const month = parseInt(dateStr.substring(4, 6)) - 1;
+                const day = parseInt(dateStr.substring(6, 8));
+                const hour = parseInt(dateStr.substring(9, 11));
+                const minute = parseInt(dateStr.substring(11, 13));
+                const second = parseInt(dateStr.substring(13, 15)) || 0;
+
+                return new Date(year, month, day, hour, minute, second);
+            } else {
+                const year = parseInt(dateStr.substring(0, 4));
+                const month = parseInt(dateStr.substring(4, 6)) - 1;
+                const day = parseInt(dateStr.substring(6, 8));
+
+                return new Date(year, month, day);
+            }
+        }
+
+        function openDashboard() {
+            window.open('room-dashboard.html', '_blank');
+        }
+    </script>
+</body>
+</html>

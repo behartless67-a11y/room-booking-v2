@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Batten Reservable Spaces — ICS Dashboard</title>
+  <!-- Tailwind (Play CDN for zero-build styling) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Luxon (dates/times) -->
+  <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
+  <!-- RRule (recurrence expansion) -->
+  <script src="https://cdn.jsdelivr.net/npm/rrule@2/dist/es5/rrule.min.js"></script>
+  <style>
+    .thin-scrollbar{scrollbar-width:thin;scrollbar-color:#cbd5e1 transparent}
+    .thin-scrollbar::-webkit-scrollbar{height:8px;width:8px}
+    .thin-scrollbar::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:9999px}
+    .badge{font-size:10px;line-height:1rem}
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+  <div class="mx-auto max-w-7xl p-4">
+    <!-- Header -->
+    <div class="mb-2 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-6 w-6 text-slate-700"><path fill="currentColor" d="M7 2h1v2h8V2h1a2 2 0 0 1 2 2v2H5V4a2 2 0 0 1 2-2m12 6H5v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2z"/></svg>
+        <div>
+          <h1 class="text-xl font-semibold tracking-tight">Batten Reservable Spaces</h1>
+          <p class="text-sm text-slate-500">Internet calendar dashboard (single HTML, Netlify‑ready)</p>
+        </div>
+      </div>
+      <button id="btnSettings" class="inline-flex items-center gap-2 rounded-xl border bg-white px-3 py-2 text-sm shadow-sm hover:bg-slate-50">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-4 w-4"><path fill="currentColor" d="M12 8a4 4 0 1 0 .001 8.001A4 4 0 0 0 12 8m10 4a1 1 0 0 0-.78-.97l-1.9-.43a7.98 7.98 0 0 0-.7-1.69l1.12-1.61a1 1 0 0 0-.12-1.27l-1.41-1.41a1 1 0 0 0-1.27-.12l-1.61 1.12a7.98 7.98 0 0 0-1.69-.7l-.43-1.9A1 1 0 0 0 12 2h-2a1 1 0 0 0-.97.78l-.43 1.9a7.98 7.98 0 0 0-1.69.7L5.3 4.26a1 1 0 0 0-1.27.12L2.62 5.79a1 1 0 0 0-.12 1.27l1.12 1.61c-.28.53-.52 1.1-.7 1.69l-1.9.43A1 1 0 0 0 0 12v2c0 .47.33.87.78.97l1.9.43c.18.6.42 1.16.7 1.69l-1.12 1.61a1 1 0 0 0 .12 1.27l1.41 1.41c.36.36.94.4 1.27.12l1.61-1.12c.53.28 1.1.52 1.69.7l.43 1.9c.1.45.5.78.97.78h2c.47 0 .87-.33.97-.78l.43-1.9c.6-.18 1.16-.42 1.69-.7l1.61 1.12c.33.28.91.24 1.27-.12l1.41-1.41c.36-.36.4-.94.12-1.27l-1.12-1.61c.28-.53.52-1.1.7-1.69l1.9-.43c.45-.1.78-.5.78-.97z"/></svg>
+        Settings
+      </button>
+    </div>
+    <div class="mb-4 text-xs text-slate-500"><span id="nowStr"></span> (America/New_York)</div>
+
+    <!-- Controls -->
+    <div class="grid grid-cols-1 gap-3 md:grid-cols-12">
+      <div class="md:col-span-3 flex items-center gap-2 rounded-2xl border bg-white p-2">
+        <label class="text-sm text-slate-500 shrink-0">Date</label>
+        <input id="inpDate" type="date" class="w-full rounded-xl border px-3 py-2 text-sm" />
+      </div>
+      <div class="md:col-span-3 flex items-center gap-2 rounded-2xl border bg-white p-2">
+        <label class="text-sm text-slate-500 shrink-0">Range</label>
+        <select id="selRange" class="w-full rounded-xl border px-3 py-2 text-sm">
+          <option value="day">Day</option>
+          <option value="3day">3 Days</option>
+          <option value="week">Week</option>
+        </select>
+      </div>
+      <div class="md:col-span-4 flex items-center gap-3 rounded-2xl border bg-white p-2">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-4 w-4 text-slate-500"><path fill="currentColor" d="M10 18h4v-2h-4zm-7 0h6v-2H3zm14 0h4v-2h-4zM3 14h10v-2H3zm12 0h6v-2h-6zM3 10h4V8H3zm6 0h12V8H9z"/></svg>
+        <label class="inline-flex items-center gap-2 text-sm">
+          <input id="chkOnlyFree" type="checkbox" /> Only free now
+        </label>
+        <label class="inline-flex items-center gap-2 text-sm">
+          <input id="chkOnlyBusy" type="checkbox" /> Only busy now
+        </label>
+      </div>
+      <div class="md:col-span-2 flex items-center justify-end">
+        <button id="btnRefresh" class="inline-flex items-center gap-2 rounded-xl border bg-white px-3 py-2 text-sm shadow-sm hover:bg-slate-50">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-4 w-4"><path fill="currentColor" d="M12 6V3L8 7l4 4V8a4 4 0 1 1-4 4H6a6 6 0 1 0 6-6"/></svg>
+          Refresh
+        </button>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="mt-6 grid grid-cols-1 gap-6 md:grid-cols-12">
+      <!-- Sidebar -->
+      <aside class="md:col-span-4 lg:col-span-3 space-y-3">
+        <div class="flex items-center gap-2 rounded-2xl border bg-white px-3 py-2">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-4 w-4 text-slate-500"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79L20 21.5 21.5 20zM9.5 14C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"/></svg>
+          <input id="inpSearch" placeholder="Search spaces" class="w-full bg-transparent text-sm outline-none" />
+        </div>
+
+        <div class="flex items-center justify-between">
+          <button id="btnToggleAll" class="text-xs text-blue-600 hover:underline">Select all</button>
+          <span class="text-xs text-slate-500"><span id="countSelected">0</span> selected</span>
+        </div>
+
+        <div id="roomsList" class="thin-scrollbar max-h-[60vh] overflow-auto rounded-2xl border bg-white p-2"></div>
+      </aside>
+
+      <!-- Main -->
+      <main class="md:col-span-8 lg:col-span-9 space-y-4" id="main"></main>
+    </div>
+  </div>
+
+  <!-- Settings Drawer -->
+  <div id="drawer" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/40" data-close></div>
+    <div class="absolute right-0 top-0 h-full w-full max-w-xl overflow-auto bg-white p-6 shadow-2xl">
+      <div class="mb-4 flex items-center justify-between">
+        <h2 class="text-lg font-semibold">Settings</h2>
+        <button class="rounded-full p-2 hover:bg-slate-100" data-close>&times;</button>
+      </div>
+      <div class="rounded-2xl border p-4">
+        <div class="mb-2 text-sm font-medium">CORS Proxy (optional)</div>
+        <p class="mb-2 text-xs text-slate-500">Only needed for remote ICS URLs that block cross‑origin. Example format: <code>https://your-proxy.example.com/?url=</code></p>
+        <input id="inpProxy" class="w-full rounded-xl border px-3 py-2 text-sm" placeholder="https://proxy.example.com/?url=" />
+        <p class="mt-2 text-[10px] text-slate-500">If all your .ics files are uploaded to this same Netlify site and listed in <code>rooms.json</code>, you can leave this blank.</p>
+      </div>
+      <div class="mt-6 text-right">
+        <button class="rounded-xl border px-4 py-2 text-sm" data-close>Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (() => {
+    const { DateTime, Interval } = luxon;
+    const TZ = 'America/New_York';
+    const LS_SELECTIONS = 'batten-ics-selected-v1';  // [roomId,...]
+    const LS_PROXY = 'batten-ics-proxy-html-v1';
+
+    /** @typedef {{id:string,name:string,ics:string}} Space */
+
+    // ---------- DOM refs ----------
+    const nowEl = document.getElementById('nowStr');
+    const dateEl = document.getElementById('inpDate');
+    const rangeEl = document.getElementById('selRange');
+    const onlyFreeEl = document.getElementById('chkOnlyFree');
+    const onlyBusyEl = document.getElementById('chkOnlyBusy');
+    const refreshEl = document.getElementById('btnRefresh');
+    const roomsListEl = document.getElementById('roomsList');
+    const mainEl = document.getElementById('main');
+    const countSelectedEl = document.getElementById('countSelected');
+    const toggleAllEl = document.getElementById('btnToggleAll');
+    const searchEl = document.getElementById('inpSearch');
+
+    const btnSettings = document.getElementById('btnSettings');
+    const drawer = document.getElementById('drawer');
+    const inpProxy = document.getElementById('inpProxy');
+
+    // ---------- State ----------
+    let rooms = [];           // Array<Space>
+    let selections = load(LS_SELECTIONS, []); // array of selected ids
+    let corsProxy = load(LS_PROXY, '');
+
+    // Init
+    dateEl.value = DateTime.now().setZone(TZ).toFormat('yyyy-LL-dd');
+    inpProxy.value = corsProxy || '';
+    tickNow();
+    setInterval(tickNow, 30000);
+
+    // Load rooms.json (same folder)
+    fetch('rooms.json', { cache: 'no-store' })
+      .then(r => {
+        if (!r.ok) throw new Error('Failed to load rooms.json');
+        return r.json();
+      })
+      .then(list => {
+        rooms = list;
+        // Default to all selected on first run
+        if (!selections.length) selections = rooms.map(r => r.id);
+        save(LS_SELECTIONS, selections);
+        renderRoomsList();
+        render();
+      })
+      .catch(err => {
+        mainEl.innerHTML = '<div class="rounded-2xl border bg-white p-6 text-sm text-rose-700">Could not load <code>rooms.json</code>. Make sure it exists next to this HTML file.</div>';
+        console.warn(err);
+      });
+
+    // ---------- Events ----------
+    refreshEl.addEventListener('click', () => render());
+    dateEl.addEventListener('change', () => render());
+    rangeEl.addEventListener('change', () => render());
+    onlyFreeEl.addEventListener('change', () => { if (onlyFreeEl.checked) onlyBusyEl.checked = false; render(); });
+    onlyBusyEl.addEventListener('change', () => { if (onlyBusyEl.checked) onlyFreeEl.checked = false; render(); });
+    searchEl.addEventListener('input', () => renderRoomsList());
+
+    toggleAllEl.addEventListener('click', () => {
+      const allSelected = rooms.length > 0 && selections.length === rooms.length;
+      selections = allSelected ? [] : rooms.map(r => r.id);
+      save(LS_SELECTIONS, selections);
+      renderRoomsList(); render();
+      toggleAllEl.textContent = allSelected ? 'Select all' : 'Clear all';
+    });
+
+    btnSettings.addEventListener('click', () => { drawer.classList.remove('hidden'); });
+    drawer.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', () => drawer.classList.add('hidden')));
+    inpProxy.addEventListener('change', () => { corsProxy = inpProxy.value.trim(); save(LS_PROXY, corsProxy); });
+
+    // ---------- Renderers ----------
+    async function render() {
+      const rangeStart = DateTime.fromISO(dateEl.value, { zone: TZ }).startOf('day');
+      const rangeEnd = rangeEl.value === 'day' ? rangeStart.plus({ days: 1 })
+                      : rangeEl.value === '3day' ? rangeStart.plus({ days: 3 })
+                      : rangeStart.plus({ days: 7 });
+
+      const visible = rooms.filter(s => selections.includes(s.id) && s.name.toLowerCase().includes((searchEl.value||'').toLowerCase()));
+
+      mainEl.innerHTML = '';
+      if (!visible.length) {
+        mainEl.innerHTML = `<div class="rounded-2xl border bg-white p-6 text-center text-sm text-slate-500">No rooms match your filters.</div>`;
+        return;
+      }
+
+      const entries = await Promise.all(visible.map(async (s) => {
+        try {
+          const icsText = await fetchIcs(s.ics);
+          const events = parseIcs(icsText, s.id);
+          return [s, events];
+        } catch (e) {
+          console.warn('Failed ICS', s, e);
+          return [s, []];
+        }
+      }));
+
+      const now = DateTime.now().setZone(TZ).toJSDate();
+
+      for (const [room, events] of entries) {
+        const busyNow = events.some(e => now >= e.start && now < e.end);
+        if (onlyBusyEl.checked && !busyNow) continue;
+        if (onlyFreeEl.checked && busyNow) continue;
+
+        const card = document.createElement('div');
+        card.className = 'rounded-2xl border bg-white p-4 shadow-sm';
+
+        const next = nextChange(events, now);
+        const nextStr = next ? DateTime.fromJSDate(next, { zone: TZ }).toFormat('ccc h:mm a') : '(none)';
+
+        card.innerHTML = `
+          <div class="mb-3 flex items-center justify-between gap-3">
+            <div>
+              <div class="text-sm text-slate-500">${escapeHtml(room.name)}</div>
+              <div class="mt-0.5 text-lg font-semibold tracking-tight">${busyNow ? 'Occupied' : 'Available'}</div>
+            </div>
+            <div class="text-right">
+              <span class="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${busyNow ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'}">
+                <span class="inline-block h-2 w-2 rounded-full ${busyNow ? 'bg-rose-600' : 'bg-emerald-600'}"></span>
+                ${busyNow ? 'Busy' : 'Free'}
+              </span>
+              <div class="mt-1 text-xs text-slate-500">Next change: ${nextStr}</div>
+            </div>
+          </div>
+          <div class="mb-3">${renderTimeline(events, rangeStart)}</div>
+          <div>
+            <div class="mb-2 text-xs font-medium text-slate-500">Upcoming</div>
+            ${renderUpcoming(events, rangeStart, rangeEnd)}
+          </div>
+        `;
+
+        mainEl.appendChild(card);
+      }
+
+      if (!mainEl.children.length) {
+        mainEl.innerHTML = `<div class="rounded-2xl border bg-white p-6 text-center text-sm text-slate-500">No rooms match your filters.</div>`;
+      }
+    }
+
+    function renderRoomsList() {
+      const q = (searchEl.value||'').toLowerCase();
+      const filtered = rooms.filter(s => s.name.toLowerCase().includes(q));
+      roomsListEl.innerHTML = '';
+      filtered.forEach(s => {
+        const row = document.createElement('label');
+        row.className = 'flex items-center gap-2 rounded-xl px-2 py-2 hover:bg-slate-50';
+        const checked = selections.includes(s.id) ? 'checked' : '';
+        row.innerHTML = `
+          <input type="checkbox" ${checked} />
+          <span class="text-sm">${escapeHtml(s.name)} ${s.ics.startsWith('http') ? '<span class="ml-2 rounded bg-slate-100 px-1.5 py-0.5 badge text-slate-600">remote</span>' : ''}</span>
+        `;
+        const cb = row.querySelector('input');
+        cb.addEventListener('change', () => {
+          if (cb.checked) { if (!selections.includes(s.id)) selections.push(s.id); }
+          else { selections = selections.filter(id => id !== s.id); }
+          save(LS_SELECTIONS, selections);
+          updateSelectedCount(); render();
+        });
+        roomsListEl.appendChild(row);
+      });
+      updateSelectedCount();
+      const allSelected = rooms.length > 0 && selections.length === rooms.length;
+      toggleAllEl.textContent = allSelected ? 'Clear all' : 'Select all';
+    }
+
+    function updateSelectedCount(){
+      countSelectedEl.textContent = String(selections.length);
+    }
+
+    function tickNow(){
+      nowEl.textContent = DateTime.now().setZone(TZ).toFormat('ccc, LLL d • h:mm a');
+    }
+
+    // ---------- ICS helpers ----------
+
+    async function fetchIcs(pathOrUrl){
+      const target = (corsProxy && pathOrUrl.startsWith('http')) ? `${corsProxy}${encodeURIComponent(pathOrUrl)}` : pathOrUrl;
+      const res = await fetch(target);
+      if (!res.ok) throw new Error(`Fetch failed (${res.status})`);
+      return res.text();
+    }
+
+    function unfoldIcs(text){
+      return text.replace(/\\r?\\n[ \\t]/g, '');
+    }
+
+    function parseIcs(text, roomId){
+      const unfolded = unfoldIcs(text);
+      const lines = unfolded.split(/\\r?\\n/);
+      const events = [];
+      let inEvent = false; let cur = {};
+      for (const raw of lines){
+        const line = raw.trim(); if (!line) continue;
+        if (line === 'BEGIN:VEVENT'){ inEvent = true; cur = { EXDATEs: [] }; continue; }
+        if (line === 'END:VEVENT'){
+          if (cur.DTSTART && cur.DTEND){
+            const start = parseIcsDate(cur.DTSTART.value, cur.DTSTART.params?.TZID);
+            const end   = parseIcsDate(cur.DTEND.value,   cur.DTEND.params?.TZID);
+            const base = {
+              uid: cur.UID?.value || `${roomId}-${Math.random().toString(36).slice(2)}`,
+              title: cur.SUMMARY?.value || '(No title)',
+              location: cur.LOCATION?.value,
+              roomId,
+            };
+            const exdates = (cur.EXDATEs || []).map(ex => parseIcsDate(ex.value, ex.params?.TZID));
+            if (cur.RRULE?.value){
+              expandRecurrence(start, end, cur.RRULE.value, exdates).forEach(({start:st,end:en}) => events.push({ ...base, start: st, end: en }));
+            } else {
+              events.push({ ...base, start, end });
+            }
+          }
+          inEvent = false; cur = {}; continue;
+        }
+        if (inEvent){
+          const {key, params, value} = parseLine(line);
+          if (key === 'EXDATE') cur.EXDATEs.push({ params, value }); else cur[key] = { params, value };
+        }
+      }
+      return events.sort((a,b) => +a.start - +b.start);
+    }
+
+    function parseLine(line){
+      const [rawKey, ...rest] = line.split(':');
+      const value = rest.join(':');
+      const [key, ...paramPairs] = rawKey.split(';');
+      const params = {};
+      for (const p of paramPairs){ const [k,v] = p.split('='); params[(k||'').toUpperCase()] = (v||'').replace(/^\"|\"$/g,''); }
+      return { key: key.toUpperCase(), params, value };
+    }
+
+    function parseIcsDate(val, tzid){
+      const hasT = val.includes('T');
+      const endsZ = val.endsWith('Z');
+      if (!hasT){
+        return luxon.DateTime.fromFormat(val, 'yyyyLLdd', { zone: tzid || TZ }).startOf('day').toJSDate();
+      }
+      if (endsZ){
+        const fmt = val.length === 16 ? "yyyyLLdd'T'HHmm'Z'" : "yyyyLLdd'T'HHmmss'Z'";
+        return luxon.DateTime.fromFormat(val, fmt, { zone: 'utc' }).toJSDate();
+      }
+      const fmt = val.length === 15 ? "yyyyLLdd'T'HHmm" : "yyyyLLdd'T'HHmmss";
+      return luxon.DateTime.fromFormat(val, fmt, { zone: tzid || TZ }).toJSDate();
+    }
+
+    function expandRecurrence(start, end, rruleStr, exdates){
+      try{
+        const rule = rrule.RRule.fromString(rruleStr);
+        rule.options.dtstart = start;
+        const durationMs = (+end) - (+start);
+        const windowStart = new Date(Date.now() - 1000*60*60*24*14);
+        const windowEnd   = new Date(Date.now() + 1000*60*60*24*60);
+        const between = rule.between(windowStart, windowEnd, true);
+        const skipIso = new Set(exdates.map(d => luxon.DateTime.fromJSDate(d, {zone:'utc'}).toISO()));
+        return between.filter(occ => !skipIso.has(luxon.DateTime.fromJSDate(occ,{zone:'utc'}).toISO()))
+                      .map(occ => ({ start: occ, end: new Date(+occ + durationMs) }));
+      } catch(e){ console.warn('RRULE parse error', e); return []; }
+    }
+
+    function nextChange(events, now){
+      const future = [];
+      for (const e of events){ if (e.start > now) future.push(e.start); if (e.end > now) future.push(e.end); }
+      future.sort((a,b) => +a - +b); return future[0];
+    }
+
+    function withinRange(ev, start, end){
+      return (ev.start >= start && ev.start < end) || (ev.end > start && ev.end <= end) || (ev.start <= start && ev.end >= end);
+    }
+
+    function renderTimeline(events, day){
+      const sod = day.startOf('day'); const eod = sod.plus({days:1});
+      const dayMs = eod.toMillis() - sod.toMillis();
+      const today = events.filter(e => withinRange(e, sod.toJSDate(), eod.toJSDate()));
+      const ticks = [0,4,8,12,16,20].map(h => `<div>${sod.plus({hours:h}).toFormat('h a')}</div>`).join('');
+      const bars = today.map(e => {
+        const s = luxon.DateTime.fromJSDate(e.start, {zone:TZ});
+        const en = luxon.DateTime.fromJSDate(e.end, {zone:TZ});
+        const cl = luxon.Interval.fromDateTimes(s,en).intersection(luxon.Interval.fromDateTimes(sod,eod));
+        if (!cl) return '';
+        const left = ((cl.start.toMillis() - sod.toMillis()) / dayMs) * 100;
+        const width = ((cl.end.toMillis() - cl.start.toMillis()) / dayMs) * 100;
+        const title = `${s.toFormat('h:mm a')}–${en.toFormat('h:mm a')} • ${escapeHtml(e.title)}`;
+        return `<div class="absolute top-1 h-8 overflow-hidden rounded-md border bg-white shadow" style="left:${left}%;width:${width}%" title="${title}"><div class="truncate px-2 text-xs leading-8">${escapeHtml(e.title)}</div></div>`;
+      }).join('');
+      return `
+        <div class="relative w-full rounded-xl border p-3">
+          <div class="mb-2 grid grid-cols-6 text-[10px] text-slate-400">${ticks}</div>
+          <div class="relative h-10 w-full rounded-lg bg-slate-100">${bars}</div>
+        </div>`;
+    }
+
+    function renderUpcoming(events, start, end){
+      const items = events.filter(e => withinRange(e, start.toJSDate(), end.toJSDate())).slice(0,8);
+      if (!items.length) return `<div class="text-sm text-slate-500">No events in range.</div>`;
+      return `<ul class="space-y-2">${items.map(e => {
+        const s = luxon.DateTime.fromJSDate(e.start,{zone:TZ});
+        const en = luxon.DateTime.fromJSDate(e.end,{zone:TZ});
+        const dayStr = s.hasSame(start,'day') ? 'Today' : s.toFormat('ccc L/d');
+        return `<li class="rounded-lg border p-2">
+          <div class="text-sm font-medium">${escapeHtml(e.title)}</div>
+          <div class="text-xs text-slate-500">${dayStr} • ${s.toFormat('h:mm a')}–${en.toFormat('h:mm a')}</div>
+          ${e.location ? `<div class="text-xs text-slate-400">${escapeHtml(e.location)}</div>` : ''}
+        </li>`;
+      }).join('')}</ul>`;
+    }
+
+    // ---------- Utils ----------
+    function save(k,v){ localStorage.setItem(k, JSON.stringify(v)); }
+    function load(k,fallback){ try{ const r = localStorage.getItem(k); return r ? JSON.parse(r) : fallback; } catch{ return fallback; } }
+    function escapeHtml(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+  })();
+  </script>
+</body>
+</html>
