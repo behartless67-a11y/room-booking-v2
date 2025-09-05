@@ -36,7 +36,7 @@ window.DashboardConfig = {
                 {
                     name: "Pavilion X Upper Garden",
                     id: "pavx-upper",
-                    icsFile: "ics/PavXUpperGarden.ics"
+                    icsFile: "https://outlook.office365.com/owa/calendar/52b9b2d41868473fac5d3e9963512a9b@virginia.edu/311e34fd14384759b006ccf185c1db677813060047149602177/calendar.ics"
                 },
                 {
                     name: "Pavilion X Basement Room 1",
@@ -46,12 +46,12 @@ window.DashboardConfig = {
                 {
                     name: "Pavilion X Basement Room 2", 
                     id: "pavx-b2",
-                    icsFile: "ics/PavXBasement2.ics"
+                    icsFile: "https://outlook.office365.com/owa/calendar/3f60cb3359dd40f7943b9de3b062b18d@virginia.edu/1e78265cf5eb44da903745ca3d872e6910017444746788834359/calendar.ics"
                 },
                 {
                     name: "Pavilion X Basement Exhibit",
                     id: "pavx-exhibit",
-                    icsFile: "ics/PavXExhibit.ics"
+                    icsFile: "https://outlook.office365.com/owa/calendar/4df4134c83844cef9d9357180ccfb48c@virginia.edu/e46a84ae5d8842d4b33a842ddc5ff66c11207228220277930183/calendar.ics"
                 }
             ]
         }
@@ -95,10 +95,10 @@ window.DashboardConfig = {
         'https://outlook.office365.com/owa/calendar/cf706332e50c45009e2b3164e0b68ca0@virginia.edu/6960c19164584f9cbb619329600a490a16019380931273154626/calendar.ics',
         'https://outlook.office365.com/owa/calendar/4cedc3f0284648fcbee80dd7f6563bab@virginia.edu/211f4d478ee94feb8fe74fa4ed82a0b22636302730039956374/calendar.ics',
         'ics/StudentLounge.ics',
-        'ics/PavXUpperGarden.ics',
+        'https://outlook.office365.com/owa/calendar/52b9b2d41868473fac5d3e9963512a9b@virginia.edu/311e34fd14384759b006ccf185c1db677813060047149602177/calendar.ics',
         'https://outlook.office365.com/owa/calendar/fa3ecb9b47824ac0a36733c7212ccc97@virginia.edu/d23afabf93da4fa4b49d2be3ce290f7911116129854936607531/calendar.ics',
-        'ics/PavXBasement2.ics',
-        'ics/PavXExhibit.ics'
+        'https://outlook.office365.com/owa/calendar/3f60cb3359dd40f7943b9de3b062b18d@virginia.edu/1e78265cf5eb44da903745ca3d872e6910017444746788834359/calendar.ics',
+        'https://outlook.office365.com/owa/calendar/4df4134c83844cef9d9357180ccfb48c@virginia.edu/e46a84ae5d8842d4b33a842ddc5ff66c11207228220277930183/calendar.ics'
     ],
     
     // Dashboard settings

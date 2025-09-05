@@ -1862,6 +1862,16 @@
                             if (currentEvent && this.isValidEvent(currentEvent)) {
                                 this.processEvent(currentEvent);
                                 this.events.push(currentEvent);
+                                
+                                // Handle recurring events (RRULE)
+                                if (currentEvent.rrule && currentEvent.startTime && currentEvent.endTime) {
+                                    console.log(`Ben 🔁 Found recurring event: "${currentEvent.summary}" with RRULE: ${currentEvent.rrule}`);
+                                    const recurringEvents = this.expandRecurringEvent(currentEvent);
+                                    if (recurringEvents.length > 0) {
+                                        console.log(`Ben 🔁 Expanded into ${recurringEvents.length} instances`);
+                                        this.events.push(...recurringEvents);
+                                    }
+                                }
                             }
                             currentEvent = null;
                             inEvent = false;
@@ -1906,10 +1916,92 @@
                         event.uid = value;
                     } else if (key === 'ORGANIZER') {
                         event.organizer = this.parseOrganizer(value);
+                    } else if (key === 'RRULE') {
+                        console.log(`Ben 🆔 Found RRULE in event "${event.summary || 'unnamed'}": ${value}`);
+                        event.rrule = value;
                     }
                 } catch (error) {
                     console.warn(`Error parsing property: ${line}, error: ${error.message}`);
                 }
+            }
+
+            expandRecurringEvent(parentEvent) {
+                const instances = [];
+                const rrule = parentEvent.rrule;
+                
+                // Parse basic RRULE format: FREQ=WEEKLY;UNTIL=20251216T204500Z;INTERVAL=1;BYDAY=TU;WKST=SU
+                const rruleParams = {};
+                rrule.split(';').forEach(param => {
+                    const [key, value] = param.split('=');
+                    rruleParams[key] = value;
+                });
+                
+                if (rruleParams.FREQ === 'WEEKLY' && rruleParams.BYDAY) {
+                    const startDate = new Date(parentEvent.startTime);
+                    const endDate = new Date(parentEvent.endTime);
+                    const duration = endDate - startDate; // Duration in milliseconds
+                    
+                    // Parse UNTIL date if present
+                    let untilDate = null;
+                    if (rruleParams.UNTIL) {
+                        untilDate = new Date(rruleParams.UNTIL.replace(/(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z/, '$1-$2-$3T$4:$5:$6Z'));
+                    }
+                    
+                    // Map day abbreviations to day numbers (0 = Sunday)
+                    const dayMap = { SU: 0, MO: 1, TU: 2, WE: 3, TH: 4, FR: 5, SA: 6 };
+                    const targetDay = dayMap[rruleParams.BYDAY];
+                    
+                    if (targetDay !== undefined) {
+                        // Generate instances for the next 6 months from today
+                        const today = new Date();
+                        console.log(`Ben 🔄 Generating recurring events for "${parentEvent.summary}"`);
+                        console.log(`Ben    Target day: ${targetDay} (${rruleParams.BYDAY}) | Today: ${today.toDateString()} (day ${today.getDay()})`);
+                        const maxDate = untilDate || new Date(today.getTime() + (6 * 30 * 24 * 60 * 60 * 1000));
+                        console.log(`Ben    Original start: ${startDate.toDateString()} | Max date: ${maxDate.toDateString()}`);
+                        
+                        let currentDate = new Date(startDate);
+                        
+                        // Find the first occurrence on the target day
+                        console.log(`Ben    Looking for first occurrence on day ${targetDay}, starting from ${currentDate.toDateString()}`);
+                        while (currentDate.getDay() !== targetDay && currentDate < maxDate) {
+                            currentDate.setDate(currentDate.getDate() + 1);
+                        }
+                        console.log(`Ben    First occurrence found: ${currentDate.toDateString()} (day ${currentDate.getDay()})`);
+                        
+                        // Generate weekly instances
+                        let instanceCount = 0;
+                        while (currentDate < maxDate && instanceCount < 50) { // Safety limit
+                            const instanceStart = new Date(currentDate);
+                            const instanceEnd = new Date(instanceStart.getTime() + duration);
+                            
+                            const isToday = instanceStart.toDateString() === today.toDateString();
+                            const isFuture = instanceStart >= today;
+                            console.log(`Ben ✅ Generated instance #${instanceCount + 1}: "${parentEvent.summary}" on ${instanceStart.toDateString()} at ${instanceStart.toLocaleTimeString()} ${isToday ? '🎯 TODAY!' : ''} ${isFuture ? '📅 FUTURE' : '📝 PAST'}`);
+                            
+                            // Create a new event instance
+                            const instance = {
+                                ...parentEvent,
+                                startTime: instanceStart,
+                                endTime: instanceEnd,
+                                uid: `${parentEvent.uid}_${instanceStart.getTime()}`,
+                                _isRecurringInstance: true
+                            };
+                            
+                            // Remove RRULE from instance
+                            delete instance.rrule;
+                            
+                            instances.push(instance);
+                            
+                            // Move to next week
+                            currentDate.setDate(currentDate.getDate() + 7);
+                            instanceCount++;
+                        }
+                        
+                        console.log(`Ben 🏁 Finished generating ${instanceCount} instances for "${parentEvent.summary}"`);
+                    }
+                }
+                
+                return instances;
             }
 
             parseDateTime(value, key) {
@@ -2579,6 +2671,7 @@
             }
 
             parseICSData(icsData, fileName = '') {
+                console.log('Ben 🚀 STARTING TO PARSE ICS DATA - IF YOU SEE THIS, THE FILE IS LOADING!');
                 console.log('Parsing ICS data...');
                 const result = this.parser.parseICS(icsData);
                 

@@ -1,6 +1,7 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+ini_set('log_errors', 1);
 
 header('Content-Type: text/plain');
 header('Access-Control-Allow-Origin: *');
@@ -84,7 +85,20 @@ if (curl_errno($curl)) {
 } else {
     // Success - return the calendar data
     error_log('Successfully fetched ' . strlen($response) . ' bytes of calendar data');
+    
+    // Ensure clean output
+    if (ob_get_level()) {
+        ob_clean();
+    }
+    
+    // Set proper headers again (in case they were overridden)
+    header('Content-Type: text/plain; charset=utf-8');
+    header('Content-Length: ' . strlen($response));
+    
     echo $response;
+    
+    // Ensure no additional output
+    exit();
 }
 
 curl_close($curl);
