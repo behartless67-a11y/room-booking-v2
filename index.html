@@ -2374,7 +2374,19 @@
                 };
                 console.log('🔍 DEBUG: final this.config:', this.config);
                 console.log('🔍 DEBUG: final this.config.eventCalendars:', this.config.eventCalendars);
-                this.icsFiles = this.config.icsFiles;
+                
+                // Extract room IDs from buildings configuration for Azure Function API
+                this.icsFiles = [];
+                if (this.config.buildings) {
+                    for (const building of this.config.buildings) {
+                        for (const room of building.rooms) {
+                            this.icsFiles.push(room.icsFile);
+                        }
+                    }
+                } else {
+                    // Fallback to legacy icsFiles array
+                    this.icsFiles = this.config.icsFiles;
+                }
                 
                 this.init();
             }
@@ -2494,11 +2506,16 @@
                     try {
                         console.log(`🔄 Attempting to load ${fileName}...`);
                         
-                        // Check if this is an external URL that needs to go through proxy
+                        // Check if this should use Azure Function for cached data
                         let fetchUrl = fileName;
                         if (fileName.startsWith('http://') || fileName.startsWith('https://')) {
+                            // Legacy direct URL support
                             fetchUrl = `calendar-proxy.php?url=${encodeURIComponent(fileName)}`;
                             console.log(`🌐 Using proxy for external URL: ${fetchUrl}`);
+                        } else if (this.config.azureFunctionUrl && !fileName.includes('/') && !fileName.includes('.ics')) {
+                            // Use Azure Function for room IDs
+                            fetchUrl = `${this.config.azureFunctionUrl}?room=${fileName}`;
+                            console.log(`☁️ Using Azure Function for room: ${fileName} -> ${fetchUrl}`);
                         }
 
                         const response = await fetch(fetchUrl, { 

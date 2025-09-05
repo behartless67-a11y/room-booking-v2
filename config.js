@@ -1,5 +1,8 @@
 // Configuration for BattenSpace
 window.DashboardConfig = {
+    // Azure Function endpoint for cached calendar data
+    azureFunctionUrl: "https://roomtool-calendar-function.azurewebsites.net/api/getcalendar",
+    
     // Room organization by building/location
     // Each building can have multiple rooms with their ICS files
     buildings: [
@@ -10,17 +13,17 @@ window.DashboardConfig = {
                 {
                     name: "Conference Room A L014",
                     id: "confa",
-                    icsFile: "https://outlook.office365.com/owa/calendar/4207f27aa0d54d318d660537325a3856@virginia.edu/64228c013c3c425ca3ec6682642a970e8523251041637520167/calendar.ics"
+                    icsFile: "confa"  // Now uses Azure Function with room ID
                 },
                 {
                     name: "Great Hall 100",
                     id: "greathall", 
-                    icsFile: "https://outlook.office365.com/owa/calendar/cf706332e50c45009e2b3164e0b68ca0@virginia.edu/6960c19164584f9cbb619329600a490a16019380931273154626/calendar.ics"
+                    icsFile: "greathall"  // Now uses Azure Function with room ID
                 },
                 {
                     name: "Seminar Room L039",
                     id: "seminar",
-                    icsFile: "https://outlook.office365.com/owa/calendar/4cedc3f0284648fcbee80dd7f6563bab@virginia.edu/211f4d478ee94feb8fe74fa4ed82a0b22636302730039956374/calendar.ics"
+                    icsFile: "seminar"  // Now uses Azure Function with room ID
                 },
                 {
                     name: "Student Lounge 206",
@@ -36,22 +39,22 @@ window.DashboardConfig = {
                 {
                     name: "Pavilion X Upper Garden",
                     id: "pavx-upper",
-                    icsFile: "https://outlook.office365.com/owa/calendar/52b9b2d41868473fac5d3e9963512a9b@virginia.edu/311e34fd14384759b006ccf185c1db677813060047149602177/calendar.ics"
+                    icsFile: "pavx-upper"  // Now uses Azure Function with room ID
                 },
                 {
                     name: "Pavilion X Basement Room 1",
                     id: "pavx-b1",
-                    icsFile: "https://outlook.office365.com/owa/calendar/fa3ecb9b47824ac0a36733c7212ccc97@virginia.edu/d23afabf93da4fa4b49d2be3ce290f7911116129854936607531/calendar.ics"
+                    icsFile: "pavx-b1"  // Now uses Azure Function with room ID
                 },
                 {
                     name: "Pavilion X Basement Room 2", 
                     id: "pavx-b2",
-                    icsFile: "https://outlook.office365.com/owa/calendar/3f60cb3359dd40f7943b9de3b062b18d@virginia.edu/1e78265cf5eb44da903745ca3d872e6910017444746788834359/calendar.ics"
+                    icsFile: "pavx-b2"  // Now uses Azure Function with room ID
                 },
                 {
                     name: "Pavilion X Basement Exhibit",
                     id: "pavx-exhibit",
-                    icsFile: "https://outlook.office365.com/owa/calendar/4df4134c83844cef9d9357180ccfb48c@virginia.edu/e46a84ae5d8842d4b33a842ddc5ff66c11207228220277930183/calendar.ics"
+                    icsFile: "pavx-exhibit"  // Now uses Azure Function with room ID
                 }
             ]
         }
