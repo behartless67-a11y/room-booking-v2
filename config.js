@@ -24,11 +24,6 @@ window.DashboardConfig = {
                     name: "Seminar Room L039",
                     id: "seminar",
                     icsFile: "seminar"  // Now uses Azure Function with room ID
-                },
-                {
-                    name: "Student Lounge 206",
-                    id: "lounge",
-                    icsFile: "ics/StudentLounge.ics"
                 }
             ]
         },
