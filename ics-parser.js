@@ -15,6 +15,12 @@ class ICSParser {
         let eventCount = 0;
 
         console.log(`Processing ${lines.length} lines of ICS content`);
+        
+        // Debug first few lines to check ICS format
+        console.log('🔍 First 10 lines of ICS:');
+        for (let i = 0; i < Math.min(10, lines.length); i++) {
+            console.log(`Line ${i}: "${lines[i]}"`);
+        }
 
         for (let i = 0; i < lines.length; i++) {
             try {
@@ -30,10 +36,28 @@ class ICSParser {
                     inEvent = true;
                     currentEvent = {};
                     eventCount++;
+                    
+                    // Debug every 50th event to see parsing progress
+                    if (eventCount % 50 === 0) {
+                        console.log(`📊 Parsed ${eventCount} events so far...`);
+                    }
                 } else if (line === 'END:VEVENT' && inEvent) {
                     if (currentEvent && this.isValidEvent(currentEvent)) {
+                        // Special logging for missing events before processing
+                        if (currentEvent.summary && (currentEvent.summary.includes('Faculty Info') || currentEvent.summary.includes('AOM Search'))) {
+                            console.log(`🚨 FOUND MISSING EVENT in ICS:`, currentEvent.summary);
+                            console.log(`🚨 Raw event data:`, currentEvent);
+                        }
+                        
                         this.processEvent(currentEvent);
                         this.events.push(currentEvent);
+                    } else {
+                        // Log invalid events that might include our missing ones
+                        if (currentEvent && currentEvent.summary && (currentEvent.summary.includes('Faculty Info') || currentEvent.summary.includes('AOM Search'))) {
+                            console.log(`🚨 INVALID EVENT (not processed):`, currentEvent.summary);
+                            console.log(`🚨 Event details:`, currentEvent);
+                            console.log(`🚨 Valid check result:`, this.isValidEvent(currentEvent));
+                        }
                     }
                     currentEvent = null;
                     inEvent = false;
@@ -47,6 +71,11 @@ class ICSParser {
         }
 
         console.log(`Processed ${eventCount} events, ${this.events.length} valid events added`);
+        
+        // Debug: Count how many BEGIN:VEVENT we found
+        const beginEventCount = icsContent.split('BEGIN:VEVENT').length - 1;
+        console.log(`🔍 Found ${beginEventCount} BEGIN:VEVENT markers in raw ICS`);
+        console.log(`🔍 But only processed ${eventCount} events in parser`);
 
         // Finalize room assignments
         this.finalizeRooms();
@@ -74,6 +103,11 @@ class ICSParser {
                 event.endTime = this.parseDateTime(value, key);
             } else if (key === 'SUMMARY') {
                 event.summary = this.unescapeValue(value);
+                
+                // Debug specific events during parsing
+                if (value && (value.includes('Faculty Info') || value.includes('AOM Search'))) {
+                    console.log(`📋 PARSING SUMMARY: "${value}"`);
+                }
             } else if (key === 'DESCRIPTION') {
                 event.description = this.unescapeValue(value);
             } else if (key === 'LOCATION') {
@@ -82,6 +116,8 @@ class ICSParser {
                 event.uid = value;
             } else if (key === 'ORGANIZER') {
                 event.organizer = this.parseOrganizer(value);
+            } else if (key === 'RRULE') {
+                event.rrule = value;
             }
         } catch (error) {
             console.warn(`Error parsing property: ${line}, error: ${error.message}`);
@@ -130,8 +166,23 @@ class ICSParser {
                 if (cleanValue.endsWith('Z')) {
                     // UTC time
                     return new Date(Date.UTC(year, month, day, hour, minute, second));
+                } else if (timezone === 'Eastern Standard Time') {
+                    // Eastern time - create a date string that the browser can parse correctly
+                    // Format: 2024-09-05T15:30:00-04:00 (Eastern Daylight Time)
+                    // Format: 2024-09-05T15:30:00-05:00 (Eastern Standard Time)
+                    
+                    // Determine if we're in DST (rough approximation)
+                    const testDate = new Date(year, month, day);
+                    const isDST = testDate.getMonth() > 2 && testDate.getMonth() < 11; // April-October roughly
+                    const offset = isDST ? '-04:00' : '-05:00';
+                    
+                    const isoString = `${year.toString().padStart(4, '0')}-${(month + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}T${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}:${second.toString().padStart(2, '0')}${offset}`;
+                    
+                    const convertedDate = new Date(isoString);
+                    console.log(`Converting Eastern time: ${value} -> ${isoString} -> ${convertedDate.toString()}`);
+                    return convertedDate;
                 } else {
-                    // Local time or timezone-specific
+                    // Local time or other timezone-specific
                     return new Date(year, month, day, hour, minute, second);
                 }
             }
@@ -173,10 +224,20 @@ class ICSParser {
 
     processEvent(event) {
         // Extract room information from location or summary
-        let room = this.extractRoom(event.location || event.summary || '');
+        // Handle empty location fields (location exists but is empty string)
+        const locationText = (event.location && event.location.trim()) || '';
+        let room = this.extractRoom(locationText || event.summary || '');
         
         // Debug logging
         console.log('Event:', event.summary, 'Location:', event.location, 'Extracted room:', room);
+        
+        // Special logging for missing events
+        if (event.summary && (event.summary.toLowerCase().includes('faculty info') || event.summary.toLowerCase().includes('aom search'))) {
+            console.log(`🔍 SEMINAR ROOM EVENT:`, event.summary);
+            console.log(`🔍 Location: "${event.location}"`);
+            console.log(`🔍 Start: ${event.startTime}`);
+            console.log(`🔍 End: ${event.endTime}`);
+        }
         
         // Specific ConfA debugging
         if (event.location && event.location.includes('ConfA')) {
@@ -193,6 +254,90 @@ class ICSParser {
             // This prevents event titles from being treated as rooms
             event.room = null; // Don't assign a default room yet
         }
+        
+        // Handle recurring events (RRULE)
+        if (event.rrule && event.startTime && event.endTime) {
+            console.log(`🔁 Found recurring event: ${event.summary}`);
+            const recurringEvents = this.expandRecurringEvent(event);
+            if (recurringEvents.length > 0) {
+                console.log(`🔁 Expanded into ${recurringEvents.length} instances`);
+                // Add expanded instances to events array
+                this.events.push(...recurringEvents);
+                // Mark original as processed so it doesn't get added again
+                event._isRecurringParent = true;
+            }
+        }
+    }
+    
+    expandRecurringEvent(parentEvent) {
+        const instances = [];
+        const rrule = parentEvent.rrule;
+        
+        // Parse basic RRULE format: FREQ=WEEKLY;UNTIL=20251216T204500Z;INTERVAL=1;BYDAY=TU;WKST=SU
+        const rruleParams = {};
+        rrule.split(';').forEach(param => {
+            const [key, value] = param.split('=');
+            rruleParams[key] = value;
+        });
+        
+        if (rruleParams.FREQ === 'WEEKLY' && rruleParams.BYDAY) {
+            const startDate = new Date(parentEvent.startTime);
+            const endDate = new Date(parentEvent.endTime);
+            const duration = endDate - startDate; // Duration in milliseconds
+            
+            // Parse UNTIL date if present
+            let untilDate = null;
+            if (rruleParams.UNTIL) {
+                untilDate = new Date(rruleParams.UNTIL.replace(/(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z/, '$1-$2-$3T$4:$5:$6Z'));
+            }
+            
+            // Map day abbreviations to day numbers (0 = Sunday)
+            const dayMap = { SU: 0, MO: 1, TU: 2, WE: 3, TH: 4, FR: 5, SA: 6 };
+            const targetDay = dayMap[rruleParams.BYDAY];
+            
+            if (targetDay !== undefined) {
+                // Generate instances for the next 6 months from today
+                const today = new Date();
+                console.log(`Generating recurring events for ${parentEvent.summary}, target day: ${targetDay} (${rruleParams.BYDAY}), today: ${today.toDateString()} (day ${today.getDay()})`);
+                const maxDate = untilDate || new Date(today.getTime() + (6 * 30 * 24 * 60 * 60 * 1000));
+                
+                let currentDate = new Date(startDate);
+                
+                // Find the first occurrence on the target day
+                while (currentDate.getDay() !== targetDay && currentDate < maxDate) {
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+                
+                // Generate weekly instances
+                while (currentDate < maxDate) {
+                    const instanceStart = new Date(currentDate);
+                    const instanceEnd = new Date(instanceStart.getTime() + duration);
+                    
+                    console.log(`  Generated instance: ${parentEvent.summary} on ${instanceStart.toDateString()} at ${instanceStart.toLocaleTimeString()}`);
+                    
+                    // Create a new event instance
+                    const instance = {
+                        ...parentEvent,
+                        startTime: instanceStart,
+                        endTime: instanceEnd,
+                        uid: `${parentEvent.uid}_${instanceStart.getTime()}`,
+                        _isRecurringInstance: true
+                    };
+                    
+                    // Remove RRULE from instance
+                    delete instance.rrule;
+                    
+                    instances.push(instance);
+                    
+                    // Move to next week
+                    currentDate.setDate(currentDate.getDate() + 7);
+                }
+                
+                console.log(`🔁 Generated ${instances.length} instances for "${parentEvent.summary}"`);
+            }
+        }
+        
+        return instances;
     }
 
     // Call this after all events are processed to remove events without rooms
@@ -209,9 +354,18 @@ class ICSParser {
         });
         console.log(`Events by room before filtering:`, roomCounts);
         
-        // Remove events without valid room assignments
+        // Remove events without valid room assignments and recurring parent events
         const originalCount = this.events.length;
-        this.events = this.events.filter(event => event.room && event.room.trim() !== '');
+        this.events = this.events.filter(event => {
+            const hasRoom = event.room && event.room.trim() !== '';
+            const isRecurringParent = event._isRecurringParent;
+            
+            if (isRecurringParent) {
+                console.log(`Filtering out recurring parent event: "${event.summary}"`);
+            }
+            
+            return hasRoom && !isRecurringParent;
+        });
         const filteredCount = originalCount - this.events.length;
         
         if (filteredCount > 0) {
@@ -417,8 +571,8 @@ class ICSParser {
             // Room + identifier (like "room 123", "room a")
             /^room\s+([a-z]\d*|\d{1,4}[a-z]?)$/i,
             
-            // Conference room patterns
-            /^conference\s+room\s+([a-z]|\d{1,4}[a-z]?)$/i
+            // Conference room patterns (including with room numbers like "conference room a L014")
+            /^conference\s+room\s+([a-z](\s+L?\d{1,4}[a-z]?)?|\d{1,4}[a-z]?)$/i
         ];
         
         // Must match at least one valid room pattern
@@ -451,9 +605,14 @@ class ICSParser {
 
         if (date) {
             const targetDate = new Date(date);
+            console.log(`Filtering events for target date: ${targetDate.toDateString()}`);
             filtered = filtered.filter(event => {
                 const eventDate = new Date(event.startTime);
-                return eventDate.toDateString() === targetDate.toDateString();
+                const matches = eventDate.toDateString() === targetDate.toDateString();
+                if (room && event.room === room) {
+                    console.log(`  Event "${event.summary}" on ${eventDate.toDateString()} ${matches ? 'MATCHES' : 'does not match'} target`);
+                }
+                return matches;
             });
         }
 

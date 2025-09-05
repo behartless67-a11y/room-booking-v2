@@ -131,6 +131,9 @@ END:VCALENDAR`;
 
     setDefaultDate() {
         const today = new Date();
+        console.log(`Browser timezone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`);
+        console.log(`Today's date: ${today.toString()}`);
+        console.log(`Today's date string: ${today.toDateString()}`);
         this.dateSelect.value = today.toISOString().split('T')[0];
         this.currentDate = today;
     }

@@ -10,8 +10,21 @@ header('Access-Control-Allow-Headers: Content-Type');
 // Log the request
 error_log('Calendar proxy request started at ' . date('Y-m-d H:i:s'));
 
-// UVA Calendar URL
-$calendarUrl = 'https://outlook.office365.com/owa/calendar/cf706332e50c45009e2b3164e0b68ca0@virginia.edu/6960c19164584f9cbb619329600a490a16019380931273154626/calendar.ics';
+// Get URL from query parameter
+$calendarUrl = isset($_GET['url']) ? $_GET['url'] : null;
+
+// Default UVA Calendar URL if no URL provided
+if (!$calendarUrl) {
+    $calendarUrl = 'https://outlook.office365.com/owa/calendar/cf706332e50c45009e2b3164e0b68ca0@virginia.edu/6960c19164584f9cbb619329600a490a16019380931273154626/calendar.ics';
+}
+
+// Validate URL
+if (!filter_var($calendarUrl, FILTER_VALIDATE_URL)) {
+    http_response_code(400);
+    echo 'Error: Invalid URL provided';
+    error_log('Invalid URL: ' . $calendarUrl);
+    exit;
+}
 
 error_log('Fetching URL: ' . $calendarUrl);
 

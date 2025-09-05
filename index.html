@@ -6,7 +6,7 @@
     <title>UVA Batten School Room Dashboard</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&display=swap');
         
         :root {
             /* Bold UVA Modern Color System */
@@ -96,12 +96,15 @@
         header {
             background: linear-gradient(135deg, var(--secondary) 0%, #1a2235 100%);
             color: white;
-            padding: 2.5rem 2rem;
-            text-align: center;
+            padding: 1rem 2rem;
+            text-align: left;
             position: relative;
             border-bottom: 4px solid var(--primary);
             box-shadow: 0 8px 32px rgba(35, 45, 75, 0.3);
             overflow: hidden;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
         header::before {
@@ -123,7 +126,7 @@
         }
         
         h1 {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Crimson Text', serif;
             font-size: 1.5rem;
             font-weight: 600;
             margin-bottom: 0;
@@ -138,19 +141,21 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 1rem;
+            gap: 0.75rem;
             padding: 1.5rem;
             background: var(--gray-50);
             border-bottom: 1px solid var(--gray-200);
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
+            overflow-x: auto;
         }
         
         .control-group {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 0.5rem;
             background: var(--white);
-            padding: 1rem 1.5rem;
+            padding: 0.75rem 1rem;
+            flex-shrink: 0;
             border-radius: var(--radius-xl);
             box-shadow: var(--shadow-sm);
             border: 1px solid var(--gray-200);
@@ -195,6 +200,93 @@
         .collapse-btn#expandAllBtn:hover {
             background: color-mix(in srgb, var(--primary) 90%, black);
             border-color: color-mix(in srgb, var(--primary) 90%, black);
+        }
+        
+        .refresh-btn {
+            padding: 0.375rem 0.75rem;
+            border: 1px solid var(--uva-orange);
+            border-radius: var(--radius-md);
+            background: var(--uva-orange);
+            color: white;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .refresh-btn:hover {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        .refresh-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .refresh-btn svg {
+            transition: transform 0.5s ease;
+        }
+        
+        .refresh-btn.spinning svg {
+            animation: spin 1s linear infinite;
+        }
+        
+        .auto-refresh-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--success-light);
+            color: var(--success);
+            border: 2px solid var(--success);
+            animation: pulse 2s infinite;
+            cursor: help;
+        }
+        
+        .auto-refresh-indicator svg {
+            animation: spin 30s linear infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .last-updated {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            margin-top: 0.5rem;
+            padding: 0.25rem 0.5rem;
+            background: var(--gray-50);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--gray-200);
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+        
+        .batten-logo, .karsh-logo {
+            height: 60px;
+            filter: brightness(0) invert(1);
+            transition: var(--transition-normal);
         }
         
         label {
@@ -309,7 +401,46 @@
         .overview-content {
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
+            gap: 0;
+        }
+        
+        .overview-room-compact {
+            transition: background-color var(--transition-normal);
+        }
+        
+        .overview-room-compact:hover {
+            background-color: var(--gray-50);
+            transform: translateX(4px);
+        }
+
+        .overview-room-compact:hover > div {
+            border-color: var(--primary);
+            box-shadow: 0 2px 8px rgba(35, 45, 75, 0.1);
+        }
+        
+        /* Batten Events Styling */
+        .batten-events-header {
+            margin-bottom: 0.5rem;
+        }
+        
+        .batten-event-compact {
+            margin-bottom: 0.5rem;
+            transition: all var(--transition-normal);
+            cursor: pointer;
+        }
+        
+        .batten-event-compact:hover {
+            transform: translateX(2px);
+        }
+        
+        .batten-event-compact:hover > div {
+            background: linear-gradient(135deg, rgba(229, 114, 0, 0.08) 0%, rgba(255, 140, 66, 0.08) 100%) !important;
+            border-color: rgba(229, 114, 0, 0.2) !important;
+            box-shadow: 0 2px 8px rgba(229, 114, 0, 0.15);
+        }
+        
+        .overview-room-compact:last-child > div {
+            border-bottom: none;
         }
         
         .overview-room {
@@ -839,7 +970,7 @@
         }
         
         .room-name {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Crimson Text', serif;
             font-size: 1.375rem;
             font-weight: 700;
             color: var(--secondary);
@@ -947,6 +1078,352 @@
             font-size: 0.875rem;
             color: var(--gray-500);
             font-style: italic;
+        }
+
+        /* Building Section Styles */
+        .building-section {
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .building-section:nth-child(1) { animation-delay: 0.1s; }
+        .building-section:nth-child(2) { animation-delay: 0.2s; }
+        .building-section:nth-child(3) { animation-delay: 0.3s; }
+
+        .building-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, #1a2436 100%);
+            border-radius: var(--radius-xl);
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .building-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .building-header:hover::before {
+            left: 100%;
+        }
+
+        .building-header:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(35, 45, 75, 0.15);
+            border-color: var(--secondary);
+        }
+
+        .building-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 0;
+            color: var(--white);
+            font-family: 'Crimson Text', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+
+        .building-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            fill: var(--secondary);
+        }
+
+        .building-collapse {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            padding: 0.5rem;
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 2.5rem;
+            height: 2.5rem;
+        }
+
+        .building-collapse:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .building-collapse svg {
+            width: 1rem;
+            height: 1rem;
+            transition: transform var(--transition-normal);
+        }
+
+        .building-section.collapsed .building-collapse svg {
+            transform: rotate(180deg);
+        }
+
+        .building-rooms {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 1.25rem;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            overflow: hidden;
+            max-height: 2000px;
+        }
+
+        .building-section.collapsed .building-rooms {
+            max-height: 0;
+            opacity: 0;
+            margin-bottom: 0;
+            transform: translateY(-10px);
+        }
+
+        /* Add staggered animation for room cards */
+        .room-card {
+            animation: slideInCard 0.5s ease-out;
+        }
+
+        .room-card:nth-child(1) { animation-delay: 0.1s; }
+        .room-card:nth-child(2) { animation-delay: 0.2s; }
+        .room-card:nth-child(3) { animation-delay: 0.3s; }
+        .room-card:nth-child(4) { animation-delay: 0.4s; }
+
+        .building-count {
+            background: var(--secondary);
+            color: var(--white);
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-full);
+            margin-left: 0.5rem;
+        }
+
+        /* Different building color schemes */
+        .building-section[data-building="garrett"] .building-header {
+            background: 
+                linear-gradient(rgba(35, 45, 75, 0.85), rgba(26, 36, 54, 0.85)),
+                url('https://news.virginia.edu/sites/default/files/article_image/16351_photo_1_high_res.jpg') center/cover;
+        }
+
+        .building-section[data-building="pavilionx"] .building-header {
+            background: 
+                linear-gradient(rgba(45, 80, 22, 0.85), rgba(61, 107, 31, 0.85)),
+                url('https://batten.virginia.edu/sites/default/files/inline-images/Pavilion%201%201200%20x%20800_0.png') center/cover;
+        }
+
+        .building-section[data-building="pavilionx"] .building-header:hover {
+            border-color: #7cb342;
+        }
+
+        /* Keyframe Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInCard {
+            from {
+                opacity: 0;
+                transform: translateX(-20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200px 0; }
+            100% { background-position: 200px 0; }
+        }
+
+        /* Loading Skeleton Animations */
+        .skeleton-content {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200px 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        /* Enhanced Room Card Animations */
+        .room-card {
+            transform-origin: center;
+            animation: slideInCard 0.5s ease-out;
+        }
+
+        .room-card:hover {
+            animation: none;
+            transform: translateY(-8px) scale(1.02);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Overview Panel Animations */
+        .overview-room-compact {
+            opacity: 0;
+            animation: slideInCompact 0.4s ease-out forwards;
+        }
+
+        .overview-room-compact:nth-child(1) { animation-delay: 0.1s; }
+        .overview-room-compact:nth-child(2) { animation-delay: 0.15s; }
+        .overview-room-compact:nth-child(3) { animation-delay: 0.2s; }
+        .overview-room-compact:nth-child(4) { animation-delay: 0.25s; }
+        .overview-room-compact:nth-child(5) { animation-delay: 0.3s; }
+        .overview-room-compact:nth-child(6) { animation-delay: 0.35s; }
+        .overview-room-compact:nth-child(7) { animation-delay: 0.4s; }
+        .overview-room-compact:nth-child(8) { animation-delay: 0.45s; }
+
+        @keyframes slideInCompact {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Compact Navigation Styles */
+        .navigation-bar {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 0.5rem 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .nav-compact {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+
+
+        .current-date-display {
+            flex: 1;
+            text-align: left;
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--gray-800);
+        }
+
+        .date-nav-compact {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .date-nav-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-md);
+            color: var(--gray-600);
+            transition: all var(--transition-normal);
+            cursor: pointer;
+        }
+
+        .date-nav-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+            transform: translateY(-1px);
+        }
+
+        .date-nav-btn.today-btn {
+            width: auto;
+            padding: 0 0.75rem;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+
+        /* Enhanced Time Indicators */
+        .time-indicator {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--danger);
+            z-index: 10;
+            border-radius: 1px;
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        .time-indicator::before {
+            content: '';
+            position: absolute;
+            left: -4px;
+            top: -3px;
+            width: 8px;
+            height: 8px;
+            background: var(--danger);
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+        }
+
+        /* Responsive navigation */
+        @media (max-width: 768px) {
+            .navigation-bar {
+                padding: 0.5rem 1rem;
+            }
+
+            .nav-compact {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .current-date-display {
+                text-align: center;
+                order: -1;
+                margin-bottom: 0.5rem;
+            }
+
+            .date-nav-compact {
+                justify-content: center;
+            }
+
+            .building-rooms {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .building-header {
+                padding: 0.75rem 1rem;
+            }
+            
+            .building-title {
+                font-size: 1.25rem;
+            }
         }
 
         /* Loading and Error States */
@@ -1171,12 +1648,37 @@
 <body>
     <div class="container">
         <header>
-            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                <img src="https://battenprojects.com/images/bat_rgb_ko.png" alt="UVA Batten School" class="batten-logo" style="height: 120px; margin-bottom: 12px; filter: brightness(0) invert(1);">
-                <h1>BattenSpace</h1>
+            <div class="header-left">
+                <img src="bat_rgb_ko.png" alt="UVA Batten School" class="batten-logo" style="height: 60px; filter: brightness(0) invert(1);">
+            </div>
+            <div class="header-right">
+                <img src="karsh.png?v=3" alt="Karsh Institute of Democracy" class="karsh-logo" style="height: 60px;">
             </div>
         </header>
         
+        <!-- Compact Navigation Bar -->
+        <div class="navigation-bar">
+            <div class="nav-compact">
+                <div class="current-date-display" id="currentDateDisplay">
+                    Thursday, August 29, 2025
+                </div>
+                
+                <div class="date-nav-compact">
+                    <button class="date-nav-btn" id="prevDayBtn" title="Previous day">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 18l-6-6 6-6"/>
+                        </svg>
+                    </button>
+                    <button class="date-nav-btn today-btn" id="todayBtn">Today</button>
+                    <button class="date-nav-btn" id="nextDayBtn" title="Next day">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18l6-6-6-6"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <div class="controls">
             <div class="control-group">
                 <label for="dateSelect">Date:</label>
@@ -1200,6 +1702,21 @@
                 <button id="expandAllBtn" class="collapse-btn">Expand</button>
                 <button id="collapseAllBtn" class="collapse-btn">Collapse</button>
             </div>
+            
+            <div class="control-group">
+                <button id="refreshBtn" class="refresh-btn" title="Refresh calendar data">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M23 4v6h-6M1 20v-6h6M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
+                    </svg>
+                    Refresh
+                </button>
+                <div id="autoRefreshIndicator" class="auto-refresh-indicator" title="Auto-refresh active">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12,6 12,12 16,14"></polyline>
+                    </svg>
+                </div>
+            </div>
         </div>
         
         <div class="dashboard">
@@ -1207,6 +1724,7 @@
                 <div class="sidebar-header">
                     <h3>Today's Overview</h3>
                     <div class="sidebar-subtitle">All rooms at a glance</div>
+                    <div id="lastUpdated" class="last-updated">Last updated: <span id="lastUpdatedTime">Never</span></div>
                 </div>
                 <div id="overviewContent" class="overview-content"></div>
             </div>
@@ -1273,7 +1791,8 @@
         </div>
     </div>
 
-            <script src="config.js?v=3"></script>
+
+            <script src="config.js?v=5"></script>
     <script>
         // Add error handling for config loading
         if (typeof window.DashboardConfig === 'undefined') {
@@ -1282,6 +1801,28 @@
                 icsFiles: ['ics/ConfA.ics', 'ics/GreatHall.ics', 'ics/SeminarRoom.ics'],
                 settings: { defaultView: 'day', dayViewStart: 8, dayViewEnd: 20 }
             };
+        }
+        
+        // Ensure eventCalendars exist even if config loaded partially
+        if (!window.DashboardConfig.eventCalendars) {
+            console.log('📅 Adding eventCalendars to config');
+            window.DashboardConfig.eventCalendars = [
+                {
+                    name: "Batten School Events",
+                    id: "batten-events", 
+                    url: "https://www.trumba.com/calendars/batten-school-events.ics",
+                    description: "Official Batten School academic and administrative events",
+                    color: "#e57200",
+                    enabled: true,
+                    roomMappings: {
+                        "Great Hall (100)": "Great Hall 100",
+                        "Conference Room A": "Conference Room A L014", 
+                        "Seminar Room": "Seminar Room L039",
+                        "Student Lounge": "Student Lounge 206",
+                        "Garrett Hall": "Garrett Hall"
+                    }
+                }
+            ];
         }
         
         // ICS Parser Class
@@ -1723,15 +2264,19 @@
                 this.currentDate = new Date();
                 this.parser = new ICSParser();
                 this.events = [];
+                this.externalEvents = []; // For Batten School events
                 this.rooms = new Set();
                 this.isLiveData = false;
 
                 
                 // Get configuration from config.js
+                console.log('🔍 DEBUG: window.DashboardConfig:', window.DashboardConfig);
                 this.config = window.DashboardConfig || {
                     icsFiles: ['ics/ConfA.ics', 'ics/GreatHall.ics', 'ics/SeminarRoom.ics'],
                     settings: { defaultView: 'day', dayViewStart: 8, dayViewEnd: 20 }
                 };
+                console.log('🔍 DEBUG: final this.config:', this.config);
+                console.log('🔍 DEBUG: final this.config.eventCalendars:', this.config.eventCalendars);
                 this.icsFiles = this.config.icsFiles;
                 
                 this.init();
@@ -1742,6 +2287,10 @@
                 this.bindEvents();
                 this.setDefaultDate();
                 this.loadCalendarData();
+                this.loadEventCalendars();
+                
+                // Start automatic refresh every 30 seconds
+                this.startAutoRefresh();
             }
             
             bindElements() {
@@ -1804,16 +2353,35 @@
                 this.collapseAllBtn.addEventListener('click', () => this.collapseAllRooms());
                 this.expandAllBtn.addEventListener('click', () => this.expandAllRooms());
                 
+                // Enhanced navigation controls
+                this.prevDayBtn = document.getElementById('prevDayBtn');
+                this.todayBtn = document.getElementById('todayBtn');
+                this.nextDayBtn = document.getElementById('nextDayBtn');
+                
+                this.prevDayBtn.addEventListener('click', () => this.navigateDate(-1));
+                this.todayBtn.addEventListener('click', () => this.navigateToToday());
+                this.nextDayBtn.addEventListener('click', () => this.navigateDate(1));
+                
+                // Refresh button
+                this.refreshBtn = document.getElementById('refreshBtn');
+                this.refreshBtn.addEventListener('click', () => this.refreshData());
+                
                 // ESC key to close modal
                 document.addEventListener('keydown', (e) => {
                     if (e.key === 'Escape' && !this.eventModal.classList.contains('hidden')) {
                         this.closeModal();
                     }
                 });
+                
+                // Clean up auto-refresh on page unload
+                window.addEventListener('beforeunload', () => {
+                    this.stopAutoRefresh();
+                });
             }
             
             setDefaultDate() {
                 this.dateSelect.value = this.currentDate.toISOString().split('T')[0];
+                this.updateDateDisplay();
             }
             
             async loadCalendarData() {
@@ -1828,8 +2396,15 @@
                 for (const fileName of this.icsFiles) {
                     try {
                         console.log(`🔄 Attempting to load ${fileName}...`);
+                        
+                        // Check if this is an external URL that needs to go through proxy
+                        let fetchUrl = fileName;
+                        if (fileName.startsWith('http://') || fileName.startsWith('https://')) {
+                            fetchUrl = `calendar-proxy.php?url=${encodeURIComponent(fileName)}`;
+                            console.log(`🌐 Using proxy for external URL: ${fetchUrl}`);
+                        }
 
-                        const response = await fetch(fileName, { 
+                        const response = await fetch(fetchUrl, { 
                             cache: 'no-cache',  // Force fresh fetch
                             headers: {
                                 'Cache-Control': 'no-cache',
@@ -1843,8 +2418,30 @@
                             const icsData = await response.text();
                             console.log(`✅ Successfully loaded ${fileName} (${icsData.length} characters)`);
                             
+                            // Special debugging for ConfA.ics
+                            if (fileName.includes('ConfA.ics')) {
+                                console.log('🔍 CONFERENCE ROOM A DEBUG:');
+                                console.log('📄 ConfA.ics content preview:', icsData.substring(0, 500));
+                                console.log('🔍 Looking for FBS-ConfA-L014 in content...');
+                                if (icsData.includes('FBS-ConfA-L014')) {
+                                    console.log('✅ Found FBS-ConfA-L014 in ConfA.ics!');
+                                } else {
+                                    console.log('❌ FBS-ConfA-L014 NOT found in ConfA.ics');
+                                }
+                            }
+                            
                             console.log(`🔧 Parsing ${fileName}...`);
-                            this.parseICSData(icsData);
+                            
+                            // Special debugging for Seminar Room
+                            if (fileName.includes('4cedc3f0284648fcbee80dd7f6563bab')) {
+                                console.log(`🔍 SEMINAR ROOM ICS LENGTH: ${icsData.length} characters`);
+                                const facultyCount = (icsData.match(/Faculty Info/g) || []).length;
+                                const aomCount = (icsData.match(/AOM Search/g) || []).length;
+                                console.log(`🔍 Faculty Info mentions in ICS: ${facultyCount}`);
+                                console.log(`🔍 AOM Search mentions in ICS: ${aomCount}`);
+                            }
+                            
+                            this.parseICSData(icsData, fileName);
                             console.log(`✅ Finished parsing ${fileName}`);
                             
                             loadedAnyFile = true;
@@ -1865,6 +2462,14 @@
                     console.log('📊 Getting final events and rooms...');
                     this.events = this.parser.getEvents();
                     this.rooms = this.parser.getRooms();
+                    
+                    // Ensure all configured rooms are included, even if they have no events
+                    this.config.buildings.forEach(building => {
+                        building.rooms.forEach(room => {
+                            this.rooms.add(room.name);
+                        });
+                    });
+                    
                     console.log('✅ Events and rooms retrieved');
                     
                     console.log(`📈 Final results: ${this.events.length} events from ${this.rooms.size} rooms`);
@@ -1895,6 +2500,9 @@
                     this.render();
                     this.showLoading(false);
                     console.log('Dashboard loaded successfully!');
+                    
+                    // Update last updated timestamp
+                    this.updateLastUpdatedTime();
                 } else {
                     console.error('No files could be loaded');
                     this.showError(`Could not load calendar data from any of the specified files: ${this.icsFiles.join(', ')}`);
@@ -1908,11 +2516,142 @@
                     console.log('Loading process completed (success or failure)');
                 }
             }
+            
+            async loadEventCalendars() {
+                console.log('🔍 DEBUG: loadEventCalendars called');
+                console.log('🔍 DEBUG: this.config:', this.config);
+                console.log('🔍 DEBUG: this.config.eventCalendars:', this.config.eventCalendars);
+                
+                if (!this.config.eventCalendars || this.config.eventCalendars.length === 0) {
+                    console.log('❌ No external event calendars configured');
+                    return;
+                }
+                
+                console.log('✅ Loading external event calendars...');
+                
+                try {
+                    this.externalEvents = [];
+                    
+                    const loadPromises = this.config.eventCalendars
+                        .filter(calendar => calendar.enabled)
+                        .map(async calendar => {
+                            try {
+                                console.log(`Loading ${calendar.name}...`);
+                                
+                                // Use a proxy approach for CORS issues
+                                const proxyUrl = `calendar-proxy.php?url=${encodeURIComponent(calendar.url)}`;
+                                const response = await fetch(proxyUrl);
+                                
+                                if (!response.ok) {
+                                    console.warn(`Failed to load ${calendar.name}: ${response.status}`);
+                                    return;
+                                }
+                                
+                                const icsContent = await response.text();
+                                const externalParser = new ICSParser();
+                                const parseResult = externalParser.parseICS(icsContent);
+                                const parsedEvents = parseResult.events || [];
+                                
+                                // Add calendar metadata to events
+                                const enrichedEvents = parsedEvents.map(event => ({
+                                    ...event,
+                                    source: calendar.id,
+                                    sourceName: calendar.name,
+                                    sourceColor: calendar.color,
+                                    isExternal: true
+                                }));
+                                
+                                                console.log(`Parsed ${enrichedEvents.length} events from ${calendar.name}`);
+                console.log('🔍 DEBUG: Sample events:', enrichedEvents.slice(0, 3));
+                this.externalEvents.push(...enrichedEvents);
+                                
+                            } catch (error) {
+                                console.error(`Error loading ${calendar.name}:`, error);
+                            }
+                        });
+                    
+                    await Promise.all(loadPromises);
+                    console.log('External events loaded. Total:', this.externalEvents.length);
+                    
+                } catch (error) {
+                    console.error('Failed to load external event calendars:', error);
+                }
+            }
 
-            parseICSData(icsData) {
+            parseICSData(icsData, fileName = '') {
                 console.log('Parsing ICS data...');
-                this.parser.parseICS(icsData);
+                const result = this.parser.parseICS(icsData);
+                
+                // Assign default room for events without location based on the calendar source
+                if (fileName) {
+                    const defaultRoom = this.getDefaultRoomForFile(fileName);
+                    if (defaultRoom) {
+                        // Find events that were just added and have no room assigned
+                        this.parser.events.forEach(event => {
+                            // Check for events with no room OR events with empty location fields
+                            const hasEmptyLocation = event.location !== undefined && (!event.location || !event.location.trim());
+                            // Debug for tomorrow's events specifically
+                            const tomorrow = new Date();
+                            tomorrow.setDate(tomorrow.getDate() + 1);
+                            const isTomorrowEvent = event.startTime && event.startTime.toDateString() === tomorrow.toDateString();
+                            
+                            if (isTomorrowEvent && defaultRoom === 'Seminar Room L039') {
+                                console.log(`📅 TOMORROW SEMINAR EVENT - Summary: "${event.summary}"`);
+                                console.log(`📅 Location: "${event.location}"`);
+                                console.log(`📅 Current room: "${event.room}"`);
+                                console.log(`📅 Has empty location: ${hasEmptyLocation}`);
+                                console.log(`📅 Needs room assignment: ${!event.room || hasEmptyLocation}`);
+                                console.log(`📅 Start time: ${event.startTime}`);
+                                console.log(`📅 End time: ${event.endTime}`);
+                            }
+                            
+                            if (!event.room || hasEmptyLocation) {
+                                console.log(`🔧 Assigning default room "${defaultRoom}" to event: ${event.summary}`);
+                                event.room = defaultRoom;
+                                this.parser.rooms.add(defaultRoom);
+                                
+                                // Special logging for specific events
+                                if (event.summary && event.summary.toLowerCase().includes('sally hudson')) {
+                                    console.log(`🎯 SALLY HUDSON EVENT FOUND:`, event);
+                                    console.log(`🎯 Start time: ${event.startTime}`);
+                                    console.log(`🎯 End time: ${event.endTime}`);
+                                    console.log(`🎯 Assigned room: ${event.room}`);
+                                }
+                                if (event.summary && event.summary.toLowerCase().includes('faculty info')) {
+                                    console.log(`🎯 FACULTY INFO SESSION FOUND:`, event);
+                                    console.log(`🎯 Start time: ${event.startTime}`);
+                                    console.log(`🎯 End time: ${event.endTime}`);
+                                    console.log(`🎯 Assigned room: ${event.room}`);
+                                }
+                                if (event.summary && event.summary.toLowerCase().includes('aom search')) {
+                                    console.log(`🎯 AOM SEARCH COMMITTEE FOUND:`, event);
+                                    console.log(`🎯 Start time: ${event.startTime}`);
+                                    console.log(`🎯 End time: ${event.endTime}`);
+                                    console.log(`🎯 Assigned room: ${event.room}`);
+                                }
+                            }
+                        });
+                    }
+                }
+                
                 console.log(`Added events from file. Parser now has ${this.parser.events.length} total events`);
+            }
+            
+            getDefaultRoomForFile(fileName) {
+                // Map calendar URLs/files to their default rooms
+                if (fileName.includes('4207f27aa0d54d318d660537325a3856') || fileName.includes('ConfA')) {
+                    return 'Conference Room A L014';
+                }
+                if (fileName.includes('cf706332e50c45009e2b3164e0b68ca0') || fileName.includes('GreatHall')) {
+                    return 'Great Hall 100';
+                }
+                if (fileName.includes('4cedc3f0284648fcbee80dd7f6563bab') || fileName.includes('SeminarRoom')) {
+                    return 'Seminar Room L039';
+                }
+                if (fileName.includes('StudentLounge')) {
+                    return 'Student Lounge 206';
+                }
+                return null;
             }
             
             updateRoomFilter() {
@@ -1934,6 +2673,7 @@
                 const dateValue = e.target.value;
                 const [year, month, day] = dateValue.split('-');
                 this.currentDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+                this.updateDateDisplay();
                 this.render();
             }
             
@@ -1954,7 +2694,14 @@
                 this.render();
             }
             
+            
             collapseAllRooms() {
+                // Collapse all building sections
+                document.querySelectorAll('.building-section').forEach(section => {
+                    section.classList.add('collapsed');
+                });
+                
+                // Collapse all room cards
                 document.querySelectorAll('.room-card').forEach(card => {
                     card.classList.add('collapsed');
                     const collapseText = card.querySelector('.collapse-indicator span');
@@ -1965,6 +2712,12 @@
             }
             
             expandAllRooms() {
+                // Expand all building sections
+                document.querySelectorAll('.building-section').forEach(section => {
+                    section.classList.remove('collapsed');
+                });
+                
+                // Expand all room cards
                 document.querySelectorAll('.room-card').forEach(card => {
                     card.classList.remove('collapsed');
                     const collapseText = card.querySelector('.collapse-indicator span');
@@ -1972,6 +2725,114 @@
                         collapseText.textContent = 'Click to collapse';
                     }
                 });
+            }
+            
+            async refreshData() {
+                // Show loading state
+                this.refreshBtn.disabled = true;
+                this.refreshBtn.classList.add('spinning');
+                this.showLoading(true);
+                
+                try {
+                    // Clear existing data
+                    this.events = [];
+                    this.rooms = new Set();
+                    this.parser = new ICSParser();
+                    
+                    // Reload calendar data
+                    await this.loadCalendarData();
+                    
+                    console.log('✅ Data refreshed successfully');
+                    
+                    // Set last refresh time for countdown
+                    this.lastRefreshTime = Date.now();
+                } catch (error) {
+                    console.error('❌ Error refreshing data:', error);
+                    this.showError(`Failed to refresh data: ${error.message}`);
+                } finally {
+                    // Reset loading state
+                    this.refreshBtn.disabled = false;
+                    this.refreshBtn.classList.remove('spinning');
+                    this.showLoading(false);
+                    
+                    // Update last updated timestamp
+                    this.updateLastUpdatedTime();
+                }
+            }
+            
+            startAutoRefresh() {
+                // Get auto-refresh interval from config (default 30 seconds if not set)
+                const refreshInterval = (this.config.settings?.autoRefreshMinutes || 0.5) * 60 * 1000;
+                
+                if (refreshInterval <= 0) {
+                    console.log('⏹️ Auto-refresh disabled in configuration');
+                    return;
+                }
+                
+                // Auto-refresh at the configured interval
+                this.autoRefreshInterval = setInterval(() => {
+                    console.log(`🔄 Auto-refreshing calendar data (every ${refreshInterval/1000} seconds)...`);
+                    this.refreshData();
+                }, refreshInterval);
+                
+                // Also refresh when the page becomes visible again (user returns to tab)
+                document.addEventListener('visibilitychange', () => {
+                    if (!document.hidden) {
+                        console.log('🔄 Page became visible, refreshing data...');
+                        this.refreshData();
+                    }
+                });
+                
+                console.log(`✅ Auto-refresh started (every ${refreshInterval/1000} seconds)`);
+            }
+            
+            startCountdown(refreshInterval) {
+                // Update countdown every second
+                this.countdownInterval = setInterval(() => {
+                    const now = Date.now();
+                    const lastRefresh = this.lastRefreshTime || now;
+                    const timeSinceRefresh = now - lastRefresh;
+                    const timeUntilNext = refreshInterval - timeSinceRefresh;
+                    
+                    if (timeUntilNext <= 0) {
+                        // Reset countdown
+                        this.lastRefreshTime = now;
+                        this.updateCountdownDisplay('Refreshing...');
+                    } else {
+                        const secondsLeft = Math.ceil(timeUntilNext / 1000);
+                        this.updateCountdownDisplay(`${secondsLeft}s`);
+                    }
+                }, 1000);
+            }
+            
+            updateCountdownDisplay(text) {
+                const indicator = document.getElementById('autoRefreshIndicator');
+                if (indicator) {
+                    indicator.title = `Auto-refresh active - ${text}`;
+                }
+            }
+            
+            stopAutoRefresh() {
+                if (this.autoRefreshInterval) {
+                    clearInterval(this.autoRefreshInterval);
+                    this.autoRefreshInterval = null;
+                    console.log('⏹️ Auto-refresh stopped');
+                }
+                
+                if (this.countdownInterval) {
+                    clearInterval(this.countdownInterval);
+                    this.countdownInterval = null;
+                    this.updateCountdownDisplay('Stopped');
+                }
+            }
+            
+            updateLastUpdatedTime() {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString();
+                const lastUpdatedElement = document.getElementById('lastUpdatedTime');
+                if (lastUpdatedElement) {
+                    lastUpdatedElement.textContent = timeString;
+                }
             }
             
             render() {
@@ -1999,18 +2860,22 @@
                 
                 const eventsForDate = this.getEventsForDate(targetDate);
                 
-                // Generate time slots from configured start to end time
+                // Generate 30-minute time slots from configured start to end time
                 const startHour = this.config.settings?.dayViewStart || 8;
                 const endHour = this.config.settings?.dayViewEnd || 20;
                 const timeSlots = [];
                 for (let hour = startHour; hour <= endHour; hour++) {
-                    const hour12 = hour > 12 ? hour - 12 : hour;
-                    const ampm = hour >= 12 ? 'PM' : 'AM';
-                    const displayHour = hour12 === 0 ? 12 : hour12;
-                    timeSlots.push({
-                        hour24: hour,
-                        display: `${displayHour}:00 ${ampm}`
-                    });
+                    for (let minute = 0; minute < 60; minute += 30) {
+                        const hour12 = hour > 12 ? hour - 12 : hour;
+                        const ampm = hour >= 12 ? 'PM' : 'AM';
+                        const displayHour = hour12 === 0 ? 12 : hour12;
+                        const displayMinute = minute === 0 ? '00' : '30';
+                        timeSlots.push({
+                            hour24: hour,
+                            minute: minute,
+                            display: `${displayHour}:${displayMinute} ${ampm}`
+                        });
+                    }
                 }
                 
                 // Filter rooms
@@ -2019,16 +2884,125 @@
                 // Build the layout
                 this.dayView.innerHTML = '';
                 
-                // Rooms grid
-                const roomsGrid = document.createElement('div');
-                roomsGrid.className = 'rooms-grid';
+                // Group rooms by building
+                if (selectedRoom) {
+                    // Single room view - use simple grid
+                    const roomsGrid = document.createElement('div');
+                    roomsGrid.className = 'rooms-grid';
+                    this.dayView.appendChild(roomsGrid);
+                    
+                    roomsToShow.forEach(room => {
+                        this.createRoomCard(room, roomsGrid, eventsForDate, timeSlots);
+                    });
+                } else {
+                    // Multi-room view - group by buildings
+                    this.config.buildings.forEach(building => {
+                        const buildingRooms = building.rooms.filter(room => 
+                            roomsToShow.includes(room.name)
+                        );
+                        
+                        if (buildingRooms.length > 0) {
+                            this.createBuildingSection(building, buildingRooms, eventsForDate, timeSlots);
+                        }
+                    });
+                }
+            }
+            
+            createBuildingSection(building, buildingRooms, eventsForDate, timeSlots) {
+                const buildingSection = document.createElement('div');
+                buildingSection.className = 'building-section collapsed';
+                buildingSection.setAttribute('data-building', building.id);
                 
-                roomsToShow.forEach(room => {
+                // Building header
+                const buildingHeader = document.createElement('div');
+                buildingHeader.className = 'building-header';
+                
+                const buildingTitle = document.createElement('h3');
+                buildingTitle.className = 'building-title';
+                
+                // Add building icon based on building type
+                const buildingIcon = document.createElement('svg');
+                buildingIcon.className = 'building-icon';
+                buildingIcon.setAttribute('viewBox', '0 0 24 24');
+                buildingIcon.setAttribute('fill', 'none');
+                buildingIcon.setAttribute('stroke', 'currentColor');
+                buildingIcon.setAttribute('stroke-width', '2');
+                
+                if (building.id === 'pavilionx') {
+                    buildingIcon.innerHTML = '<path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"></path><path d="M9 9v.01M9 12v.01M9 15v.01M9 18v.01"></path>';
+                } else {
+                    buildingIcon.innerHTML = '<path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"></path><path d="M6 12h4m-4 4h4m-4 4h4"></path>';
+                }
+                
+                const titleText = document.createElement('span');
+                titleText.textContent = building.name;
+                
+                const buildingCount = document.createElement('span');
+                buildingCount.className = 'building-count';
+                buildingCount.textContent = buildingRooms.length;
+                
+                buildingTitle.appendChild(buildingIcon);
+                buildingTitle.appendChild(titleText);
+                buildingTitle.appendChild(buildingCount);
+                
+                const collapseButton = document.createElement('button');
+                collapseButton.className = 'building-collapse';
+                collapseButton.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6"></path>
+                    </svg>
+                `;
+                
+                buildingHeader.appendChild(buildingTitle);
+                buildingHeader.appendChild(collapseButton);
+                
+                // Building rooms container
+                const buildingRoomsContainer = document.createElement('div');
+                buildingRoomsContainer.className = 'building-rooms';
+                
+                // Add rooms to this building
+                buildingRooms.forEach(room => {
+                    this.createRoomCard(room.name, buildingRoomsContainer, eventsForDate, timeSlots);
+                });
+                
+                buildingSection.appendChild(buildingHeader);
+                buildingSection.appendChild(buildingRoomsContainer);
+                
+                // Add collapse functionality
+                buildingHeader.addEventListener('click', () => {
+                    buildingSection.classList.toggle('collapsed');
+                });
+                
+                this.dayView.appendChild(buildingSection);
+            }
+            
+            createRoomCard(room, container, eventsForDate, timeSlots) {
+                    console.log(`Creating room card for: "${room}"`);
+                    console.log(`Events for date:`, eventsForDate);
+                    console.log(`All events:`, this.events);
+                    
                     const roomCard = document.createElement('div');
                     roomCard.className = 'room-card collapsed';
                     
                     // Calculate room occupancy for the day
-                    const roomEvents = eventsForDate.filter(event => event.room === room);
+                    const roomEvents = eventsForDate.filter(event => {
+                        console.log(`Comparing event.room "${event.room}" with room "${room}"`);
+                        
+                        // Special debugging for AOM Search Committee
+                        if (event.summary && event.summary.toLowerCase().includes('aom search')) {
+                            console.log(`🔍 AOM SEARCH EVENT FILTERING:`, {
+                                summary: event.summary,
+                                eventRoom: event.room,
+                                targetRoom: room,
+                                match: event.room === room,
+                                startTime: event.startTime,
+                                endTime: event.endTime
+                            });
+                        }
+                        
+                        return event.room === room;
+                    });
+                    console.log(`Found ${roomEvents.length} events for room "${room}":`, roomEvents);
                     const hasEvents = roomEvents.length > 0;
                     
                     if (hasEvents) {
@@ -2061,6 +3035,7 @@
                     
                     // Determine current room status
                     const now = new Date();
+                    const targetDate = this.currentDate.toDateString();
                     const currentlyBusy = this.isRoomBusyAtTime(room, now, targetDate);
                     
                     if (currentlyBusy) {
@@ -2093,8 +3068,9 @@
                     
                     timeSlots.forEach(timeObj => {
                         const slotTime = new Date(this.currentDate);
-                        slotTime.setHours(timeObj.hour24, 0, 0, 0);
+                        slotTime.setHours(timeObj.hour24, timeObj.minute, 0, 0);
                         
+                        // Find event for this 30-minute time slot
                         const event = this.findEventAtTime(room, slotTime, targetDate);
                         
                         const slotRow = document.createElement('div');
@@ -2113,13 +3089,14 @@
                         const textDiv = document.createElement('div');
                         
                         if (event) {
-                            statusDot.classList.add('status-busy');
-                            textDiv.className = 'time-slot-event';
-                            textDiv.textContent = event.summary;
-                            slotRow.title = `${event.summary}\n${this.formatTime(event.startTime)} - ${this.formatTime(event.endTime)}`;
+                            statusDot.classList.add('busy');
+                            textDiv.className = 'time-slot-text';
+                            textDiv.innerHTML = `<strong>${event.summary}</strong>`;
+                            slotRow.classList.add('has-event');
+                            slotRow.title = `${room}: ${event.summary} (${this.formatTime(event.startTime)} - ${this.formatTime(event.endTime)})`;
                         } else {
-                            statusDot.classList.add('status-available');
-                            textDiv.className = 'time-slot-free';
+                            statusDot.classList.add('free');
+                            textDiv.className = 'time-slot-text time-slot-free';
                             textDiv.textContent = 'Available';
                             slotRow.title = `${room} is available at ${timeObj.display}`;
                         }
@@ -2141,7 +3118,7 @@
                     });
                     
                     roomContent.appendChild(roomSchedule);
-                    roomsGrid.appendChild(roomCard);
+                    container.appendChild(roomCard);
                     
                     // Add click handler for collapse functionality
                     roomHeader.addEventListener('click', () => {
@@ -2151,9 +3128,6 @@
                         // Update collapse text
                         collapseText.textContent = isCollapsed ? 'Click to collapse' : 'Click to expand';
                     });
-                });
-                
-                this.dayView.appendChild(roomsGrid);
             }
             
 
@@ -2552,7 +3526,27 @@
                 return this.events.find(event => {
                     const roomMatch = event.room === room;
                     const dateMatch = event.startTime.toDateString() === targetDate;
-                    const timeMatch = event.startTime <= slotTime && event.endTime > slotTime;
+                    
+                    // Check if event overlaps with the 30-minute slot (slotTime to slotTime+30min)
+                    const slotEnd = new Date(slotTime);
+                    slotEnd.setMinutes(slotEnd.getMinutes() + 30);
+                    
+                    // Event overlaps if: (event.start < slot.end) AND (event.end > slot.start)
+                    const timeMatch = (event.startTime < slotEnd) && (event.endTime > slotTime);
+                    
+                    // Debug for AOM Search Committee
+                    if (event.summary && event.summary.toLowerCase().includes('aom search')) {
+                        console.log(`🔍 AOM TIME MATCHING:`, {
+                            summary: event.summary,
+                            eventStart: event.startTime,
+                            eventEnd: event.endTime,
+                            slotStart: slotTime,
+                            slotEnd: slotEnd,
+                            timeMatch: timeMatch,
+                            roomMatch: roomMatch,
+                            dateMatch: dateMatch
+                        });
+                    }
                     
                     return roomMatch && dateMatch && timeMatch;
                 });
@@ -2571,6 +3565,25 @@
             }
             
             getEventsForDate(dateString) {
+                // Debug logging for September 5th events
+                if (dateString.includes('Sep 05')) {
+                    console.log(`🔍 DEBUG: Getting events for ${dateString}`);
+                    console.log(`🔍 Total events available:`, this.events.length);
+                    
+                    this.events.forEach((event, index) => {
+                        const eventDateStr = event.startTime.toDateString();
+                        if (eventDateStr === dateString) {
+                            console.log(`🔍 Event ${index + 1}:`, {
+                                summary: event.summary,
+                                room: event.room,
+                                location: event.location,
+                                startTime: event.startTime,
+                                endTime: event.endTime
+                            });
+                        }
+                    });
+                }
+                
                 return this.events.filter(event => {
                     const eventDateString = event.startTime.toDateString();
                     return eventDateString === dateString;
@@ -2724,6 +3737,9 @@
                 // Clear sidebar content
                 this.overviewContent.innerHTML = '';
                 
+                // Add Batten Events section if there are relevant events
+                this.addBattenEventsSection(targetDate);
+                
                 const roomsToShow = Array.from(this.rooms).sort();
                 
                 roomsToShow.forEach(room => {
@@ -2733,8 +3749,139 @@
                 });
             }
             
+            addBattenEventsSection(targetDate) {
+                console.log('🔍 DEBUG: addBattenEventsSection called for date:', targetDate);
+                console.log('🔍 DEBUG: this.externalEvents:', this.externalEvents);
+                console.log('🔍 DEBUG: this.externalEvents.length:', this.externalEvents ? this.externalEvents.length : 'undefined');
+                
+                if (!this.externalEvents || this.externalEvents.length === 0) {
+                    console.log('❌ No external events available');
+                    return;
+                }
+                
+                // Filter events for the current date and relevant rooms
+                console.log('🔍 DEBUG: Filtering events for targetDate:', targetDate);
+                console.log('🔍 DEBUG: Available external events:', this.externalEvents.length);
+                console.log('🔍 DEBUG: Sample external event:', this.externalEvents[0]);
+                console.log('🔍 DEBUG: Tracked rooms:', Array.from(this.rooms));
+                
+                const relevantEvents = this.externalEvents.filter(event => {
+                    const eventDate = new Date(event.startTime).toDateString();
+                    console.log('🔍 DEBUG: Event date vs target:', eventDate, 'vs', targetDate);
+                    if (eventDate !== targetDate) return false;
+                    
+                    // Check if event is in one of our tracked rooms
+                    const trackedRooms = Array.from(this.rooms);
+                    const eventRoom = this.mapEventRoom(event.room || event.location);
+                    console.log('🔍 DEBUG: Event location mapping:', event.room || event.location, '→', eventRoom);
+                    
+                    return eventRoom && trackedRooms.includes(eventRoom);
+                });
+                
+                console.log('🔍 DEBUG: Relevant events found:', relevantEvents.length);
+                
+                if (relevantEvents.length === 0) {
+                    return;
+                }
+                
+                // Create section header
+                const sectionHeader = document.createElement('div');
+                sectionHeader.className = 'batten-events-header';
+                sectionHeader.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--gray-200);">
+                        <div style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; background: linear-gradient(135deg, #e57200 0%, #ff8c42 100%); border-radius: 50%;">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                <path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div style="font-weight: 700; font-size: 0.875rem; color: var(--gray-900); font-family: 'Crimson Text', serif;">
+                                Batten Events Today
+                            </div>
+                            <div style="font-size: 0.75rem; color: var(--gray-600);">
+                                ${relevantEvents.length} event${relevantEvents.length !== 1 ? 's' : ''} in tracked rooms
+                            </div>
+                        </div>
+                    </div>
+                `;
+                this.overviewContent.appendChild(sectionHeader);
+                
+                // Add events
+                relevantEvents
+                    .sort((a, b) => new Date(a.startTime) - new Date(b.startTime))
+                    .forEach(event => {
+                        const eventItem = this.createBattenEventItem(event);
+                        this.overviewContent.appendChild(eventItem);
+                    });
+                
+                // Add separator between Batten events and room overview
+                const separator = document.createElement('div');
+                separator.style.cssText = 'height: 1px; background: var(--gray-200); margin: 1.5rem 0;';
+                this.overviewContent.appendChild(separator);
+            }
+            
+            mapEventRoom(eventLocation) {
+                if (!eventLocation || !this.config.eventCalendars) return null;
+                
+                const calendar = this.config.eventCalendars.find(cal => cal.id === 'batten-events');
+                if (!calendar || !calendar.roomMappings) return null;
+                
+                // Try exact match first
+                if (calendar.roomMappings[eventLocation]) {
+                    return calendar.roomMappings[eventLocation];
+                }
+                
+                // Try partial matches
+                for (const [key, value] of Object.entries(calendar.roomMappings)) {
+                    if (eventLocation.includes(key) || key.includes(eventLocation)) {
+                        return value;
+                    }
+                }
+                
+                return null;
+            }
+            
+            createBattenEventItem(event) {
+                const item = document.createElement('div');
+                item.className = 'batten-event-compact';
+                
+                const eventRoom = this.mapEventRoom(event.room || event.location) || event.location;
+                const startTime = this.formatTime(new Date(event.startTime));
+                const endTime = this.formatTime(new Date(event.endTime));
+                
+                // Truncate long event titles
+                const maxTitleLength = 45;
+                const eventTitle = event.summary.length > maxTitleLength 
+                    ? event.summary.substring(0, maxTitleLength) + '...' 
+                    : event.summary;
+                
+                item.innerHTML = `
+                    <div style="display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.75rem; border-radius: var(--radius-lg); transition: all 0.2s ease; background: linear-gradient(135deg, rgba(229, 114, 0, 0.05) 0%, rgba(255, 140, 66, 0.05) 100%); border: 1px solid rgba(229, 114, 0, 0.1);">
+                        <div style="margin-top: 0.125rem; display: flex; align-items: center; justify-content: center; min-width: 20px;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#e57200" stroke-width="2">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                        </div>
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="font-weight: 600; font-size: 0.875rem; color: var(--gray-900); margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.5rem; font-family: 'Crimson Text', serif;">
+                                ${eventTitle}
+                                <span style="background: #e57200; color: white; font-size: 0.625rem; font-weight: 500; padding: 0.125rem 0.375rem; border-radius: var(--radius-full); text-transform: uppercase; letter-spacing: 0.05em;">
+                                    EVENT
+                                </span>
+                            </div>
+                            <div style="font-size: 0.75rem; color: var(--gray-600); line-height: 1.4;">
+                                ${startTime} - ${endTime} • ${eventRoom}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                return item;
+            }
+            
             createOverviewRoomItem(room, events, targetDate) {
                 const item = document.createElement('div');
+                item.className = 'overview-room-compact';
                 
                 // Determine room status
                 const now = new Date();
@@ -2742,72 +3889,117 @@
                 const currentlyBusy = isToday ? this.isRoomBusyAtTime(room, now, new Date(targetDate)) : false;
                 
                 let status = 'available';
+                let statusIcon = `<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="6" fill="#10b981"/></svg>`;
                 let statusText = 'Available all day';
                 
                 if (events.length > 0) {
-                    item.className = 'overview-room has-events';
                     if (currentlyBusy) {
                         status = 'busy';
-                        statusText = 'Currently busy';
+                        statusIcon = `<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="6" fill="#ef4444"/><path d="M8 4L4 8M4 4l4 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>`;
+                        statusText = 'Currently in use';
                     } else {
                         status = 'partial';
-                        statusText = `${events.length} event${events.length > 1 ? 's' : ''} today`;
+                        statusIcon = `<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="6" fill="#f59e0b"/><path d="M6 3v3l2 2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>`;
+                        statusText = `${events.length} event${events.length > 1 ? 's' : ''}`;
+                    }
+                }
+                
+                // Create compact text-only display
+                let description = '';
+                if (events.length > 0) {
+                    // Get next/current event for description
+                    const sortedEvents = events.sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
+                    const nextEvent = currentlyBusy ? 
+                        sortedEvents.find(e => new Date(e.startTime) <= now && new Date(e.endTime) > now) :
+                        sortedEvents.find(e => new Date(e.startTime) > now) || sortedEvents[0];
+                    
+                    if (nextEvent) {
+                        const eventTime = currentlyBusy ? 
+                            `until ${this.formatTime(new Date(nextEvent.endTime))}` :
+                            `at ${this.formatTime(new Date(nextEvent.startTime))}`;
+                        
+                        // Truncate long event names
+                        const eventName = nextEvent.summary.length > 30 ? 
+                            nextEvent.summary.substring(0, 27) + '...' : 
+                            nextEvent.summary;
+                        
+                        description = `${eventName} ${eventTime}.`;
                     }
                 } else {
-                    item.className = 'overview-room';
+                    description = 'Free all day.';
                 }
                 
-                // Create room header
-                const roomHeader = document.createElement('div');
-                roomHeader.className = 'room-info';
-                roomHeader.innerHTML = `
-                    <div class="room-status-dot ${status}"></div>
-                    <div class="room-info-name">${room}</div>
-                    <div class="room-info-status">${statusText}</div>
+                item.innerHTML = `
+                    <div style="display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.75rem; border-bottom: 1px solid var(--gray-200); border-radius: var(--radius-lg); transition: all 0.2s ease;">
+                        <div style="margin-top: 0.125rem; display: flex; align-items: center; justify-content: center; min-width: 20px;">
+                            ${statusIcon}
+                        </div>
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="font-weight: 600; font-size: 0.875rem; color: var(--gray-900); margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.5rem;">
+                                ${room}
+                                <span style="background: var(--gray-100); color: var(--gray-600); font-size: 0.625rem; font-weight: 500; padding: 0.125rem 0.375rem; border-radius: var(--radius-full); text-transform: uppercase; letter-spacing: 0.05em;">
+                                    ${statusText}
+                                </span>
+                            </div>
+                            <div style="font-size: 0.75rem; color: var(--gray-600); line-height: 1.4;">
+                                ${description}
+                            </div>
+                        </div>
+                    </div>
                 `;
-                item.appendChild(roomHeader);
                 
-                // Create events list
-                const eventsContainer = document.createElement('div');
-                eventsContainer.className = 'overview-events';
-                
-                if (events.length > 0) {
-                    // Sort events by start time
-                    events.sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
-                    
-                    events.forEach(event => {
-                        const eventDiv = document.createElement('div');
-                        eventDiv.className = 'overview-event';
-                        
-                        const startTime = new Date(event.startTime);
-                        const endTime = new Date(event.endTime);
-                        const timeStr = `${this.formatTime(startTime)} - ${this.formatTime(endTime)}`;
-                        
-                        eventDiv.innerHTML = `
-                            <div class="overview-event-time">${timeStr}</div>
-                            <div class="overview-event-title">${event.summary}</div>
-                        `;
-                        
-                        // Add click to show event details
-                        eventDiv.addEventListener('click', (e) => {
-                            e.stopPropagation();
-                            this.showEventDetails(event);
-                        });
-                        
-                        eventsContainer.appendChild(eventDiv);
-                    });
-                } else {
-                    const noEvents = document.createElement('div');
-                    noEvents.className = 'no-events';
-                    noEvents.textContent = 'No events scheduled';
-                    eventsContainer.appendChild(noEvents);
-                }
-                
-                item.appendChild(eventsContainer);
+                // Add click handler to show room details
+                item.style.cursor = 'pointer';
+                item.addEventListener('click', () => {
+                    // Filter room in main view
+                    this.roomFilter.value = room;
+                    this.render();
+                });
                 
                 return item;
             }
             
+            // Enhanced Navigation Methods
+            navigateDate(days) {
+                const newDate = new Date(this.currentDate);
+                newDate.setDate(newDate.getDate() + days);
+                this.currentDate = newDate;
+                this.dateSelect.value = this.formatDateInput(newDate);
+                this.updateDateDisplay();
+                this.render();
+            }
+            
+            navigateToToday() {
+                this.currentDate = new Date();
+                this.dateSelect.value = this.formatDateInput(this.currentDate);
+                this.updateDateDisplay();
+                this.render();
+            }
+            
+            formatDateInput(date) {
+                return date.toISOString().split('T')[0];
+            }
+            
+            formatDateDisplay(date) {
+                const options = { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                };
+                return date.toLocaleDateString('en-US', options);
+            }
+            
+            updateDateDisplay() {
+                const currentDateDisplay = document.getElementById('currentDateDisplay');
+                if (currentDateDisplay) {
+                    currentDateDisplay.textContent = this.formatDateDisplay(this.currentDate);
+                }
+            }
+
+            
+
+
             displayAvailableRooms(availableRooms, conflictingRooms, searchStart, searchEnd) {
                 this.availableRoomsList.innerHTML = '';
                 
@@ -2899,7 +4091,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             try {
                 console.log('Initializing Room Dashboard...');
-                new RoomDashboard();
+                window.dashboard = new RoomDashboard();
             } catch (error) {
                 console.error('Failed to initialize dashboard:', error);
                 document.body.innerHTML = `
