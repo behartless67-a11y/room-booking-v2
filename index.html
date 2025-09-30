@@ -1021,7 +1021,75 @@
             flex-direction: column;
             gap: 0.5rem;
         }
-        
+
+        /* Event List Styling */
+        .room-events-list {
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+        }
+
+        .event-list-item {
+            display: flex;
+            gap: 1rem;
+            padding: 0.875rem 1rem;
+            border-radius: var(--radius-lg);
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            transition: all var(--transition-normal);
+            cursor: pointer;
+        }
+
+        .event-list-item:hover {
+            background: var(--white);
+            border-color: var(--primary);
+            box-shadow: 0 2px 8px rgba(229, 114, 0, 0.1);
+            transform: translateX(2px);
+        }
+
+        .event-time-range {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--secondary);
+            min-width: 140px;
+            padding: 0.5rem 0.75rem;
+            background: var(--white);
+            border-radius: var(--radius-md);
+            text-align: center;
+            border: 1px solid var(--gray-200);
+        }
+
+        .event-details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .event-title {
+            font-weight: 600;
+            color: var(--gray-900);
+            font-size: 0.938rem;
+        }
+
+        .event-description {
+            font-size: 0.813rem;
+            color: var(--gray-600);
+            line-height: 1.4;
+        }
+
+        .no-events-message {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.5rem 1rem;
+            color: var(--success);
+            font-weight: 500;
+            justify-content: center;
+            background: var(--success-light);
+            border-radius: var(--radius-lg);
+            font-size: 0.938rem;
+        }
+
         .time-slot-row {
             display: flex;
             align-items: center;
@@ -1032,7 +1100,7 @@
             cursor: pointer;
             border: 1px solid transparent;
         }
-        
+
         .time-slot-row:hover {
             background: var(--gray-50);
             border-color: var(--gray-200);
@@ -2998,29 +3066,15 @@
                 
                 // Build the layout
                 this.dayView.innerHTML = '';
-                
-                // Group rooms by building
-                if (selectedRoom) {
-                    // Single room view - use simple grid
-                    const roomsGrid = document.createElement('div');
-                    roomsGrid.className = 'rooms-grid';
-                    this.dayView.appendChild(roomsGrid);
-                    
-                    roomsToShow.forEach(room => {
-                        this.createRoomCard(room, roomsGrid, eventsForDate, timeSlots);
-                    });
-                } else {
-                    // Multi-room view - group by buildings
-                    this.config.buildings.forEach(building => {
-                        const buildingRooms = building.rooms.filter(room => 
-                            roomsToShow.includes(room.name)
-                        );
-                        
-                        if (buildingRooms.length > 0) {
-                            this.createBuildingSection(building, buildingRooms, eventsForDate, timeSlots);
-                        }
-                    });
-                }
+
+                // Show all rooms in a simple grid (no building grouping)
+                const roomsGrid = document.createElement('div');
+                roomsGrid.className = 'rooms-grid';
+                this.dayView.appendChild(roomsGrid);
+
+                roomsToShow.forEach(room => {
+                    this.createRoomCard(room, roomsGrid, eventsForDate, timeSlots);
+                });
             }
             
             createBuildingSection(building, buildingRooms, eventsForDate, timeSlots) {
@@ -3097,7 +3151,7 @@
                     console.log(`All events:`, this.events);
                     
                     const roomCard = document.createElement('div');
-                    roomCard.className = 'room-card collapsed';
+                    roomCard.className = 'room-card'; // Not collapsed by default with simplified view
                     
                     // Calculate room occupancy for the day
                     const roomEvents = eventsForDate.filter(event => {
@@ -3131,28 +3185,15 @@
                     const roomNameDiv = document.createElement('div');
                     roomNameDiv.className = 'room-name';
                     roomNameDiv.textContent = room;
-                    
-                    // Collapse indicator
-                    const collapseIndicator = document.createElement('div');
-                    collapseIndicator.className = 'collapse-indicator';
-                    
-                    const collapseText = document.createElement('span');
-                    collapseText.textContent = 'Click to expand';
-                    
-                    const collapseArrow = document.createElement('div');
-                    collapseArrow.className = 'collapse-arrow';
-                    
-                    collapseIndicator.appendChild(collapseText);
-                    collapseIndicator.appendChild(collapseArrow);
-                    
+
                     const statusBadge = document.createElement('div');
                     statusBadge.className = 'room-status-badge';
-                    
+
                     // Determine current room status
                     const now = new Date();
                     const targetDate = this.currentDate.toDateString();
                     const currentlyBusy = this.isRoomBusyAtTime(room, now, targetDate);
-                    
+
                     if (currentlyBusy) {
                         statusBadge.className += ' room-status-busy';
                         statusBadge.textContent = 'In Use';
@@ -3163,75 +3204,74 @@
                         statusBadge.className += ' room-status-available';
                         statusBadge.textContent = 'Available';
                     }
-                    
+
                     roomHeader.appendChild(roomNameDiv);
-                    roomHeader.appendChild(collapseIndicator);
+                    roomHeader.appendChild(statusBadge);
                     
-                    // Create room content wrapper for collapsible content
+                    // Create room content wrapper
                     const roomContent = document.createElement('div');
                     roomContent.className = 'room-content';
-                    
-                    // Status badge goes in content area
-                    roomContent.appendChild(statusBadge);
-                    
+
                     roomCard.appendChild(roomHeader);
                     roomCard.appendChild(roomContent);
                     
-                    // Room schedule
+                    // Room events list - simplified view
                     const roomSchedule = document.createElement('div');
-                    roomSchedule.className = 'room-schedule';
-                    
-                    timeSlots.forEach(timeObj => {
-                        const slotTime = new Date(this.currentDate);
-                        slotTime.setHours(timeObj.hour24, timeObj.minute, 0, 0);
-                        
-                        // Find event for this 30-minute time slot
-                        const event = this.findEventAtTime(room, slotTime, targetDate);
-                        
-                        const slotRow = document.createElement('div');
-                        slotRow.className = 'time-slot-row';
-                        
-                        const timeDiv = document.createElement('div');
-                        timeDiv.className = 'time-slot-time';
-                        timeDiv.textContent = timeObj.display;
-                        
-                        const contentDiv = document.createElement('div');
-                        contentDiv.className = 'time-slot-content';
-                        
-                        const statusDot = document.createElement('div');
-                        statusDot.className = 'time-slot-status';
-                        
-                        const textDiv = document.createElement('div');
-                        
-                        if (event) {
-                            statusDot.classList.add('busy');
-                            textDiv.className = 'time-slot-text';
-                            textDiv.innerHTML = `<strong>${event.summary}</strong>`;
-                            slotRow.classList.add('has-event');
-                            slotRow.title = `${room}: ${event.summary} (${this.formatTime(event.startTime)} - ${this.formatTime(event.endTime)})`;
-                        } else {
-                            statusDot.classList.add('free');
-                            textDiv.className = 'time-slot-text time-slot-free';
-                            textDiv.textContent = 'Available';
-                            slotRow.title = `${room} is available at ${timeObj.display}`;
-                        }
-                        
-                        contentDiv.appendChild(statusDot);
-                        contentDiv.appendChild(textDiv);
-                        
-                        slotRow.appendChild(timeDiv);
-                        slotRow.appendChild(contentDiv);
-                        
-                        // Add click handler to show events for this time slot
-                        slotRow.addEventListener('click', () => {
-                            if (event) {
-                                this.showEventDetails(event);
+                    roomSchedule.className = 'room-schedule room-events-list';
+
+                    if (roomEvents.length === 0) {
+                        // No events - show availability message
+                        const noEventsDiv = document.createElement('div');
+                        noEventsDiv.className = 'no-events-message';
+                        noEventsDiv.innerHTML = `
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px; color: var(--success);">
+                                <path d="M9 11l3 3L22 4"></path>
+                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                            </svg>
+                            <span>No events scheduled today</span>
+                        `;
+                        roomSchedule.appendChild(noEventsDiv);
+                    } else {
+                        // Sort events by start time
+                        roomEvents.sort((a, b) => a.startTime - b.startTime);
+
+                        // Show each event
+                        roomEvents.forEach(event => {
+                            const eventRow = document.createElement('div');
+                            eventRow.className = 'event-list-item';
+
+                            const timeRange = document.createElement('div');
+                            timeRange.className = 'event-time-range';
+                            timeRange.textContent = `${this.formatTime(event.startTime)} - ${this.formatTime(event.endTime)}`;
+
+                            const eventDetails = document.createElement('div');
+                            eventDetails.className = 'event-details';
+
+                            const eventTitle = document.createElement('div');
+                            eventTitle.className = 'event-title';
+                            eventTitle.textContent = event.summary || 'Untitled Event';
+
+                            eventDetails.appendChild(eventTitle);
+
+                            if (event.description) {
+                                const eventDesc = document.createElement('div');
+                                eventDesc.className = 'event-description';
+                                eventDesc.textContent = event.description.substring(0, 100) + (event.description.length > 100 ? '...' : '');
+                                eventDetails.appendChild(eventDesc);
                             }
+
+                            eventRow.appendChild(timeRange);
+                            eventRow.appendChild(eventDetails);
+
+                            // Add click handler to show full event details
+                            eventRow.addEventListener('click', () => {
+                                this.showEventDetails(event);
+                            });
+
+                            roomSchedule.appendChild(eventRow);
                         });
-                        
-                        roomSchedule.appendChild(slotRow);
-                    });
-                    
+                    }
+
                     roomContent.appendChild(roomSchedule);
                     container.appendChild(roomCard);
                     
