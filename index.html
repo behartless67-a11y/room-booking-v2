@@ -831,13 +831,11 @@
         }
         
         .room-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 40px rgba(35, 45, 75, 0.15);
-            border-color: var(--primary);
+            /* Hover animations removed */
         }
         
         .room-card:hover::before {
-            transform: scaleX(1);
+            /* Hover animations removed */
         }
         
         /* Loading Skeleton Styles */
@@ -963,7 +961,7 @@
         }
         
         .room-card:hover::before {
-            transform: scaleX(1);
+            /* Hover animations removed */
         }
         
         .room-card.has-events::before {
@@ -1564,9 +1562,7 @@
         }
 
         .room-card:hover {
-            animation: none;
-            transform: translateY(-8px) scale(1.02);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            /* Hover animations removed */
         }
 
         /* Overview Panel Animations */
@@ -3661,17 +3657,9 @@
                         border: 1px solid var(--gray-200);
                         transition: all var(--transition-normal);
                     `;
-                    
-                    roomRow.addEventListener('mouseenter', () => {
-                        roomRow.style.transform = 'translateY(-2px)';
-                        roomRow.style.boxShadow = 'var(--shadow-md)';
-                    });
-                    
-                    roomRow.addEventListener('mouseleave', () => {
-                        roomRow.style.transform = 'translateY(0)';
-                        roomRow.style.boxShadow = 'var(--shadow-sm)';
-                    });
-                    
+
+                    // Hover animations removed
+
                     // Room name
                     const roomLabel = document.createElement('div');
                     roomLabel.style.cssText = `
