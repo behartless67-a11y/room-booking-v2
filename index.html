@@ -1874,6 +1874,43 @@
             color: var(--gray-900);
         }
 
+        /* Info Banner */
+        .info-banner {
+            background: linear-gradient(135deg, #f0f7ff 0%, #e6f2ff 100%);
+            border-left: 4px solid var(--primary);
+            padding: 0.875rem 1.25rem;
+            margin: 0 2rem;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+            color: var(--gray-700);
+            box-shadow: 0 2px 8px rgba(35, 45, 75, 0.08);
+        }
+
+        .info-banner svg {
+            flex-shrink: 0;
+            color: var(--primary);
+        }
+
+        .info-banner-text {
+            line-height: 1.5;
+        }
+
+        /* Availability Filter */
+        .availability-filter {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .availability-filter input[type="checkbox"] {
+            display: none;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .container {
@@ -1964,6 +2001,18 @@
             </div>
         </div>
 
+        <!-- Info Banner -->
+        <div class="info-banner">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <div class="info-banner-text">
+                <strong>Calendar updates every 15 minutes.</strong> After booking a room in Outlook, allow up to 15 minutes for it to appear on this dashboard.
+            </div>
+        </div>
+
         <div class="controls">
             <div class="control-group">
                 <label for="dateSelect">Date:</label>
@@ -1981,6 +2030,14 @@
                     <input type="checkbox" id="textModeToggle">
                     <span class="toggle-slider"></span>
                     <span class="toggle-label">Text Only</span>
+                </label>
+            </div>
+
+            <div class="control-group">
+                <label class="availability-filter">
+                    <input type="checkbox" id="availabilityFilter">
+                    <span class="toggle-slider"></span>
+                    <span class="toggle-label">Available Only</span>
                 </label>
             </div>
 
@@ -2793,6 +2850,10 @@
                 // Print button
                 this.printBtn = document.getElementById('printBtn');
                 this.printBtn.addEventListener('click', () => this.printSchedule());
+
+                // Availability filter
+                this.availabilityFilter = document.getElementById('availabilityFilter');
+                this.availabilityFilter.addEventListener('change', () => this.render());
             }
             
             setDefaultDate() {
@@ -3318,6 +3379,15 @@
 
                         // Then alphabetically
                         return a.localeCompare(b);
+                    });
+                }
+
+                // Apply availability filter if enabled
+                if (this.availabilityFilter && this.availabilityFilter.checked) {
+                    const now = new Date();
+                    const targetDate = this.currentDate.toDateString();
+                    roomsToShow = roomsToShow.filter(room => {
+                        return !this.isRoomBusyAtTime(room, now, targetDate);
                     });
                 }
 
@@ -4476,6 +4546,15 @@
 
                 if (selectedRoom && selectedRoom !== 'all') {
                     roomsToShow = [selectedRoom];
+                }
+
+                // Apply availability filter if enabled
+                if (this.availabilityFilter && this.availabilityFilter.checked) {
+                    const now = new Date();
+                    const targetDate = this.currentDate.toDateString();
+                    roomsToShow = roomsToShow.filter(room => {
+                        return !this.isRoomBusyAtTime(room, now, targetDate);
+                    });
                 }
 
                 // Create text-only view container
