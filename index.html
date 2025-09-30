@@ -3089,8 +3089,26 @@
                 }
                 
                 // Filter rooms
-                const roomsToShow = selectedRoom ? [selectedRoom] : Array.from(this.rooms).sort();
-                
+                let roomsToShow = selectedRoom ? [selectedRoom] : Array.from(this.rooms).sort();
+
+                // Sort rooms: available first, then by name
+                if (!selectedRoom) {
+                    const now = new Date();
+                    const targetDate = this.currentDate.toDateString();
+
+                    roomsToShow = roomsToShow.sort((a, b) => {
+                        const aAvailable = !this.isRoomBusyAtTime(a, now, targetDate);
+                        const bAvailable = !this.isRoomBusyAtTime(b, now, targetDate);
+
+                        // Available rooms first
+                        if (aAvailable && !bAvailable) return -1;
+                        if (!aAvailable && bAvailable) return 1;
+
+                        // Then alphabetically
+                        return a.localeCompare(b);
+                    });
+                }
+
                 // Build the layout
                 this.dayView.innerHTML = '';
 
