@@ -3458,9 +3458,6 @@
                     if (currentlyBusy) {
                         statusBadge.className += ' room-status-busy';
                         statusBadge.textContent = 'In Use';
-                    } else if (hasEvents) {
-                        statusBadge.className += ' room-status-partial';
-                        statusBadge.textContent = 'Partial';
                     } else {
                         statusBadge.className += ' room-status-available';
                         statusBadge.textContent = 'Available';
@@ -4548,12 +4545,9 @@
                     if (currentlyBusy) {
                         statusBadge.className += ' text-only-status-busy';
                         statusBadge.textContent = 'In Use';
-                    } else if (hasEvents) {
-                        statusBadge.className += ' text-only-status-partial';
-                        statusBadge.textContent = 'Available';
                     } else {
                         statusBadge.className += ' text-only-status-available';
-                        statusBadge.textContent = 'Available All Day';
+                        statusBadge.textContent = 'Available';
                     }
                     roomHeader.appendChild(statusBadge);
 
