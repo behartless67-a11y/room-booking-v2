@@ -3235,11 +3235,24 @@
                     roomHeader.appendChild(roomNameDiv);
                     roomHeader.appendChild(statusBadge);
 
-                    // Add Reserve Room button for Conference Room A (testing)
-                    if (room === "Conference Room A L014") {
+                    // Add Reserve Room button with email mapping
+                    const roomEmailMap = {
+                        "Conference Room A L014": "fbs-confa-l014@virginia.edu",
+                        "Seminar Room L039": "FBS-SeminarRoom-L039@virginia.edu",
+                        "Great Hall 100": "FBS-GreatHall-100@virginia.edu",
+                        "Student Lounge 206": "FBS-Commons-206@virginia.edu",
+                        "Pavilion X Basement Exhibit": "FBS-PavX-BsmtExhibit@virginia.edu",
+                        "Pavilion X Basement Room 1": "FBS-PavX-BasementRm1@virginia.edu",
+                        "Pavilion X Basement Room 2": "FBS-PavX-BasementRm2@virginia.edu",
+                        "Pavilion X Upper Garden": "FBS-PavX-UpperGarden@virginia.edu"
+                    };
+
+                    const roomEmail = roomEmailMap[room];
+                    if (roomEmail) {
                         const reserveButton = document.createElement('a');
                         reserveButton.className = 'reserve-room-button';
-                        reserveButton.href = `https://outlook.office365.com/owa/?path=/calendar/action/compose&location=fbs-confa-l014@virginia.edu&subject=Meeting%20in%20Conference%20Room%20A`;
+                        const encodedSubject = encodeURIComponent(`Meeting in ${room}`);
+                        reserveButton.href = `https://outlook.office365.com/owa/?path=/calendar/action/compose&location=${roomEmail}&subject=${encodedSubject}`;
                         reserveButton.target = '_blank';
                         reserveButton.innerHTML = `
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
