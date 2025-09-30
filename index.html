@@ -169,39 +169,6 @@
         }
         
 
-        
-        .collapse-btn {
-            padding: 0.375rem 0.75rem;
-            border: 1px solid var(--gray-300);
-            border-radius: var(--radius-md);
-            background: var(--white);
-            color: var(--gray-700);
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all var(--transition-normal);
-            margin: 0 0.125rem;
-        }
-        
-        .collapse-btn:hover {
-            background: var(--gray-50);
-            border-color: var(--gray-400);
-        }
-        
-        .collapse-btn:active {
-            background: var(--gray-100);
-        }
-        
-        .collapse-btn#expandAllBtn {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-        
-        .collapse-btn#expandAllBtn:hover {
-            background: color-mix(in srgb, var(--primary) 90%, black);
-            border-color: color-mix(in srgb, var(--primary) 90%, black);
-        }
-        
         .refresh-btn {
             padding: 0.375rem 0.75rem;
             border: 1px solid var(--uva-orange);
@@ -2047,12 +2014,7 @@
                     <option value="">All Rooms</option>
                 </select>
             </div>
-            
-            <div class="control-group" id="collapseControls">
-                <button id="expandAllBtn" class="collapse-btn">Expand</button>
-                <button id="collapseAllBtn" class="collapse-btn">Collapse</button>
-            </div>
-            
+
             <div class="control-group">
                 <button id="refreshBtn" class="refresh-btn" title="Refresh calendar data">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -2809,15 +2771,7 @@
                     if (e.target === this.findRoomsModal) this.closeFindRoomsModal();
                 });
                 this.searchRooms.addEventListener('click', () => this.searchAvailableRooms());
-                
-                // Collapse controls
-                this.collapseControls = document.getElementById('collapseControls');
-                this.collapseAllBtn = document.getElementById('collapseAllBtn');
-                this.expandAllBtn = document.getElementById('expandAllBtn');
-                
-                this.collapseAllBtn.addEventListener('click', () => this.collapseAllRooms());
-                this.expandAllBtn.addEventListener('click', () => this.expandAllRooms());
-                
+
                 // Enhanced navigation controls
                 this.prevDayBtn = document.getElementById('prevDayBtn');
                 this.todayBtn = document.getElementById('todayBtn');
@@ -3166,50 +3120,11 @@
                 // Update button states
                 document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
                 document.getElementById(`${viewType}Btn`).classList.add('active');
-                
-                // Show/hide collapse controls based on view
-                if (viewType === 'day') {
-                    this.collapseControls.style.display = 'flex';
-                } else {
-                    this.collapseControls.style.display = 'none';
-                }
-                
+
                 this.render();
             }
             
-            
-            collapseAllRooms() {
-                // Collapse all building sections
-                document.querySelectorAll('.building-section').forEach(section => {
-                    section.classList.add('collapsed');
-                });
-                
-                // Collapse all room cards
-                document.querySelectorAll('.room-card').forEach(card => {
-                    card.classList.add('collapsed');
-                    const collapseText = card.querySelector('.collapse-indicator span');
-                    if (collapseText) {
-                        collapseText.textContent = 'Click to expand';
-                    }
-                });
-            }
-            
-            expandAllRooms() {
-                // Expand all building sections
-                document.querySelectorAll('.building-section').forEach(section => {
-                    section.classList.remove('collapsed');
-                });
-                
-                // Expand all room cards
-                document.querySelectorAll('.room-card').forEach(card => {
-                    card.classList.remove('collapsed');
-                    const collapseText = card.querySelector('.collapse-indicator span');
-                    if (collapseText) {
-                        collapseText.textContent = 'Click to collapse';
-                    }
-                });
-            }
-            
+
             async refreshData() {
                 // Show loading state
                 this.refreshBtn.disabled = true;
