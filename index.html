@@ -234,7 +234,54 @@
         .refresh-btn.spinning svg {
             animation: spin 1s linear infinite;
         }
-        
+
+        .print-btn {
+            padding: 0.375rem 0.75rem;
+            border: 1px solid var(--primary);
+            border-radius: var(--radius-md);
+            background: white;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .print-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .print-btn svg {
+            flex-shrink: 0;
+        }
+
+        @media print {
+            .controls-section,
+            .find-rooms-fab,
+            .print-btn {
+                display: none !important;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 0;
+            }
+
+            .room-card {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            .text-only-room {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+        }
+
         .auto-refresh-indicator {
             display: flex;
             align-items: center;
@@ -1967,6 +2014,17 @@
                     </svg>
                 </div>
             </div>
+
+            <div class="control-group">
+                <button id="printBtn" class="print-btn" title="Print room schedules">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                        <rect x="6" y="14" width="12" height="8"></rect>
+                    </svg>
+                    Print
+                </button>
+            </div>
         </div>
         
         <div class="dashboard">
@@ -2735,6 +2793,10 @@
                 // Text-only mode toggle
                 this.textModeToggle = document.getElementById('textModeToggle');
                 this.textModeToggle.addEventListener('change', () => this.toggleTextMode());
+
+                // Print button
+                this.printBtn = document.getElementById('printBtn');
+                this.printBtn.addEventListener('click', () => this.printSchedule());
             }
             
             setDefaultDate() {
@@ -4385,6 +4447,33 @@
                 }
             }
 
+            printSchedule() {
+                // Add a title with the current date/view to the print
+                const originalTitle = document.title;
+                let viewText = '';
+
+                if (this.currentView === 'day') {
+                    viewText = `Room Schedules - ${this.formatDateDisplay(this.currentDate)}`;
+                } else if (this.currentView === 'week') {
+                    const startOfWeek = new Date(this.currentDate);
+                    startOfWeek.setDate(this.currentDate.getDate() - this.currentDate.getDay());
+                    const endOfWeek = new Date(startOfWeek);
+                    endOfWeek.setDate(startOfWeek.getDate() + 6);
+                    viewText = `Room Schedules - Week of ${startOfWeek.toLocaleDateString()} to ${endOfWeek.toLocaleDateString()}`;
+                } else if (this.currentView === 'month') {
+                    const monthName = this.currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+                    viewText = `Room Schedules - ${monthName}`;
+                }
+
+                document.title = viewText;
+
+                // Print
+                window.print();
+
+                // Restore original title
+                document.title = originalTitle;
+            }
+
             toggleTextMode() {
                 const isTextMode = this.textModeToggle.checked;
 
@@ -4396,11 +4485,6 @@
             }
 
             renderTextOnlyView() {
-                const targetDate = this.currentDate.toDateString();
-                const eventsForDate = this.events.filter(event =>
-                    event.startTime.toDateString() === targetDate
-                );
-
                 // Get selected room filter
                 const selectedRoom = this.roomFilter.value;
                 let roomsToShow = Array.from(this.rooms).sort();
@@ -4409,35 +4493,49 @@
                     roomsToShow = [selectedRoom];
                 }
 
+                // Create text-only view container
+                this.dayView.innerHTML = '';
+                const textOnlyContainer = document.createElement('div');
+                textOnlyContainer.className = 'text-only-view';
+
+                // Handle different view types
+                if (this.currentView === 'day') {
+                    this.renderTextOnlyDay(textOnlyContainer, roomsToShow);
+                } else if (this.currentView === 'week') {
+                    this.renderTextOnlyWeek(textOnlyContainer, roomsToShow);
+                } else if (this.currentView === 'month') {
+                    this.renderTextOnlyMonth(textOnlyContainer, roomsToShow);
+                }
+
+                this.dayView.appendChild(textOnlyContainer);
+            }
+
+            renderTextOnlyDay(container, roomsToShow) {
+                const targetDate = this.currentDate.toDateString();
+                const eventsForDate = this.events.filter(event =>
+                    event.startTime.toDateString() === targetDate
+                );
+
                 // Sort rooms: available first, then alphabetically
                 const now = new Date();
                 roomsToShow = roomsToShow.sort((a, b) => {
                     const aAvailable = !this.isRoomBusyAtTime(a, now, targetDate);
                     const bAvailable = !this.isRoomBusyAtTime(b, now, targetDate);
 
-                    // Available rooms first
                     if (aAvailable && !bAvailable) return -1;
                     if (!aAvailable && bAvailable) return 1;
 
-                    // Then alphabetically
                     return a.localeCompare(b);
                 });
-
-                // Create text-only view container
-                this.dayView.innerHTML = '';
-                const textOnlyContainer = document.createElement('div');
-                textOnlyContainer.className = 'text-only-view';
 
                 roomsToShow.forEach(room => {
                     const roomEvents = eventsForDate.filter(event => event.room === room);
                     const currentlyBusy = this.isRoomBusyAtTime(room, now, targetDate);
                     const hasEvents = roomEvents.length > 0;
 
-                    // Room section
                     const roomSection = document.createElement('div');
                     roomSection.className = 'text-only-room';
 
-                    // Room header
                     const roomHeader = document.createElement('div');
                     roomHeader.className = 'text-only-room-header';
 
@@ -4461,14 +4559,12 @@
 
                     roomSection.appendChild(roomHeader);
 
-                    // Events list or no events message
                     if (roomEvents.length === 0) {
                         const noEvents = document.createElement('p');
                         noEvents.className = 'text-only-no-events';
                         noEvents.textContent = 'No events scheduled today';
                         roomSection.appendChild(noEvents);
                     } else {
-                        // Sort events by start time
                         roomEvents.sort((a, b) => a.startTime - b.startTime);
 
                         const eventsList = document.createElement('div');
@@ -4494,10 +4590,157 @@
                         roomSection.appendChild(eventsList);
                     }
 
-                    textOnlyContainer.appendChild(roomSection);
+                    container.appendChild(roomSection);
                 });
+            }
 
-                this.dayView.appendChild(textOnlyContainer);
+            renderTextOnlyWeek(container, roomsToShow) {
+                const startOfWeek = new Date(this.currentDate);
+                startOfWeek.setDate(this.currentDate.getDate() - this.currentDate.getDay());
+
+                const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+                roomsToShow.forEach(room => {
+                    const roomSection = document.createElement('div');
+                    roomSection.className = 'text-only-room';
+
+                    const roomName = document.createElement('h3');
+                    roomName.textContent = room;
+                    roomSection.appendChild(roomName);
+
+                    // Show each day of the week
+                    for (let i = 0; i < 7; i++) {
+                        const dayDate = new Date(startOfWeek);
+                        dayDate.setDate(startOfWeek.getDate() + i);
+
+                        const dayEvents = this.events.filter(event =>
+                            event.startTime.toDateString() === dayDate.toDateString() &&
+                            event.room === room
+                        );
+
+                        if (dayEvents.length > 0) {
+                            const daySection = document.createElement('div');
+                            daySection.style.marginTop = '1rem';
+
+                            const dayHeader = document.createElement('div');
+                            dayHeader.style.cssText = 'font-weight: 600; color: var(--primary); margin-bottom: 0.5rem;';
+                            dayHeader.textContent = `${dayNames[i]}, ${dayDate.toLocaleDateString()}`;
+                            daySection.appendChild(dayHeader);
+
+                            const eventsList = document.createElement('div');
+                            eventsList.className = 'text-only-events-list';
+
+                            dayEvents.sort((a, b) => a.startTime - b.startTime);
+                            dayEvents.forEach(event => {
+                                const eventItem = document.createElement('div');
+                                eventItem.className = 'text-only-event';
+
+                                const timeDiv = document.createElement('div');
+                                timeDiv.className = 'text-only-event-time';
+                                timeDiv.textContent = `${this.formatTime(event.startTime)} - ${this.formatTime(event.endTime)}`;
+
+                                const titleDiv = document.createElement('div');
+                                titleDiv.className = 'text-only-event-title';
+                                titleDiv.textContent = event.summary || 'Untitled Event';
+
+                                eventItem.appendChild(timeDiv);
+                                eventItem.appendChild(titleDiv);
+                                eventsList.appendChild(eventItem);
+                            });
+
+                            daySection.appendChild(eventsList);
+                            roomSection.appendChild(daySection);
+                        }
+                    }
+
+                    // Show "No events this week" if no events found
+                    if (roomSection.children.length === 1) {
+                        const noEvents = document.createElement('p');
+                        noEvents.className = 'text-only-no-events';
+                        noEvents.textContent = 'No events this week';
+                        roomSection.appendChild(noEvents);
+                    }
+
+                    container.appendChild(roomSection);
+                });
+            }
+
+            renderTextOnlyMonth(container, roomsToShow) {
+                const year = this.currentDate.getFullYear();
+                const month = this.currentDate.getMonth();
+                const firstDay = new Date(year, month, 1);
+                const lastDay = new Date(year, month + 1, 0);
+
+                roomsToShow.forEach(room => {
+                    const roomSection = document.createElement('div');
+                    roomSection.className = 'text-only-room';
+
+                    const roomName = document.createElement('h3');
+                    roomName.textContent = room;
+                    roomSection.appendChild(roomName);
+
+                    // Collect all events for this room in this month
+                    const monthEvents = [];
+                    for (let day = 1; day <= lastDay.getDate(); day++) {
+                        const currentDate = new Date(year, month, day);
+                        const dayEvents = this.events.filter(event =>
+                            event.startTime.toDateString() === currentDate.toDateString() &&
+                            event.room === room
+                        );
+
+                        if (dayEvents.length > 0) {
+                            monthEvents.push({ date: currentDate, events: dayEvents });
+                        }
+                    }
+
+                    // Display events grouped by date
+                    if (monthEvents.length > 0) {
+                        monthEvents.forEach(({ date, events }) => {
+                            const daySection = document.createElement('div');
+                            daySection.style.marginTop = '1rem';
+
+                            const dayHeader = document.createElement('div');
+                            dayHeader.style.cssText = 'font-weight: 600; color: var(--primary); margin-bottom: 0.5rem;';
+                            dayHeader.textContent = date.toLocaleDateString('en-US', {
+                                weekday: 'short',
+                                month: 'short',
+                                day: 'numeric'
+                            });
+                            daySection.appendChild(dayHeader);
+
+                            const eventsList = document.createElement('div');
+                            eventsList.className = 'text-only-events-list';
+
+                            events.sort((a, b) => a.startTime - b.startTime);
+                            events.forEach(event => {
+                                const eventItem = document.createElement('div');
+                                eventItem.className = 'text-only-event';
+
+                                const timeDiv = document.createElement('div');
+                                timeDiv.className = 'text-only-event-time';
+                                timeDiv.textContent = `${this.formatTime(event.startTime)} - ${this.formatTime(event.endTime)}`;
+
+                                const titleDiv = document.createElement('div');
+                                titleDiv.className = 'text-only-event-title';
+                                titleDiv.textContent = event.summary || 'Untitled Event';
+
+                                eventItem.appendChild(timeDiv);
+                                eventItem.appendChild(titleDiv);
+                                eventsList.appendChild(eventItem);
+                            });
+
+                            daySection.appendChild(eventsList);
+                            roomSection.appendChild(daySection);
+                        });
+                    } else {
+                        const noEvents = document.createElement('p');
+                        noEvents.className = 'text-only-no-events';
+                        noEvents.textContent = 'No events this month';
+                        roomSection.appendChild(noEvents);
+                    }
+
+                    container.appendChild(roomSection);
+                });
             }
 
 
