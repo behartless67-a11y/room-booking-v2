@@ -1706,55 +1706,156 @@
             transform: translateX(22px);
         }
 
+        /* Mobile Text-Only View Styles */
+        .mobile-text-view {
+            display: none;
+        }
+
+        .mobile-room-item {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            margin-bottom: 0.75rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+            overflow: hidden;
+        }
+
+        .mobile-room-header {
+            padding: 1rem;
+            background: var(--gray-50);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .mobile-room-header:active {
+            background: var(--gray-100);
+        }
+
+        .mobile-room-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--navy);
+        }
+
+        .mobile-room-status {
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-full);
+        }
+
+        .mobile-room-status.available {
+            background: var(--green-100);
+            color: var(--green-700);
+        }
+
+        .mobile-room-status.busy {
+            background: var(--red-100);
+            color: var(--red-700);
+        }
+
+        .mobile-room-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .mobile-room-item.expanded .mobile-room-content {
+            max-height: 1000px;
+        }
+
+        .mobile-room-item.expanded .mobile-expand-icon {
+            transform: rotate(180deg);
+        }
+
+        .mobile-expand-icon {
+            transition: transform 0.3s ease;
+            color: var(--gray-500);
+        }
+
+        .mobile-event-list {
+            padding: 0.5rem 1rem 1rem;
+        }
+
+        .mobile-event-item {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background: var(--gray-50);
+            border-radius: var(--radius-md);
+            border-left: 3px solid var(--orange);
+        }
+
+        .mobile-event-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .mobile-event-time {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 0.25rem;
+        }
+
+        .mobile-event-title {
+            font-size: 0.875rem;
+            color: var(--gray-700);
+        }
+
+        .mobile-event-free {
+            border-left-color: var(--green-500);
+            background: var(--green-50);
+        }
+
+        .mobile-no-events {
+            padding: 1rem;
+            text-align: center;
+            color: var(--gray-500);
+            font-size: 0.875rem;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .container {
-                margin: 1rem;
+                margin: 0.5rem;
                 border-radius: var(--radius-xl);
             }
-            
+
             header {
-                padding: 1.5rem 1.5rem;
+                padding: 1rem;
             }
-            
+
+            header img {
+                height: 40px !important;
+            }
+
             h1 {
                 font-size: 1.25rem;
             }
-            
+
             .controls {
-                padding: 1.5rem;
+                padding: 1rem;
                 gap: 1rem;
                 flex-direction: column;
             }
-            
+
             .dashboard {
-                padding: 1.5rem;
-            }
-            
-            .rooms-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-            
-            .room-card {
                 padding: 1rem;
             }
-            
-            .room-name {
-                font-size: 1rem;
+
+            /* Hide desktop card view on mobile */
+            .rooms-grid,
+            .building-rooms {
+                display: none !important;
             }
-            
-            .time-slot-row {
-                flex-direction: column;
-                gap: 0.75rem;
-                align-items: stretch;
-                text-align: center;
+
+            /* Show mobile text view */
+            .mobile-text-view {
+                display: block;
             }
-            
-            .time-slot-time {
-                min-width: auto;
-            }
-            
+
             .modal-content {
                 margin: 1rem;
                 max-width: calc(100vw - 2rem);
@@ -1885,6 +1986,9 @@
                 <div id="errorMsg" class="error hidden"></div>
             </div>
         </div>
+
+        <!-- Mobile Text-Only View -->
+        <div class="mobile-text-view" id="mobileView"></div>
     </div>
     
     <!-- Event Details Modal -->
@@ -3090,8 +3194,118 @@
                 roomsToShow.forEach(room => {
                     this.createRoomCard(room, roomsGrid, eventsForDate, timeSlots);
                 });
+
+                // Also render mobile view
+                this.renderMobileView(roomsToShow, eventsForDate);
             }
-            
+
+            renderMobileView(rooms, eventsForDate) {
+                const mobileView = document.getElementById('mobileView');
+                if (!mobileView) return;
+
+                mobileView.innerHTML = '';
+                const now = new Date();
+                const targetDate = this.currentDate.toDateString();
+
+                // Limit to 8 rooms on mobile for performance
+                const limitedRooms = rooms.slice(0, 8);
+
+                limitedRooms.forEach(roomName => {
+                    const roomEvents = eventsForDate[roomName] || [];
+
+                    // Filter to show only current and upcoming events (next 4 hours)
+                    const nowTime = now.getTime();
+                    const fourHoursLater = nowTime + (4 * 60 * 60 * 1000);
+
+                    const relevantEvents = roomEvents.filter(event => {
+                        const eventEnd = new Date(event.end).getTime();
+                        const eventStart = new Date(event.start).getTime();
+                        return eventEnd > nowTime && eventStart < fourHoursLater;
+                    }).slice(0, 5); // Show max 5 events per room
+
+                    // Check if room is currently available
+                    const isAvailable = !this.isRoomBusyAtTime(roomName, now, targetDate);
+
+                    // Create mobile room item
+                    const roomItem = document.createElement('div');
+                    roomItem.className = 'mobile-room-item';
+
+                    // Room header (collapsible)
+                    const roomHeader = document.createElement('div');
+                    roomHeader.className = 'mobile-room-header';
+
+                    const roomNameDiv = document.createElement('div');
+                    roomNameDiv.className = 'mobile-room-name';
+                    roomNameDiv.textContent = roomName;
+
+                    const headerRight = document.createElement('div');
+                    headerRight.style.display = 'flex';
+                    headerRight.style.alignItems = 'center';
+                    headerRight.style.gap = '0.5rem';
+
+                    const statusBadge = document.createElement('div');
+                    statusBadge.className = `mobile-room-status ${isAvailable ? 'available' : 'busy'}`;
+                    statusBadge.textContent = isAvailable ? 'Available' : 'Busy';
+
+                    const expandIcon = document.createElement('span');
+                    expandIcon.className = 'mobile-expand-icon';
+                    expandIcon.innerHTML = '▼';
+
+                    headerRight.appendChild(statusBadge);
+                    headerRight.appendChild(expandIcon);
+
+                    roomHeader.appendChild(roomNameDiv);
+                    roomHeader.appendChild(headerRight);
+
+                    // Toggle expand/collapse
+                    roomHeader.addEventListener('click', () => {
+                        roomItem.classList.toggle('expanded');
+                    });
+
+                    // Room content (collapsible)
+                    const roomContent = document.createElement('div');
+                    roomContent.className = 'mobile-room-content';
+
+                    const eventList = document.createElement('div');
+                    eventList.className = 'mobile-event-list';
+
+                    if (relevantEvents.length === 0) {
+                        const noEvents = document.createElement('div');
+                        noEvents.className = 'mobile-no-events';
+                        noEvents.textContent = 'No events in the next 4 hours';
+                        eventList.appendChild(noEvents);
+                    } else {
+                        relevantEvents.forEach(event => {
+                            const eventItem = document.createElement('div');
+                            eventItem.className = 'mobile-event-item';
+                            if (!event.summary || event.summary === 'Free') {
+                                eventItem.classList.add('mobile-event-free');
+                            }
+
+                            const eventTime = document.createElement('div');
+                            eventTime.className = 'mobile-event-time';
+                            const startTime = new Date(event.start);
+                            const endTime = new Date(event.end);
+                            eventTime.textContent = `${this.formatTime(startTime)} - ${this.formatTime(endTime)}`;
+
+                            const eventTitle = document.createElement('div');
+                            eventTitle.className = 'mobile-event-title';
+                            eventTitle.textContent = event.summary || 'Available';
+
+                            eventItem.appendChild(eventTime);
+                            eventItem.appendChild(eventTitle);
+                            eventList.appendChild(eventItem);
+                        });
+                    }
+
+                    roomContent.appendChild(eventList);
+
+                    roomItem.appendChild(roomHeader);
+                    roomItem.appendChild(roomContent);
+                    mobileView.appendChild(roomItem);
+                });
+            }
+
             createBuildingSection(building, buildingRooms, eventsForDate, timeSlots) {
                 const buildingSection = document.createElement('div');
                 buildingSection.className = 'building-section collapsed';
