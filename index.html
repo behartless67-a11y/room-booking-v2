@@ -1016,7 +1016,33 @@
             color: var(--warning);
             border: 1px solid var(--warning);
         }
-        
+
+        .reserve-room-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1rem;
+            background: var(--primary);
+            color: var(--white);
+            border-radius: var(--radius-lg);
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all var(--transition-normal);
+            border: 2px solid var(--primary);
+        }
+
+        .reserve-room-button:hover {
+            background: var(--secondary);
+            border-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(35, 45, 75, 0.2);
+        }
+
+        .reserve-room-button svg {
+            flex-shrink: 0;
+        }
+
         .room-schedule {
             display: flex;
             flex-direction: column;
@@ -3208,7 +3234,28 @@
 
                     roomHeader.appendChild(roomNameDiv);
                     roomHeader.appendChild(statusBadge);
-                    
+
+                    // Add Reserve Room button for Conference Room A (testing)
+                    if (room === "Conference Room A L014") {
+                        const reserveButton = document.createElement('a');
+                        reserveButton.className = 'reserve-room-button';
+                        reserveButton.href = `https://outlook.office365.com/owa/?path=/calendar/action/compose&location=fbs-confa-l014@virginia.edu&subject=Meeting%20in%20Conference%20Room%20A`;
+                        reserveButton.target = '_blank';
+                        reserveButton.innerHTML = `
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                            Reserve Room
+                        `;
+                        reserveButton.onclick = (e) => {
+                            e.stopPropagation(); // Prevent card collapse/expand
+                        };
+                        roomHeader.appendChild(reserveButton);
+                    }
+
                     // Create room content wrapper
                     const roomContent = document.createElement('div');
                     roomContent.className = 'room-content';
