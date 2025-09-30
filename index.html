@@ -84,7 +84,7 @@
         }
         
         .container {
-            max-width: 1400px;
+            max-width: 95%;
             margin: 0 auto;
             background: var(--white);
             border-radius: var(--radius-2xl);
@@ -374,6 +374,7 @@
         }
         
         .overview-sidebar {
+            display: none; /* Hidden for cleaner view */
             width: 320px;
             background: var(--white);
             border-radius: var(--radius-xl);
@@ -741,8 +742,8 @@
         
         .rooms-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 1.25rem;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 1.5rem;
         }
         
         .room-card {
