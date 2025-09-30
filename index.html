@@ -1048,6 +1048,143 @@
             flex-shrink: 0;
         }
 
+        /* Text Mode Toggle */
+        .text-mode-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .text-mode-toggle input[type="checkbox"] {
+            display: none;
+        }
+
+        .toggle-slider {
+            position: relative;
+            width: 48px;
+            height: 26px;
+            background: var(--gray-300);
+            border-radius: 26px;
+            transition: background 0.3s;
+        }
+
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: white;
+            top: 3px;
+            left: 3px;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .text-mode-toggle input:checked + .toggle-slider {
+            background: var(--primary);
+        }
+
+        .text-mode-toggle input:checked + .toggle-slider::before {
+            transform: translateX(22px);
+        }
+
+        .toggle-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        /* Text-Only View Styles */
+        .text-only-view {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .text-only-room {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        .text-only-room:last-child {
+            border-bottom: none;
+        }
+
+        .text-only-room-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .text-only-room-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+
+        .text-only-status {
+            font-size: 0.875rem;
+            font-weight: 600;
+            padding: 0.375rem 0.75rem;
+            border-radius: var(--radius-md);
+        }
+
+        .text-only-status.available {
+            background: var(--success-light);
+            color: var(--success);
+        }
+
+        .text-only-status.busy {
+            background: var(--error-light);
+            color: var(--error);
+        }
+
+        .text-only-status.partial {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
+
+        .text-only-events {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .text-only-event {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--gray-100);
+            display: flex;
+            gap: 1rem;
+        }
+
+        .text-only-event:last-child {
+            border-bottom: none;
+        }
+
+        .text-only-time {
+            font-weight: 600;
+            color: var(--secondary);
+            min-width: 180px;
+            font-size: 0.938rem;
+        }
+
+        .text-only-event-title {
+            color: var(--gray-900);
+            font-size: 0.938rem;
+        }
+
+        .text-only-no-events {
+            color: var(--success);
+            font-style: italic;
+            padding: 0.5rem 0;
+        }
+
         .room-schedule {
             display: flex;
             flex-direction: column;
@@ -1795,7 +1932,15 @@
                 <button class="view-btn" id="weekBtn">Week</button>
                 <button class="view-btn" id="monthBtn">Month</button>
             </div>
-            
+
+            <div class="control-group">
+                <label class="text-mode-toggle">
+                    <input type="checkbox" id="textModeToggle">
+                    <span class="toggle-slider"></span>
+                    <span class="toggle-label">Text Only</span>
+                </label>
+            </div>
+
             <div class="control-group">
                 <label for="roomFilter">Room:</label>
                 <select id="roomFilter">
@@ -2586,6 +2731,10 @@
                 window.addEventListener('beforeunload', () => {
                     this.stopAutoRefresh();
                 });
+
+                // Text-only mode toggle
+                this.textModeToggle = document.getElementById('textModeToggle');
+                this.textModeToggle.addEventListener('change', () => this.toggleTextMode());
             }
             
             setDefaultDate() {
@@ -4236,7 +4385,120 @@
                 }
             }
 
-            
+            toggleTextMode() {
+                const isTextMode = this.textModeToggle.checked;
+
+                if (isTextMode) {
+                    this.renderTextOnlyView();
+                } else {
+                    this.render(); // Go back to normal card view
+                }
+            }
+
+            renderTextOnlyView() {
+                const targetDate = this.currentDate.toDateString();
+                const eventsForDate = this.events.filter(event =>
+                    event.startTime.toDateString() === targetDate
+                );
+
+                // Get selected room filter
+                const selectedRoom = this.roomFilter.value;
+                let roomsToShow = Array.from(this.rooms).sort();
+
+                if (selectedRoom && selectedRoom !== 'all') {
+                    roomsToShow = [selectedRoom];
+                }
+
+                // Sort rooms: available first, then alphabetically
+                const now = new Date();
+                roomsToShow = roomsToShow.sort((a, b) => {
+                    const aAvailable = !this.isRoomBusyAtTime(a, now, targetDate);
+                    const bAvailable = !this.isRoomBusyAtTime(b, now, targetDate);
+
+                    // Available rooms first
+                    if (aAvailable && !bAvailable) return -1;
+                    if (!aAvailable && bAvailable) return 1;
+
+                    // Then alphabetically
+                    return a.localeCompare(b);
+                });
+
+                // Create text-only view container
+                this.dayView.innerHTML = '';
+                const textOnlyContainer = document.createElement('div');
+                textOnlyContainer.className = 'text-only-view';
+
+                roomsToShow.forEach(room => {
+                    const roomEvents = eventsForDate.filter(event => event.room === room);
+                    const currentlyBusy = this.isRoomBusyAtTime(room, now, targetDate);
+                    const hasEvents = roomEvents.length > 0;
+
+                    // Room section
+                    const roomSection = document.createElement('div');
+                    roomSection.className = 'text-only-room';
+
+                    // Room header
+                    const roomHeader = document.createElement('div');
+                    roomHeader.className = 'text-only-room-header';
+
+                    const roomName = document.createElement('h3');
+                    roomName.textContent = room;
+                    roomHeader.appendChild(roomName);
+
+                    const statusBadge = document.createElement('span');
+                    statusBadge.className = 'text-only-status';
+                    if (currentlyBusy) {
+                        statusBadge.className += ' text-only-status-busy';
+                        statusBadge.textContent = 'In Use';
+                    } else if (hasEvents) {
+                        statusBadge.className += ' text-only-status-partial';
+                        statusBadge.textContent = 'Available';
+                    } else {
+                        statusBadge.className += ' text-only-status-available';
+                        statusBadge.textContent = 'Available All Day';
+                    }
+                    roomHeader.appendChild(statusBadge);
+
+                    roomSection.appendChild(roomHeader);
+
+                    // Events list or no events message
+                    if (roomEvents.length === 0) {
+                        const noEvents = document.createElement('p');
+                        noEvents.className = 'text-only-no-events';
+                        noEvents.textContent = 'No events scheduled today';
+                        roomSection.appendChild(noEvents);
+                    } else {
+                        // Sort events by start time
+                        roomEvents.sort((a, b) => a.startTime - b.startTime);
+
+                        const eventsList = document.createElement('div');
+                        eventsList.className = 'text-only-events-list';
+
+                        roomEvents.forEach(event => {
+                            const eventItem = document.createElement('div');
+                            eventItem.className = 'text-only-event';
+
+                            const timeDiv = document.createElement('div');
+                            timeDiv.className = 'text-only-event-time';
+                            timeDiv.textContent = `${this.formatTime(event.startTime)} - ${this.formatTime(event.endTime)}`;
+
+                            const titleDiv = document.createElement('div');
+                            titleDiv.className = 'text-only-event-title';
+                            titleDiv.textContent = event.summary || 'Untitled Event';
+
+                            eventItem.appendChild(timeDiv);
+                            eventItem.appendChild(titleDiv);
+                            eventsList.appendChild(eventItem);
+                        });
+
+                        roomSection.appendChild(eventsList);
+                    }
+
+                    textOnlyContainer.appendChild(roomSection);
+                });
+
+                this.dayView.appendChild(textOnlyContainer);
+            }
 
 
             displayAvailableRooms(availableRooms, conflictingRooms, searchStart, searchEnd) {
