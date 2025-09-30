@@ -928,6 +928,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 1rem;
+            flex-wrap: nowrap;
             margin-bottom: 1rem;
             padding-bottom: 0.75rem;
             border-bottom: 1px solid var(--gray-200);
@@ -1030,6 +1032,9 @@
             text-decoration: none;
             transition: all var(--transition-normal);
             border: 2px solid var(--primary);
+            white-space: nowrap;
+            flex-shrink: 0;
+            min-width: fit-content;
         }
 
         .reserve-room-button:hover {
