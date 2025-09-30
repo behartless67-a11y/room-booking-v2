@@ -1865,7 +1865,7 @@
             line-height: 1.5;
         }
 
-        /* Availability Filter */
+        /* Availability Filter - uses same styles as text-mode-toggle */
         .availability-filter {
             display: flex;
             align-items: center;
@@ -1876,6 +1876,14 @@
 
         .availability-filter input[type="checkbox"] {
             display: none;
+        }
+
+        .availability-filter input:checked + .toggle-slider {
+            background: var(--primary);
+        }
+
+        .availability-filter input:checked + .toggle-slider::before {
+            transform: translateX(22px);
         }
 
         /* Responsive Design */
@@ -3234,18 +3242,23 @@
             }
             
             render() {
-                switch (this.currentView) {
-                    case 'day':
-                        this.renderDayView();
-                        break;
-                    case 'week':
-                        this.renderWeekView();
-                        break;
-                    case 'month':
-                        this.renderMonthView();
-                        break;
+                // Check if text-only mode is active
+                if (this.textModeToggle && this.textModeToggle.checked) {
+                    this.renderTextOnlyView();
+                } else {
+                    switch (this.currentView) {
+                        case 'day':
+                            this.renderDayView();
+                            break;
+                        case 'week':
+                            this.renderWeekView();
+                            break;
+                        case 'month':
+                            this.renderMonthView();
+                            break;
+                    }
                 }
-                
+
                 // Always update the overview sidebar
                 this.updateOverviewSidebar();
             }
