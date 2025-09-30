@@ -3212,15 +3212,22 @@
                 limitedRooms.forEach(roomName => {
                     const roomEvents = eventsForDate[roomName] || [];
 
-                    // Filter to show only current and upcoming events (next 4 hours)
-                    const nowTime = now.getTime();
-                    const fourHoursLater = nowTime + (4 * 60 * 60 * 1000);
+                    // For viewing today: show current and upcoming events
+                    // For other dates: show all events for that day
+                    const isToday = targetDate === new Date().toDateString();
 
-                    const relevantEvents = roomEvents.filter(event => {
-                        const eventEnd = new Date(event.end).getTime();
-                        const eventStart = new Date(event.start).getTime();
-                        return eventEnd > nowTime && eventStart < fourHoursLater;
-                    }).slice(0, 5); // Show max 5 events per room
+                    let relevantEvents;
+                    if (isToday) {
+                        // Show only current and upcoming events for today
+                        const nowTime = now.getTime();
+                        relevantEvents = roomEvents.filter(event => {
+                            const eventEnd = new Date(event.end).getTime();
+                            return eventEnd > nowTime;
+                        }).slice(0, 10); // Show max 10 events per room
+                    } else {
+                        // Show all events for the selected date
+                        relevantEvents = roomEvents.slice(0, 10);
+                    }
 
                     // Check if room is currently available
                     const isAvailable = !this.isRoomBusyAtTime(roomName, now, targetDate);
@@ -3271,7 +3278,7 @@
                     if (relevantEvents.length === 0) {
                         const noEvents = document.createElement('div');
                         noEvents.className = 'mobile-no-events';
-                        noEvents.textContent = 'No events in the next 4 hours';
+                        noEvents.textContent = isToday ? 'No upcoming events today' : 'No events scheduled';
                         eventList.appendChild(noEvents);
                     } else {
                         relevantEvents.forEach(event => {
