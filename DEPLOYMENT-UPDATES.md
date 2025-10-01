@@ -161,12 +161,47 @@ Visit: `https://nice-dune-0d695b810.2.azurestaticapps.net/`
 - CORS configured specifically for the Static Web App domain
 - Calendar data cached in private Azure Blob Storage container
 
+## Deployment Workflow
+
+### IMPORTANT: Git Push Auto-Deployment
+**All changes to the codebase automatically deploy to Azure Static Web Apps when pushed to GitHub.**
+
+#### Standard Deployment Process:
+```bash
+# 1. Make changes to files (index.html, config.js, etc.)
+
+# 2. Stage and commit changes
+git add .
+git commit -m "Description of changes"
+
+# 3. Push to GitHub main branch
+git push origin main
+```
+
+#### What Happens Automatically:
+1. **GitHub Actions Workflow Triggers** (`.github/workflows/azure-static-web-apps.yml`)
+2. **Azure Static Web Apps Deployment** begins (~2-3 minutes)
+3. **Live Site Updated** at https://nice-dune-0d695b810.2.azurestaticapps.net/
+4. **Zero downtime** - smooth transition to new version
+
+#### Monitoring Deployment:
+- **GitHub**: Check Actions tab for workflow status
+- **Azure Portal**: Static Web Apps → Deployments section
+- **Live Site**: Changes appear within 2-3 minutes of push
+
+### Azure Function Updates (Separate Process)
+Azure Functions require manual deployment:
+```bash
+cd azure-function
+func azure functionapp publish roomtool-calendar-function --python
+```
+
 ## Future Improvements
 - Consider implementing authentication for manual refresh endpoint
-- Add monitoring alerts for failed calendar refreshes  
+- Add monitoring alerts for failed calendar refreshes
 - Implement cache expiration policies
 - Add more detailed logging and error handling
 
 ---
-*Last updated: September 6, 2025*
+*Last updated: October 1, 2025*
 *System Status: ✅ Fully Operational*
