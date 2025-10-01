@@ -3316,6 +3316,10 @@
                         }
                     });
                     console.log('🔍 DEBUG Converted array to eventsByRoom object:', Object.keys(eventsByRoom));
+                    console.log('🔍 DEBUG First event in array:', eventsForDate[0]);
+                    if (eventsByRoom['Conference Room A L014']) {
+                        console.log('🔍 DEBUG First Conference Room A event after grouping:', eventsByRoom['Conference Room A L014'][0]);
+                    }
                 } else {
                     // It's already an object, use it directly
                     Object.assign(eventsByRoom, eventsForDate);
