@@ -102,7 +102,7 @@ echo ".env" >> .gitignore
 - Cross-platform server scripts (`start_server.bat`, `start_server.sh`)
 - Proper .gitignore to exclude unnecessary files
 
-### Phase 3: Azure Cloud Deployment
+### Phase 3: Azure Cloud Deployment (CURRENT PRODUCTION)
 **Goal**: Deploy to Azure Functions for production hosting
 
 **Deployment Strategy**:
@@ -115,12 +115,38 @@ echo ".env" >> .gitignore
    start_server.bat                   # Windows script
    ```
 
-2. **Azure Functions** (Production deployment)
-   - Dynamic calendar data processing
-   - Scalable cloud hosting
-   - Integration with Azure services
-   - Cost-effective serverless architecture
-   - Automatic scaling based on usage
+2. **Azure Static Web Apps** (Production deployment - CURRENT)
+   - **Live URL**: https://nice-dune-0d695b810.2.azurestaticapps.net/
+   - **Auto-deployment**: GitHub Actions workflow triggers on push to main
+   - **Deployment time**: 2-3 minutes
+   - **Zero downtime**: Seamless updates
+
+3. **Azure Functions** (Backend services)
+   - Calendar data caching (15-minute refresh cycle)
+   - API endpoints for calendar data
+   - Manual deployment required: `func azure functionapp publish roomtool-calendar-function --python`
+
+### ⚠️ CRITICAL: Deployment Workflow
+
+**ALL CODE CHANGES AUTO-DEPLOY TO PRODUCTION VIA GIT PUSH:**
+
+```bash
+# Standard workflow for any code change
+git add .
+git commit -m "Description of changes"
+git push origin main
+
+# Within 2-3 minutes:
+# → GitHub Actions triggers
+# → Azure Static Web Apps deploys
+# → Live site updates automatically
+```
+
+**Key Points**:
+- Every push to `main` branch deploys to production immediately
+- No manual deployment steps needed for frontend changes
+- Monitor deployment: GitHub Actions tab or Azure Portal
+- Azure Functions require separate manual deployment
 
 ### Development Commands & Scripts
 
