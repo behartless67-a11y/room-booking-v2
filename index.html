@@ -879,6 +879,86 @@
             flex-shrink: 0;
         }
 
+        /* Room Details Section */
+        .room-details-section {
+            margin-top: 1rem;
+            border-top: 1px solid var(--gray-200);
+            padding-top: 0.75rem;
+        }
+
+        .room-details-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 0.625rem 0.875rem;
+            background: transparent;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius-lg);
+            color: var(--secondary);
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+
+        .room-details-toggle:hover {
+            background: var(--gray-50);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .details-toggle-icon {
+            width: 18px;
+            height: 18px;
+            transition: transform var(--transition-normal);
+        }
+
+        .room-details-section.expanded .details-toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .room-details-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height var(--transition-slow);
+        }
+
+        .room-details-section.expanded .room-details-content {
+            max-height: 500px;
+            margin-top: 0.75rem;
+        }
+
+        .room-details-title {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 0.625rem;
+            letter-spacing: 0.025em;
+            text-transform: uppercase;
+        }
+
+        .room-capacity-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .room-capacity-list li {
+            padding: 0.5rem 0.75rem;
+            margin-bottom: 0.375rem;
+            background: var(--gray-50);
+            border-left: 3px solid var(--primary);
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            color: var(--gray-700);
+            line-height: 1.5;
+        }
+
+        .room-capacity-list li:last-child {
+            margin-bottom: 0;
+        }
+
         /* Text Mode Toggle */
         .text-mode-toggle {
             display: flex;
@@ -3539,13 +3619,80 @@
                     }
 
                     roomContent.appendChild(roomSchedule);
+
+                    // Add room capacity details section
+                    const roomCapacityData = {
+                        "Great Hall 100": [
+                            "Unfurnished/standing only: up to 180",
+                            "Seated, theatre-style: up to 160",
+                            "Seated for dining: up to 108",
+                            "Seated, table clusters: up to 80",
+                            "Seated, classroom-style: up to 70"
+                        ],
+                        "Conference Room A L014": [
+                            "Seated at the table: up to 8"
+                        ],
+                        "Seminar Room L039": [
+                            "Seated, boardroom: up to 30",
+                            "Chairs against the wall for an additional 10"
+                        ],
+                        "Student Lounge 206": [
+                            "Unfurnished/standing only: up to 40",
+                            "Seated, theatre-style: up to 35",
+                            "Seated, boardroom: up to 20",
+                            "Seated for dining: up to 20"
+                        ]
+                    };
+
+                    if (roomCapacityData[room]) {
+                        const detailsSection = document.createElement('div');
+                        detailsSection.className = 'room-details-section';
+
+                        const detailsToggle = document.createElement('button');
+                        detailsToggle.className = 'room-details-toggle';
+                        detailsToggle.innerHTML = `
+                            <span class="details-toggle-text">View Room Details</span>
+                            <svg class="details-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        `;
+
+                        const detailsContent = document.createElement('div');
+                        detailsContent.className = 'room-details-content';
+
+                        const detailsTitle = document.createElement('div');
+                        detailsTitle.className = 'room-details-title';
+                        detailsTitle.textContent = 'Room Capacity';
+
+                        const capacityList = document.createElement('ul');
+                        capacityList.className = 'room-capacity-list';
+
+                        roomCapacityData[room].forEach(capacity => {
+                            const listItem = document.createElement('li');
+                            listItem.textContent = capacity;
+                            capacityList.appendChild(listItem);
+                        });
+
+                        detailsContent.appendChild(detailsTitle);
+                        detailsContent.appendChild(capacityList);
+
+                        detailsToggle.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            detailsSection.classList.toggle('expanded');
+                        });
+
+                        detailsSection.appendChild(detailsToggle);
+                        detailsSection.appendChild(detailsContent);
+                        roomContent.appendChild(detailsSection);
+                    }
+
                     container.appendChild(roomCard);
-                    
+
                     // Add click handler for collapse functionality
                     roomHeader.addEventListener('click', () => {
                         const isCollapsed = roomCard.classList.contains('collapsed');
                         roomCard.classList.toggle('collapsed');
-                        
+
                         // Update collapse text
                         collapseText.textContent = isCollapsed ? 'Click to collapse' : 'Click to expand';
                     });
