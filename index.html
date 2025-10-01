@@ -3398,6 +3398,9 @@
                     // Check if room is currently available
                     const isAvailable = !this.isRoomBusyAtTime(roomName, now, targetDate);
 
+                    // DEBUG: Log room events
+                    console.log(`📱 Mobile: ${roomName} - isAvailable: ${isAvailable}, isToday: ${isToday}, total events: ${roomEvents.length}`);
+
                     let relevantEvents;
                     if (isToday) {
                         const nowTime = now.getTime();
@@ -3415,11 +3418,26 @@
                                 // Show events that are happening now or will happen later
                                 return eventEnd > nowTime || (eventStart <= nowTime && eventEnd > nowTime);
                             }).slice(0, 5);
+
+                            console.log(`📱 In-Use room ${roomName}: filtered to ${relevantEvents.length} events from ${roomEvents.length} total`);
+                            if (relevantEvents.length > 0) {
+                                relevantEvents.forEach((e, i) => {
+                                    console.log(`  Event ${i}: ${e.summary} (${new Date(e.start).toLocaleTimeString()} - ${new Date(e.end).toLocaleTimeString()})`);
+                                });
+                            } else {
+                                console.log(`  All ${roomEvents.length} events filtered out. First event:`, roomEvents[0] ? {
+                                    summary: roomEvents[0].summary,
+                                    start: new Date(roomEvents[0].start).toLocaleString(),
+                                    end: new Date(roomEvents[0].end).toLocaleString()
+                                } : 'none');
+                            }
                         }
                     } else {
                         // For other dates: show first 3-5 events
                         relevantEvents = roomEvents.slice(0, isAvailable ? 3 : 5);
                     }
+
+                    console.log(`📱 ${roomName}: showing ${relevantEvents.length} relevant events`);
 
                     // Create mobile room item
                     const roomItem = document.createElement('div');
