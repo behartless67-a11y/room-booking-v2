@@ -3298,9 +3298,12 @@
             renderDayView() {
                 const selectedRoom = this.roomFilter.value;
                 const targetDate = this.currentDate.toDateString();
-                
+
                 const eventsForDate = this.getEventsForDate(targetDate);
-                
+                console.log('🔍 DEBUG renderDayView eventsForDate:', eventsForDate);
+                console.log('🔍 DEBUG eventsForDate keys:', Object.keys(eventsForDate));
+                console.log('🔍 DEBUG total events across all rooms:', Object.values(eventsForDate).reduce((sum, arr) => sum + arr.length, 0));
+
                 // Generate 30-minute time slots from configured start to end time
                 const startHour = this.config.settings?.dayViewStart || 8;
                 const endHour = this.config.settings?.dayViewEnd || 20;
