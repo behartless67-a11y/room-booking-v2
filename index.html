@@ -1793,7 +1793,7 @@
 
         /* Mobile Availability Summary */
         .mobile-availability-summary {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: var(--primary);
             color: white;
             padding: 1rem;
             border-radius: var(--radius-lg);
@@ -3395,21 +3395,26 @@
                     // For other dates: show all events for that day
                     const isToday = targetDate === new Date().toDateString();
 
-                    let relevantEvents;
-                    if (isToday) {
-                        // Show only current and upcoming events for today (max 3 for mobile)
-                        const nowTime = now.getTime();
-                        relevantEvents = roomEvents.filter(event => {
-                            const eventEnd = new Date(event.end).getTime();
-                            return eventEnd > nowTime;
-                        }).slice(0, 3);
-                    } else {
-                        // Show first 3 events for the selected date
-                        relevantEvents = roomEvents.slice(0, 3);
-                    }
-
                     // Check if room is currently available
                     const isAvailable = !this.isRoomBusyAtTime(roomName, now, targetDate);
+
+                    let relevantEvents;
+                    if (isToday) {
+                        const nowTime = now.getTime();
+                        if (isAvailable) {
+                            // For available rooms: show only upcoming events (max 3)
+                            relevantEvents = roomEvents.filter(event => {
+                                const eventEnd = new Date(event.end).getTime();
+                                return eventEnd > nowTime;
+                            }).slice(0, 3);
+                        } else {
+                            // For in-use rooms: show ALL events for today (not just upcoming)
+                            relevantEvents = roomEvents.slice(0, 5);
+                        }
+                    } else {
+                        // For other dates: show first 3-5 events
+                        relevantEvents = roomEvents.slice(0, isAvailable ? 3 : 5);
+                    }
 
                     // Create mobile room item
                     const roomItem = document.createElement('div');
@@ -3431,8 +3436,8 @@
                     roomHeader.appendChild(statusBadge);
                     roomItem.appendChild(roomHeader);
 
-                    // Add expand button for "In Use" rooms
-                    if (!isAvailable && relevantEvents.length > 0) {
+                    // Add expand button for "In Use" rooms (always, even if no events)
+                    if (!isAvailable) {
                         const expandButton = document.createElement('button');
                         expandButton.className = 'mobile-expand-toggle';
                         expandButton.innerHTML = `
@@ -3441,7 +3446,8 @@
                             </svg>
                             <span>View Details</span>
                         `;
-                        expandButton.addEventListener('click', () => {
+                        expandButton.addEventListener('click', (e) => {
+                            e.stopPropagation();
                             roomItem.classList.toggle('expanded');
                             const text = roomItem.classList.contains('expanded') ? 'Hide Details' : 'View Details';
                             expandButton.querySelector('span').textContent = text;
