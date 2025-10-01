@@ -304,6 +304,7 @@
         .karsh-logo {
             height: 60px;
             transition: var(--transition-normal);
+            display: none; /* Hidden for now */
         }
         
         label {
@@ -1909,13 +1910,18 @@
                 border-radius: var(--radius-xl);
             }
 
-            /* Simplify header - smaller logos */
+            /* Simplify header - just Batten logo, minimal padding */
             header {
-                padding: 0.75rem 1rem;
+                padding: 0.75rem 1rem 0.5rem 1rem;
+                justify-content: flex-start;
+            }
+
+            header .header-right {
+                display: none; /* Hide Karsh logo container */
             }
 
             header img {
-                height: 35px !important;
+                height: 40px !important;
             }
 
             h1 {
@@ -1932,23 +1938,32 @@
                 display: none !important;
             }
 
-            /* Simplify navigation bar */
+            /* Simplify navigation bar - reduce spacing */
             .navigation-bar {
-                padding: 0.75rem 1rem;
-                margin-bottom: 0.5rem;
+                padding: 0.5rem 1rem;
+                margin-bottom: 0.75rem;
             }
 
             .nav-compact {
                 gap: 0.5rem;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
             }
 
             .current-date-display {
-                font-size: 1rem;
+                font-size: 0.9375rem;
+                order: 0;
+                margin-bottom: 0;
+            }
+
+            .date-nav-compact {
+                justify-content: flex-end;
             }
 
             .date-nav-btn {
-                padding: 0.5rem 0.75rem;
-                font-size: 0.875rem;
+                padding: 0.4rem 0.65rem;
+                font-size: 0.8125rem;
             }
 
             .dashboard {
