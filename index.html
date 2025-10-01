@@ -3366,12 +3366,21 @@
             }
 
             renderMobileView(rooms, eventsForDate) {
+                console.log('📱 ========== MOBILE VIEW RENDER START ==========');
+                console.log('📱 Rooms to render:', rooms.length);
+                console.log('📱 Events for date:', Object.keys(eventsForDate).length, 'rooms have events');
+
                 const mobileView = document.getElementById('mobileView');
-                if (!mobileView) return;
+                console.log('📱 mobileView element found:', !!mobileView);
+                if (!mobileView) {
+                    console.error('❌ mobileView element NOT FOUND!');
+                    return;
+                }
 
                 mobileView.innerHTML = '';
                 const now = new Date();
                 const targetDate = this.currentDate.toDateString();
+                console.log('📱 Current time:', now.toLocaleTimeString(), '| Target date:', targetDate);
 
                 // Count available rooms
                 const availableCount = rooms.filter(room => !this.isRoomBusyAtTime(room, now, targetDate)).length;
