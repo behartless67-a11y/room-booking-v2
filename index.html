@@ -1859,8 +1859,44 @@
         }
 
         .mobile-room-content {
-            /* Always visible on mobile - no collapsing needed */
-            display: block;
+            /* Collapsible for "In Use" rooms */
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .mobile-room-item.expanded .mobile-room-content {
+            max-height: 1000px;
+        }
+
+        .mobile-room-item.available-room .mobile-room-content {
+            /* Available rooms always show events */
+            max-height: none;
+        }
+
+        .mobile-expand-toggle {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 0.8125rem;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .mobile-expand-toggle svg {
+            width: 16px;
+            height: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-room-item.expanded .mobile-expand-toggle svg {
+            transform: rotate(180deg);
         }
 
         .mobile-event-list {
@@ -1967,7 +2003,15 @@
             }
 
             .dashboard {
-                padding: 0.5rem;
+                padding: 0;
+            }
+
+            .day-view {
+                display: none; /* Hide on mobile, use mobile-text-view instead */
+            }
+
+            .main-content {
+                padding: 0;
             }
 
             /* Hide desktop card view on mobile */
@@ -1979,7 +2023,7 @@
             /* Show mobile text view */
             .mobile-text-view {
                 display: block;
-                padding: 0 0.5rem 1rem 0.5rem;
+                padding: 0 0.75rem 1rem 0.75rem;
             }
 
             .modal-content {
@@ -3373,9 +3417,9 @@
 
                     // Create mobile room item
                     const roomItem = document.createElement('div');
-                    roomItem.className = 'mobile-room-item';
+                    roomItem.className = `mobile-room-item ${isAvailable ? 'available-room' : ''}`;
 
-                    // Room header (collapsible)
+                    // Room header
                     const roomHeader = document.createElement('div');
                     roomHeader.className = 'mobile-room-header';
 
@@ -3390,7 +3434,28 @@
                     roomHeader.appendChild(roomNameDiv);
                     roomHeader.appendChild(statusBadge);
 
-                    // Room content (collapsible)
+                    // Add expand button for "In Use" rooms
+                    if (!isAvailable && relevantEvents.length > 0) {
+                        const expandButton = document.createElement('button');
+                        expandButton.className = 'mobile-expand-toggle';
+                        expandButton.innerHTML = `
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                            <span>View Details</span>
+                        `;
+                        expandButton.addEventListener('click', () => {
+                            roomItem.classList.toggle('expanded');
+                            const text = roomItem.classList.contains('expanded') ? 'Hide Details' : 'View Details';
+                            expandButton.querySelector('span').textContent = text;
+                        });
+                        roomItem.appendChild(roomHeader);
+                        roomItem.appendChild(expandButton);
+                    } else {
+                        roomItem.appendChild(roomHeader);
+                    }
+
+                    // Room content
                     const roomContent = document.createElement('div');
                     roomContent.className = 'mobile-room-content';
 
