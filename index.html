@@ -3440,14 +3440,14 @@
                         if (isAvailable) {
                             // For available rooms: show only upcoming events (max 3)
                             relevantEvents = roomEvents.filter(event => {
-                                const eventEnd = new Date(event.end).getTime();
+                                const eventEnd = new Date(event.endTime).getTime();
                                 return eventEnd > nowTime;
                             }).slice(0, 3);
                         } else {
                             // For in-use rooms: show current + upcoming events (up to 5)
                             relevantEvents = roomEvents.filter(event => {
-                                const eventEnd = new Date(event.end).getTime();
-                                const eventStart = new Date(event.start).getTime();
+                                const eventEnd = new Date(event.endTime).getTime();
+                                const eventStart = new Date(event.startTime).getTime();
                                 // Show events that are happening now or will happen later
                                 return eventEnd > nowTime || (eventStart <= nowTime && eventEnd > nowTime);
                             }).slice(0, 5);
@@ -3455,13 +3455,13 @@
                             console.log(`📱 In-Use room ${roomName}: filtered to ${relevantEvents.length} events from ${roomEvents.length} total`);
                             if (relevantEvents.length > 0) {
                                 relevantEvents.forEach((e, i) => {
-                                    console.log(`  Event ${i}: ${e.summary} (${new Date(e.start).toLocaleTimeString()} - ${new Date(e.end).toLocaleTimeString()})`);
+                                    console.log(`  Event ${i}: ${e.summary} (${new Date(e.startTime).toLocaleTimeString()} - ${new Date(e.endTime).toLocaleTimeString()})`);
                                 });
                             } else {
                                 console.log(`  All ${roomEvents.length} events filtered out. First event:`, roomEvents[0] ? {
                                     summary: roomEvents[0].summary,
-                                    start: new Date(roomEvents[0].start).toLocaleString(),
-                                    end: new Date(roomEvents[0].end).toLocaleString()
+                                    start: new Date(roomEvents[0].startTime).toLocaleString(),
+                                    end: new Date(roomEvents[0].endTime).toLocaleString()
                                 } : 'none');
                             }
                         }
@@ -3513,8 +3513,8 @@
 
                             const eventTime = document.createElement('div');
                             eventTime.className = 'mobile-event-time';
-                            const startTime = new Date(event.start);
-                            const endTime = new Date(event.end);
+                            const startTime = new Date(event.startTime);
+                            const endTime = new Date(event.endTime);
                             eventTime.textContent = `${this.formatTime(startTime)} - ${this.formatTime(endTime)}`;
 
                             const eventTitle = document.createElement('div');
