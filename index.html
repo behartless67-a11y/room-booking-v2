@@ -3434,26 +3434,6 @@
 
                     roomHeader.appendChild(roomNameDiv);
                     roomHeader.appendChild(statusBadge);
-                    roomItem.appendChild(roomHeader);
-
-                    // Add expand button for "In Use" rooms (always, even if no events)
-                    if (!isAvailable) {
-                        const expandButton = document.createElement('button');
-                        expandButton.className = 'mobile-expand-toggle';
-                        expandButton.innerHTML = `
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                            <span>View Details</span>
-                        `;
-                        expandButton.addEventListener('click', (e) => {
-                            e.stopPropagation();
-                            roomItem.classList.toggle('expanded');
-                            const text = roomItem.classList.contains('expanded') ? 'Hide Details' : 'View Details';
-                            expandButton.querySelector('span').textContent = text;
-                        });
-                        roomItem.appendChild(expandButton);
-                    }
 
                     // Room content
                     const roomContent = document.createElement('div');
@@ -3493,7 +3473,28 @@
 
                     roomContent.appendChild(eventList);
 
+                    // Build the room item in correct order
                     roomItem.appendChild(roomHeader);
+
+                    // Add expand button for "In Use" rooms (always, even if no events)
+                    if (!isAvailable) {
+                        const expandButton = document.createElement('button');
+                        expandButton.className = 'mobile-expand-toggle';
+                        expandButton.innerHTML = `
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                            <span>View Details</span>
+                        `;
+                        expandButton.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            roomItem.classList.toggle('expanded');
+                            const text = roomItem.classList.contains('expanded') ? 'Hide Details' : 'View Details';
+                            expandButton.querySelector('span').textContent = text;
+                        });
+                        roomItem.appendChild(expandButton);
+                    }
+
                     roomItem.appendChild(roomContent);
                     mobileView.appendChild(roomItem);
                 });
