@@ -3301,8 +3301,25 @@
 
                 const eventsForDate = this.getEventsForDate(targetDate);
                 console.log('🔍 DEBUG renderDayView eventsForDate:', eventsForDate);
-                console.log('🔍 DEBUG eventsForDate keys:', Object.keys(eventsForDate));
-                console.log('🔍 DEBUG total events across all rooms:', Object.values(eventsForDate).reduce((sum, arr) => sum + arr.length, 0));
+                console.log('🔍 DEBUG Is array?', Array.isArray(eventsForDate));
+
+                // Convert array to object grouped by room for mobile view
+                const eventsByRoom = {};
+                if (Array.isArray(eventsForDate)) {
+                    // It's an array of events, group by room
+                    eventsForDate.forEach(event => {
+                        if (event.room) {
+                            if (!eventsByRoom[event.room]) {
+                                eventsByRoom[event.room] = [];
+                            }
+                            eventsByRoom[event.room].push(event);
+                        }
+                    });
+                    console.log('🔍 DEBUG Converted array to eventsByRoom object:', Object.keys(eventsByRoom));
+                } else {
+                    // It's already an object, use it directly
+                    Object.assign(eventsByRoom, eventsForDate);
+                }
 
                 // Generate 30-minute time slots from configured start to end time
                 const startHour = this.config.settings?.dayViewStart || 8;
@@ -3364,8 +3381,8 @@
                     this.createRoomCard(room, roomsGrid, eventsForDate, timeSlots);
                 });
 
-                // Also render mobile view
-                this.renderMobileView(roomsToShow, eventsForDate);
+                // Also render mobile view (use eventsByRoom object, not array)
+                this.renderMobileView(roomsToShow, eventsByRoom);
             }
 
             renderMobileView(rooms, eventsForDate) {
