@@ -1790,6 +1790,30 @@
             display: none;
         }
 
+        /* Mobile Availability Summary */
+        .mobile-availability-summary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 1rem;
+            border-radius: var(--radius-lg);
+            margin-bottom: 1rem;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+        }
+
+        .mobile-availability-number {
+            font-size: 2rem;
+            font-weight: 900;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Arial Black', sans-serif;
+            margin-bottom: 0.25rem;
+        }
+
+        .mobile-availability-text {
+            font-size: 0.875rem;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+
         .mobile-room-item {
             background: var(--white);
             border-radius: var(--radius-lg);
@@ -1800,30 +1824,27 @@
         }
 
         .mobile-room-header {
-            padding: 1rem;
+            padding: 0.875rem 1rem;
             background: var(--gray-50);
-            cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid var(--gray-200);
         }
 
-        .mobile-room-header:active {
-            background: var(--gray-100);
-        }
-
         .mobile-room-name {
-            font-weight: 600;
-            font-size: 1rem;
+            font-weight: 700;
+            font-size: 0.9375rem;
             color: var(--navy);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Arial Black', sans-serif;
         }
 
         .mobile-room-status {
-            font-size: 0.875rem;
-            font-weight: 500;
-            padding: 0.25rem 0.75rem;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            padding: 0.25rem 0.625rem;
             border-radius: var(--radius-full);
+            white-space: nowrap;
         }
 
         .mobile-room-status.available {
@@ -1837,22 +1858,8 @@
         }
 
         .mobile-room-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .mobile-room-item.expanded .mobile-room-content {
-            max-height: 1000px;
-        }
-
-        .mobile-room-item.expanded .mobile-expand-icon {
-            transform: rotate(180deg);
-        }
-
-        .mobile-expand-icon {
-            transition: transform 0.3s ease;
-            color: var(--gray-500);
+            /* Always visible on mobile - no collapsing needed */
+            display: block;
         }
 
         .mobile-event-list {
@@ -1902,26 +1909,50 @@
                 border-radius: var(--radius-xl);
             }
 
+            /* Simplify header - smaller logos */
             header {
-                padding: 1rem;
+                padding: 0.75rem 1rem;
             }
 
             header img {
-                height: 40px !important;
+                height: 35px !important;
             }
 
             h1 {
                 font-size: 1.25rem;
             }
 
+            /* Hide most desktop controls on mobile */
             .controls {
-                padding: 1rem;
-                gap: 1rem;
-                flex-direction: column;
+                display: none !important;
+            }
+
+            /* Hide info banner on mobile for cleaner look */
+            .info-banner {
+                display: none !important;
+            }
+
+            /* Simplify navigation bar */
+            .navigation-bar {
+                padding: 0.75rem 1rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .nav-compact {
+                gap: 0.5rem;
+            }
+
+            .current-date-display {
+                font-size: 1rem;
+            }
+
+            .date-nav-btn {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.875rem;
             }
 
             .dashboard {
-                padding: 1rem;
+                padding: 0.5rem;
             }
 
             /* Hide desktop card view on mobile */
@@ -1933,6 +1964,7 @@
             /* Show mobile text view */
             .mobile-text-view {
                 display: block;
+                padding: 0 0.5rem 1rem 0.5rem;
             }
 
             .modal-content {
@@ -3286,8 +3318,20 @@
                 const now = new Date();
                 const targetDate = this.currentDate.toDateString();
 
-                // Limit to 8 rooms on mobile for performance
-                const limitedRooms = rooms.slice(0, 8);
+                // Count available rooms
+                const availableCount = rooms.filter(room => !this.isRoomBusyAtTime(room, now, targetDate)).length;
+
+                // Add availability summary banner
+                const summaryBanner = document.createElement('div');
+                summaryBanner.className = 'mobile-availability-summary';
+                summaryBanner.innerHTML = `
+                    <div class="mobile-availability-number">${availableCount}</div>
+                    <div class="mobile-availability-text">${availableCount === 1 ? 'Room Available Now' : 'Rooms Available Now'}</div>
+                `;
+                mobileView.appendChild(summaryBanner);
+
+                // No room limit on mobile - show all rooms
+                const limitedRooms = rooms;
 
                 limitedRooms.forEach(roomName => {
                     const roomEvents = eventsForDate[roomName] || [];
@@ -3298,15 +3342,15 @@
 
                     let relevantEvents;
                     if (isToday) {
-                        // Show only current and upcoming events for today
+                        // Show only current and upcoming events for today (max 3 for mobile)
                         const nowTime = now.getTime();
                         relevantEvents = roomEvents.filter(event => {
                             const eventEnd = new Date(event.end).getTime();
                             return eventEnd > nowTime;
-                        }).slice(0, 10); // Show max 10 events per room
+                        }).slice(0, 3);
                     } else {
-                        // Show all events for the selected date
-                        relevantEvents = roomEvents.slice(0, 10);
+                        // Show first 3 events for the selected date
+                        relevantEvents = roomEvents.slice(0, 3);
                     }
 
                     // Check if room is currently available
@@ -3324,29 +3368,12 @@
                     roomNameDiv.className = 'mobile-room-name';
                     roomNameDiv.textContent = roomName;
 
-                    const headerRight = document.createElement('div');
-                    headerRight.style.display = 'flex';
-                    headerRight.style.alignItems = 'center';
-                    headerRight.style.gap = '0.5rem';
-
                     const statusBadge = document.createElement('div');
                     statusBadge.className = `mobile-room-status ${isAvailable ? 'available' : 'busy'}`;
-                    statusBadge.textContent = isAvailable ? 'Available' : 'Busy';
-
-                    const expandIcon = document.createElement('span');
-                    expandIcon.className = 'mobile-expand-icon';
-                    expandIcon.innerHTML = '▼';
-
-                    headerRight.appendChild(statusBadge);
-                    headerRight.appendChild(expandIcon);
+                    statusBadge.textContent = isAvailable ? 'Available' : 'In Use';
 
                     roomHeader.appendChild(roomNameDiv);
-                    roomHeader.appendChild(headerRight);
-
-                    // Toggle expand/collapse
-                    roomHeader.addEventListener('click', () => {
-                        roomItem.classList.toggle('expanded');
-                    });
+                    roomHeader.appendChild(statusBadge);
 
                     // Room content (collapsible)
                     const roomContent = document.createElement('div');
