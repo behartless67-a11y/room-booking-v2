@@ -2003,15 +2003,11 @@
             }
 
             .dashboard {
-                padding: 0;
+                display: none !important; /* Hide entire dashboard container on mobile */
             }
 
-            .day-view {
-                display: none; /* Hide on mobile, use mobile-text-view instead */
-            }
-
-            .main-content {
-                padding: 0;
+            .overview-sidebar {
+                display: none !important;
             }
 
             /* Hide desktop card view on mobile */
@@ -3433,6 +3429,7 @@
 
                     roomHeader.appendChild(roomNameDiv);
                     roomHeader.appendChild(statusBadge);
+                    roomItem.appendChild(roomHeader);
 
                     // Add expand button for "In Use" rooms
                     if (!isAvailable && relevantEvents.length > 0) {
@@ -3449,10 +3446,7 @@
                             const text = roomItem.classList.contains('expanded') ? 'Hide Details' : 'View Details';
                             expandButton.querySelector('span').textContent = text;
                         });
-                        roomItem.appendChild(roomHeader);
                         roomItem.appendChild(expandButton);
-                    } else {
-                        roomItem.appendChild(roomHeader);
                     }
 
                     // Room content
