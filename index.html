@@ -3408,8 +3408,13 @@
                                 return eventEnd > nowTime;
                             }).slice(0, 3);
                         } else {
-                            // For in-use rooms: show ALL events for today (not just upcoming)
-                            relevantEvents = roomEvents.slice(0, 5);
+                            // For in-use rooms: show current + upcoming events (up to 5)
+                            relevantEvents = roomEvents.filter(event => {
+                                const eventEnd = new Date(event.end).getTime();
+                                const eventStart = new Date(event.start).getTime();
+                                // Show events that are happening now or will happen later
+                                return eventEnd > nowTime || (eventStart <= nowTime && eventEnd > nowTime);
+                            }).slice(0, 5);
                         }
                     } else {
                         // For other dates: show first 3-5 events
