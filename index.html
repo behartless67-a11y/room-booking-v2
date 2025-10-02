@@ -3722,21 +3722,22 @@
                         const endTime = new Date(bookingDate);
                         endTime.setHours(bookingDate.getHours() + 1); // Default 1-hour meeting
 
-                        // Format dates for Outlook Web Access
-                        // OWA expects dates in ISO format without colons in time portion for URL compatibility
-                        const startdt = encodeURIComponent(bookingDate.toISOString());
-                        const enddt = encodeURIComponent(endTime.toISOString());
+                        // Format dates for Outlook Web Access in ISO 8601 format
+                        // Use local timezone format (omit Z) so Outlook interprets in user's timezone
+                        const startdt = bookingDate.toISOString();
+                        const enddt = endTime.toISOString();
 
-                        // Debug: Log the URL being generated
-                        console.log('🔗 Reserve Room URL:', {
-                            room: room,
-                            viewingDate: this.currentDate.toDateString(),
-                            bookingDate: bookingDate.toISOString(),
-                            startdt: startdt,
-                            enddt: enddt
-                        });
+                        // Build Outlook deep link URL with all parameters
+                        // Using office.com (not office365.com) and /calendar/deeplink/compose format
+                        const outlookUrl = new URL('https://outlook.office.com/calendar/deeplink/compose');
+                        outlookUrl.searchParams.set('path', '/calendar/action/compose');
+                        outlookUrl.searchParams.set('rru', 'addevent');
+                        outlookUrl.searchParams.set('startdt', startdt);
+                        outlookUrl.searchParams.set('enddt', enddt);
+                        outlookUrl.searchParams.set('subject', `Meeting in ${room}`);
+                        outlookUrl.searchParams.set('location', roomEmail);
 
-                        reserveButton.href = `https://outlook.office365.com/owa/?path=/calendar/action/compose&rru=addevent&location=${roomEmail}&subject=${encodedSubject}&startdt=${startdt}&enddt=${enddt}`;
+                        reserveButton.href = outlookUrl.toString();
                         reserveButton.target = '_blank';
                         reserveButton.innerHTML = `
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
