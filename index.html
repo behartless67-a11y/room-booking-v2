@@ -3737,7 +3737,8 @@
                         outlookUrl.searchParams.set('subject', `Meeting in ${room}`);
                         outlookUrl.searchParams.set('location', roomEmail);
 
-                        reserveButton.href = outlookUrl.toString();
+                        const bookingUrl = outlookUrl.toString();
+                        reserveButton.href = bookingUrl;
                         reserveButton.target = '_blank';
                         reserveButton.innerHTML = `
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
@@ -3749,7 +3750,37 @@
                             Reserve Room
                         `;
                         reserveButton.onclick = (e) => {
+                            e.preventDefault(); // Prevent immediate navigation
                             e.stopPropagation(); // Prevent card collapse/expand
+
+                            // Check if room has any conflicting events at the booking time
+                            const conflicts = roomEvents.filter(event => {
+                                // Check if booking time overlaps with existing event
+                                return (bookingDate >= event.startTime && bookingDate < event.endTime) ||
+                                       (endTime > event.startTime && endTime <= event.endTime) ||
+                                       (bookingDate <= event.startTime && endTime >= event.endTime);
+                            });
+
+                            if (conflicts.length > 0) {
+                                // Room has conflicts - show warning
+                                const conflictDetails = conflicts.map(evt =>
+                                    `  • ${this.formatTime(evt.startTime)} - ${this.formatTime(evt.endTime)}: ${evt.summary || 'Untitled Event'}`
+                                ).join('\n');
+
+                                const confirmed = confirm(
+                                    `⚠️ BOOKING CONFLICT WARNING\n\n` +
+                                    `This room is already reserved during your selected time:\n\n${conflictDetails}\n\n` +
+                                    `You may need to coordinate with the current booking holder.\n\n` +
+                                    `Do you want to proceed with booking anyway?`
+                                );
+
+                                if (confirmed) {
+                                    window.open(bookingUrl, '_blank');
+                                }
+                            } else {
+                                // No conflicts - proceed directly
+                                window.open(bookingUrl, '_blank');
+                            }
                         };
                         roomHeader.appendChild(reserveButton);
                     }
