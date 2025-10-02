@@ -3722,11 +3722,21 @@
                         const endTime = new Date(bookingDate);
                         endTime.setHours(bookingDate.getHours() + 1); // Default 1-hour meeting
 
-                        // Format dates for Outlook (ISO 8601 format)
-                        const startdt = bookingDate.toISOString();
-                        const enddt = endTime.toISOString();
+                        // Format dates for Outlook Web Access
+                        // OWA expects dates in ISO format without colons in time portion for URL compatibility
+                        const startdt = encodeURIComponent(bookingDate.toISOString());
+                        const enddt = encodeURIComponent(endTime.toISOString());
 
-                        reserveButton.href = `https://outlook.office365.com/owa/?path=/calendar/action/compose&location=${roomEmail}&subject=${encodedSubject}&startdt=${startdt}&enddt=${enddt}`;
+                        // Debug: Log the URL being generated
+                        console.log('🔗 Reserve Room URL:', {
+                            room: room,
+                            viewingDate: this.currentDate.toDateString(),
+                            bookingDate: bookingDate.toISOString(),
+                            startdt: startdt,
+                            enddt: enddt
+                        });
+
+                        reserveButton.href = `https://outlook.office365.com/owa/?path=/calendar/action/compose&rru=addevent&location=${roomEmail}&subject=${encodedSubject}&startdt=${startdt}&enddt=${enddt}`;
                         reserveButton.target = '_blank';
                         reserveButton.innerHTML = `
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
