@@ -888,11 +888,17 @@
             padding-top: 0.75rem;
         }
 
+        .room-details-buttons-container {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
         .room-details-toggle {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            width: 100%;
+            flex: 1;
             padding: 0.625rem 0.875rem;
             background: transparent;
             border: 1px solid var(--gray-300);
@@ -916,7 +922,7 @@
             transition: transform var(--transition-normal);
         }
 
-        .room-details-section.expanded .details-toggle-icon {
+        .room-details-toggle.expanded .details-toggle-icon {
             transform: rotate(180deg);
         }
 
@@ -926,9 +932,9 @@
             transition: max-height var(--transition-slow);
         }
 
-        .room-details-section.expanded .room-details-content {
+        .room-details-content.expanded {
             max-height: 500px;
-            margin-top: 0.75rem;
+            margin-bottom: 0.75rem;
         }
 
         .room-details-title {
@@ -3864,73 +3870,177 @@
 
                     roomContent.appendChild(roomSchedule);
 
-                    // Add room capacity details section
-                    const roomCapacityData = {
-                        "Great Hall 100": [
-                            "Unfurnished/standing only: up to 180",
-                            "Seated, theatre-style: up to 160",
-                            "Seated for dining: up to 108",
-                            "Seated, table clusters: up to 80",
-                            "Seated, classroom-style: up to 70"
-                        ],
-                        "Conference Room A L014": [
-                            "Seated at the table: up to 8"
-                        ],
-                        "Seminar Room L039": [
-                            "Seated, boardroom: up to 30",
-                            "Chairs against the wall for an additional 10"
-                        ],
-                        "Student Lounge 206": [
-                            "Unfurnished/standing only: up to 40",
-                            "Seated, theatre-style: up to 35",
-                            "Seated, boardroom: up to 20",
-                            "Seated for dining: up to 20"
-                        ],
-                        "Pavilion X Upper Garden": [
-                            "Seated (tables and benches): up to 22",
-                            "Standing: 50-60 (approximate)"
-                        ]
+                    // Add room capacity and AV details section
+                    const roomDetailsData = {
+                        "Great Hall 100": {
+                            capacity: [
+                                "Unfurnished/standing only: up to 180",
+                                "Seated, theatre-style: up to 160",
+                                "Seated for dining: up to 108",
+                                "Seated, table clusters: up to 80",
+                                "Seated, classroom-style: up to 70"
+                            ],
+                            av: [
+                                "🖥️ Displays: 3 TVs (2 mobile, 1 fixed)",
+                                "📹 Cameras: 4 PTZ cameras",
+                                "🎤 Audio: 12 microphones (all connect to Zoom)",
+                                "💻 Video Modes:",
+                                "   • Desktop PC",
+                                "   • Wireless via Airtame",
+                                "   • Zoom Rooms",
+                                "📡 Screen Sharing: Wireless only (Airtame or Zoom)",
+                                "🎮 Control: Crestron touch panel",
+                                "⚠️ Note: No direct HDMI connection for BYOD"
+                            ]
+                        },
+                        "Conference Room A L014": {
+                            capacity: [
+                                "Seated at the table: up to 8"
+                            ],
+                            av: [
+                                "🖥️ Displays: 2 displays",
+                                "📹 Camera: Logitech MeetUp (audio/video/mic)",
+                                "💻 Video System: Zoom Rooms",
+                                "📡 Screen Sharing: Zoom Rooms or Airtame",
+                                "⚠️ Note: No direct HDMI connection"
+                            ]
+                        },
+                        "Seminar Room L039": {
+                            capacity: [
+                                "Seated, boardroom: up to 30",
+                                "Chairs against the wall for an additional 10"
+                            ],
+                            av: [
+                                "🖥️ Displays: 7 TVs (some standalone for independent content)",
+                                "📹 Cameras: 2 cameras (one on each far end)",
+                                "🎤 Audio: Ceiling array microphones",
+                                "💻 Video System: Zoom Rooms for screen sharing",
+                                "📡 Screen Sharing: Airtame (allows different content on different screens)",
+                                "⚠️ Note: No direct HDMI connections"
+                            ]
+                        },
+                        "Student Lounge 206": {
+                            capacity: [
+                                "Unfurnished/standing only: up to 40",
+                                "Seated, theatre-style: up to 35",
+                                "Seated, boardroom: up to 20",
+                                "Seated for dining: up to 20"
+                            ],
+                            av: [
+                                "🖥️ Display: 1 TV",
+                                "📹 Camera: Logitech MeetUp 2 (audio/video/mic)"
+                            ]
+                        },
+                        "Pavilion X Upper Garden": {
+                            capacity: [
+                                "Seated (tables and benches): up to 22",
+                                "Standing: 50-60 (approximate)"
+                            ],
+                            av: [
+                                "🖥️ Display: Mobile TV available upon request (HDMI)",
+                                "🔊 Audio: Mobile speaker and microphones upon request",
+                                "📝 Note: Equipment must be requested in advance"
+                            ]
+                        },
+                        "Pavilion X Basement Room 1": {
+                            av: [
+                                "🖥️ Display: Mobile TV available upon request (HDMI)",
+                                "📝 Note: Equipment must be requested in advance"
+                            ]
+                        },
+                        "Pavilion X Basement Room 2": {
+                            av: [
+                                "🖥️ Display: Mobile TV available upon request (HDMI)",
+                                "📝 Note: Equipment must be requested in advance"
+                            ]
+                        },
+                        "Pavilion X Basement Exhibit": {
+                            av: [
+                                "🖥️ Display: Mobile TV available upon request (HDMI)",
+                                "📝 Note: Equipment must be requested in advance"
+                            ]
+                        }
                     };
 
-                    if (roomCapacityData[room]) {
+                    if (roomDetailsData[room]) {
                         const detailsSection = document.createElement('div');
                         detailsSection.className = 'room-details-section';
 
-                        const detailsToggle = document.createElement('button');
-                        detailsToggle.className = 'room-details-toggle';
-                        detailsToggle.innerHTML = `
-                            <span class="details-toggle-text">View Room Details</span>
-                            <svg class="details-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        `;
+                        // Create buttons container for side-by-side layout
+                        const buttonsContainer = document.createElement('div');
+                        buttonsContainer.className = 'room-details-buttons-container';
 
-                        const detailsContent = document.createElement('div');
-                        detailsContent.className = 'room-details-content';
+                        // Create capacity button and content if available
+                        if (roomDetailsData[room].capacity) {
+                            const capacityToggle = document.createElement('button');
+                            capacityToggle.className = 'room-details-toggle';
+                            capacityToggle.innerHTML = `
+                                <span class="details-toggle-text">Room Capacity</span>
+                                <svg class="details-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            `;
 
-                        const detailsTitle = document.createElement('div');
-                        detailsTitle.className = 'room-details-title';
-                        detailsTitle.textContent = 'Room Capacity';
+                            const capacityContent = document.createElement('div');
+                            capacityContent.className = 'room-details-content';
 
-                        const capacityList = document.createElement('ul');
-                        capacityList.className = 'room-capacity-list';
+                            const capacityList = document.createElement('ul');
+                            capacityList.className = 'room-capacity-list';
 
-                        roomCapacityData[room].forEach(capacity => {
-                            const listItem = document.createElement('li');
-                            listItem.textContent = capacity;
-                            capacityList.appendChild(listItem);
-                        });
+                            roomDetailsData[room].capacity.forEach(capacity => {
+                                const listItem = document.createElement('li');
+                                listItem.textContent = capacity;
+                                capacityList.appendChild(listItem);
+                            });
 
-                        detailsContent.appendChild(detailsTitle);
-                        detailsContent.appendChild(capacityList);
+                            capacityContent.appendChild(capacityList);
 
-                        detailsToggle.addEventListener('click', (e) => {
-                            e.stopPropagation();
-                            detailsSection.classList.toggle('expanded');
-                        });
+                            capacityToggle.addEventListener('click', (e) => {
+                                e.stopPropagation();
+                                capacityToggle.classList.toggle('expanded');
+                                capacityContent.classList.toggle('expanded');
+                            });
 
-                        detailsSection.appendChild(detailsToggle);
-                        detailsSection.appendChild(detailsContent);
+                            buttonsContainer.appendChild(capacityToggle);
+                            detailsSection.appendChild(buttonsContainer);
+                            detailsSection.appendChild(capacityContent);
+                        }
+
+                        // Create AV button and content if available
+                        if (roomDetailsData[room].av) {
+                            const avToggle = document.createElement('button');
+                            avToggle.className = 'room-details-toggle';
+                            avToggle.innerHTML = `
+                                <span class="details-toggle-text">AV Equipment</span>
+                                <svg class="details-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            `;
+
+                            const avContent = document.createElement('div');
+                            avContent.className = 'room-details-content';
+
+                            const avList = document.createElement('ul');
+                            avList.className = 'room-capacity-list';
+
+                            roomDetailsData[room].av.forEach(avItem => {
+                                const listItem = document.createElement('li');
+                                listItem.textContent = avItem;
+                                avList.appendChild(listItem);
+                            });
+
+                            avContent.appendChild(avList);
+
+                            avToggle.addEventListener('click', (e) => {
+                                e.stopPropagation();
+                                avToggle.classList.toggle('expanded');
+                                avContent.classList.toggle('expanded');
+                            });
+
+                            buttonsContainer.appendChild(avToggle);
+                            detailsSection.appendChild(avContent);
+                        }
+
                         roomContent.appendChild(detailsSection);
                     }
 
