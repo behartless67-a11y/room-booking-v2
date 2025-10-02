@@ -3701,7 +3701,28 @@
                         const reserveButton = document.createElement('a');
                         reserveButton.className = 'reserve-room-button';
                         const encodedSubject = encodeURIComponent(`Meeting in ${room}`);
-                        reserveButton.href = `https://outlook.office365.com/owa/?path=/calendar/action/compose&location=${roomEmail}&subject=${encodedSubject}`;
+
+                        // Pre-fill booking with the date being viewed
+                        // Default to next available hour or 9 AM if looking at a future date
+                        const bookingDate = new Date(this.currentDate);
+                        const now = new Date();
+
+                        // If viewing today and it's before 5 PM, use next hour
+                        // Otherwise default to 9 AM of the viewed date
+                        if (bookingDate.toDateString() === now.toDateString() && now.getHours() < 17) {
+                            bookingDate.setHours(now.getHours() + 1, 0, 0, 0);
+                        } else {
+                            bookingDate.setHours(9, 0, 0, 0);
+                        }
+
+                        const endTime = new Date(bookingDate);
+                        endTime.setHours(bookingDate.getHours() + 1); // Default 1-hour meeting
+
+                        // Format dates for Outlook (ISO 8601 format)
+                        const startdt = bookingDate.toISOString();
+                        const enddt = endTime.toISOString();
+
+                        reserveButton.href = `https://outlook.office365.com/owa/?path=/calendar/action/compose&location=${roomEmail}&subject=${encodedSubject}&startdt=${startdt}&enddt=${enddt}`;
                         reserveButton.target = '_blank';
                         reserveButton.innerHTML = `
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
