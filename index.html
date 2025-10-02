@@ -3707,14 +3707,27 @@
                         const encodedSubject = encodeURIComponent(`Meeting in ${room}`);
 
                         // Pre-fill booking with the date being viewed
-                        // Default to next available hour or 9 AM if looking at a future date
+                        // Default to next available half-hour or 9 AM if looking at a future date
                         const bookingDate = new Date(this.currentDate);
                         const now = new Date();
 
-                        // If viewing today and it's before 5 PM, use next hour
+                        // If viewing today and it's before 5 PM, round up to next half-hour
                         // Otherwise default to 9 AM of the viewed date
                         if (bookingDate.toDateString() === now.toDateString() && now.getHours() < 17) {
-                            bookingDate.setHours(now.getHours() + 1, 0, 0, 0);
+                            // Round up to nearest half hour
+                            const currentMinutes = now.getMinutes();
+                            const currentHours = now.getHours();
+
+                            if (currentMinutes === 0) {
+                                // Exactly on the hour - use next half hour (e.g., 2:00 PM → 2:30 PM)
+                                bookingDate.setHours(currentHours, 30, 0, 0);
+                            } else if (currentMinutes <= 30) {
+                                // Between :01 and :30 - round up to :30 (e.g., 2:15 PM → 2:30 PM)
+                                bookingDate.setHours(currentHours, 30, 0, 0);
+                            } else {
+                                // Between :31 and :59 - round up to next hour (e.g., 2:45 PM → 3:00 PM)
+                                bookingDate.setHours(currentHours + 1, 0, 0, 0);
+                            }
                         } else {
                             bookingDate.setHours(9, 0, 0, 0);
                         }
