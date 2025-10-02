@@ -84,7 +84,8 @@
         }
         
         .container {
-            max-width: 95%;
+            max-width: 1400px; /* Cap maximum width */
+            width: 95%;
             margin: 0 auto;
             background: var(--white);
             border-radius: var(--radius-2xl);
@@ -145,8 +146,8 @@
             padding: 1.5rem;
             background: var(--gray-50);
             border-bottom: 1px solid var(--gray-200);
-            flex-wrap: nowrap;
-            overflow-x: auto;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+            overflow-x: visible;
             overflow-y: visible; /* Prevent clipping date picker dropdown */
         }
         
