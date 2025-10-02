@@ -147,6 +147,7 @@
             border-bottom: 1px solid var(--gray-200);
             flex-wrap: nowrap;
             overflow-x: auto;
+            overflow-y: visible; /* Prevent clipping date picker dropdown */
         }
         
         .control-group {
@@ -1689,9 +1690,12 @@
             width: 100%;
             max-height: 80vh;
             overflow-y: auto;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
             box-shadow: var(--shadow-2xl);
             border: 1px solid var(--gray-200);
             animation: modalSlideIn 0.3s ease;
+            word-wrap: break-word; /* Break long words */
+            overflow-wrap: break-word; /* Break long words on all browsers */
         }
         
         @keyframes modalSlideIn {
@@ -4382,19 +4386,19 @@
                 this.modalTitle.textContent = 'Event Details';
                 this.eventDetails.innerHTML = `
                     <div style="background: var(--bg-secondary); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
-                        <h3 style="color: var(--uva-navy); margin-bottom: 10px;">${event.summary}</h3>
+                        <h3 style="color: var(--uva-navy); margin-bottom: 10px; word-wrap: break-word; overflow-wrap: break-word;">${event.summary}</h3>
                         <p style="color: var(--uva-orange); font-weight: 600; margin-bottom: 8px;">
                             ${this.formatTime(event.startTime)} - ${this.formatTime(event.endTime)}
                         </p>
-                        <p style="color: var(--text-secondary);">
+                        <p style="color: var(--text-secondary); word-wrap: break-word; overflow-wrap: break-word;">
                             <strong>Room:</strong> ${event.room}
                         </p>
-                        ${event.location ? `<p style="color: var(--text-secondary);"><strong>Location:</strong> ${event.location}</p>` : ''}
-                        ${event.description ? `<p style="color: var(--text-secondary); margin-top: 12px;"><strong>Description:</strong> ${event.description}</p>` : ''}
-                        ${event.organizer ? `<p style="color: var(--text-secondary);"><strong>Organizer:</strong> ${event.organizer}</p>` : ''}
+                        ${event.location ? `<p style="color: var(--text-secondary); word-wrap: break-word; overflow-wrap: break-word;"><strong>Location:</strong> ${event.location}</p>` : ''}
+                        ${event.description ? `<p style="color: var(--text-secondary); margin-top: 12px; word-wrap: break-word; overflow-wrap: break-word; white-space: pre-wrap;"><strong>Description:</strong> ${event.description}</p>` : ''}
+                        ${event.organizer ? `<p style="color: var(--text-secondary); word-wrap: break-word; overflow-wrap: break-word;"><strong>Organizer:</strong> ${event.organizer}</p>` : ''}
                     </div>
                 `;
-                
+
                 this.eventModal.classList.remove('hidden');
             }
             
