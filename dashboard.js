@@ -5,11 +5,90 @@ class RoomDashboard {
         this.selectedRoom = '';
         this.viewPeriod = 'day';
         this.timeSlots = this.generateTimeSlots();
-        
+        this.userInfo = null;
+
         this.initializeUI();
         this.bindEvents();
         this.setDefaultDate();
         this.addTestButton(); // Add a test button for debugging
+        this.loadUserInfo(); // Load authenticated user information
+    }
+
+    /**
+     * Load authenticated user information from Azure Static Web Apps
+     * This method calls the /.auth/me endpoint to get user details and roles
+     */
+    async loadUserInfo() {
+        try {
+            const response = await fetch('/.auth/me');
+            const payload = await response.json();
+            this.userInfo = payload.clientPrincipal;
+
+            if (this.userInfo) {
+                console.log('Authenticated user:', this.userInfo.userDetails);
+                console.log('User roles:', this.userInfo.userRoles);
+                this.displayUserInfo();
+            } else {
+                console.log('No authenticated user found');
+            }
+        } catch (error) {
+            console.error('Error loading user info:', error);
+        }
+    }
+
+    /**
+     * Display user information in the UI
+     * Shows a welcome message with the user's name
+     */
+    displayUserInfo() {
+        if (!this.userInfo) return;
+
+        // Create user info display if it doesn't exist
+        let userInfoDiv = document.getElementById('userInfo');
+        if (!userInfoDiv) {
+            userInfoDiv = document.createElement('div');
+            userInfoDiv.id = 'userInfo';
+            userInfoDiv.className = 'user-info';
+
+            // Insert at the top of the dashboard
+            const dashboard = document.querySelector('.dashboard');
+            if (dashboard) {
+                dashboard.insertBefore(userInfoDiv, dashboard.firstChild);
+            }
+        }
+
+        // Display user name and logout link
+        userInfoDiv.innerHTML = `
+            <span class="user-name">Welcome, ${this.userInfo.userDetails}</span>
+            <a href="/.auth/logout" class="logout-link">Logout</a>
+        `;
+    }
+
+    /**
+     * Check if the current user has a specific role
+     * @param {string} role - The role to check for
+     * @returns {boolean} True if user has the role
+     */
+    hasRole(role) {
+        return this.userInfo &&
+               this.userInfo.userRoles &&
+               this.userInfo.userRoles.includes(role);
+    }
+
+    /**
+     * Check if user is a staff member
+     * @returns {boolean}
+     */
+    isStaff() {
+        return this.hasRole('staff');
+    }
+
+    /**
+     * Check if user is a community member
+     * @returns {boolean}
+     */
+    isCommunity() {
+        return this.hasRole('community');
     }
 
     addTestButton() {

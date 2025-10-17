@@ -111,20 +111,53 @@ echo ".env" >> .gitignore
    ```bash
    # Quick start options
    python serve.py                    # Python server
-   ./start_server.sh                  # Unix/Mac script  
+   ./start_server.sh                  # Unix/Mac script
    start_server.bat                   # Windows script
    ```
 
 2. **Azure Static Web Apps** (Production deployment - CURRENT)
    - **Live URL**: https://nice-dune-0d695b810.2.azurestaticapps.net/
+   - **Custom Domains**: appexplorer.thebattenspace.org, www.thebattenspace.org
    - **Auto-deployment**: GitHub Actions workflow triggers on push to main
    - **Deployment time**: 2-3 minutes
    - **Zero downtime**: Seamless updates
+   - **Authentication**: Azure Entra ID (Azure AD) with UVA credentials
 
 3. **Azure Functions** (Backend services)
    - Calendar data caching (15-minute refresh cycle)
    - API endpoints for calendar data
+   - User role mapping (`GetUserRoles` function)
    - Manual deployment required: `func azure functionapp publish roomtool-calendar-function --python`
+
+### Phase 4: Authentication & Access Control (CURRENT)
+**Goal**: Secure the application with Azure Entra ID authentication
+
+**Authentication Implementation**:
+
+1. **Azure Entra ID Integration**
+   - **Provider**: Azure Active Directory (Entra ID)
+   - **Tenant**: UVA (myuva.onmicrosoft.com)
+   - **Login Flow**: Automatic redirect to UVA login for unauthenticated users
+   - **Groups**: `FBS_StaffAll`, `FBS_Community`
+   - **Access Level**: Both groups have full read-only access to dashboard
+
+2. **Authentication Configuration**
+   - **Client ID**: `0b45a06e-6b4a-4c3e-80ff-01d0c11a9def`
+   - **Tenant ID**: `7b3480c7-3707-4873-8b77-e216733a65ac`
+   - **Client Secret**: Stored in Azure Key Vault (eieide2kv)
+   - **Setup Guide**: See [ENTRA-ID-SETUP-GUIDE.md](ENTRA-ID-SETUP-GUIDE.md)
+
+3. **User Experience**
+   - User visits site → Redirects to UVA login (if not authenticated)
+   - After login → Dashboard displays with "Welcome, [Name]" and Logout button
+   - Group membership checked automatically
+   - All dashboard features available to both groups
+
+4. **Technical Components**
+   - `staticwebapp.config.json`: Authentication routes and provider configuration
+   - `GetUserRoles` Azure Function: Maps Azure AD groups to application roles
+   - `dashboard.js`: User info display and role checking helper methods
+   - `styles.css`: User info UI styling
 
 ### ⚠️ CRITICAL: Deployment Workflow
 
@@ -184,26 +217,34 @@ open -a Safari http://localhost:8000/dashboard.html
 
 ```
 BattenSpace/
-├── dashboard.html              # Main dashboard (recommended UI)
-├── room-dashboard.html         # Advanced dashboard with search
-├── simple-dashboard.html       # File upload and processing
-├── index.html                  # Basic grid view
-├── config.js                   # Central configuration
-├── ics-parser.js              # Calendar parsing engine
-├── dashboard.js               # Dashboard functionality
-├── styles.css                 # Base styling
-├── serve.py                   # Local development server
-├── start_server.{bat,sh}      # Platform-specific launchers
-├── deploy-azure.sh            # Azure deployment script
-├── web.config                 # IIS/Windows server config
-├── ics/                       # Sample calendar files
+├── dashboard.html                  # Main dashboard (recommended UI)
+├── room-dashboard.html             # Advanced dashboard with search
+├── simple-dashboard.html           # File upload and processing
+├── index.html                      # Basic grid view
+├── config.js                       # Central configuration
+├── ics-parser.js                  # Calendar parsing engine
+├── dashboard.js                   # Dashboard functionality (with auth)
+├── styles.css                     # Base styling (with auth UI)
+├── staticwebapp.config.json       # Azure Static Web Apps auth config
+├── serve.py                       # Local development server
+├── start_server.{bat,sh}          # Platform-specific launchers
+├── deploy-azure.sh                # Azure deployment script
+├── web.config                     # IIS/Windows server config
+├── ENTRA-ID-SETUP-GUIDE.md       # Authentication setup instructions
+├── ics/                           # Sample calendar files
 │   ├── ConfA.ics
 │   ├── GreatHall.ics
 │   └── SeminarRoom.ics
-├── azure-function/            # Azure Functions implementation
-├── archive/                   # Historical versions
-├── img/                       # Image assets
-└── ChatGPT/                   # AI-assisted development logs
+├── azure-function/                # Azure Functions implementation
+│   ├── GetCalendar/              # Calendar API endpoint
+│   ├── CalendarRefresh/          # Scheduled calendar refresh
+│   ├── GetUserRoles/             # User role mapping for auth
+│   ├── ManualRefresh/            # Manual trigger for refresh
+│   ├── TestFunction/             # Test endpoint
+│   └── DebugStatus/              # Debug information
+├── archive/                       # Historical versions
+├── img/                           # Image assets
+└── ChatGPT/                       # AI-assisted development logs
 ```
 
 ## Future Development Guidelines
@@ -255,13 +296,42 @@ BattenSpace/
 - Ensure accessibility compliance
 - Verify color contrast meets standards
 
+## Authentication Maintenance
+
+### Regular Tasks
+1. **Client Secret Rotation** (Every 6 months)
+   - You'll receive automated email notification from Azure
+   - Retrieve new secret from Key Vault
+   - Update `AAD_CLIENT_SECRET` in Static Web App configuration
+   - Test authentication flow after update
+
+2. **Group Membership Management**
+   - Groups managed by UVA IT in Azure AD
+   - Users added/removed via Azure AD Groups: `FBS_StaffAll`, `FBS_Community`
+   - No code changes needed when membership changes
+
+3. **Monitoring Authentication**
+   - Check Azure Portal → Static Web Apps → Logs for authentication errors
+   - Monitor `GetUserRoles` function logs for role mapping issues
+   - Test login flow periodically with different user accounts
+
+### Optional: Managed Identity Setup
+For enhanced security, contact Judy to enable Managed Identity:
+- Eliminates manual secret management
+- Azure handles authentication automatically
+- More secure than storing secrets in app settings
+
 ## Support & Maintenance
 
 For ongoing maintenance:
 1. **Monitor calendar data sources** for format changes
 2. **Update Azure Functions configuration** as needed
-3. **Review user feedback** and usage analytics
-4. **Maintain documentation** as features are added
-5. **Test across browsers** with each update
+3. **Monitor authentication logs** and client secret expiration
+4. **Review user feedback** and usage analytics
+5. **Maintain documentation** as features are added
+6. **Test across browsers** with each update
 
-**Contact**: Issues and enhancements can be tracked through GitHub Issues on the BattenIT/RoomTool repository.
+**Contact**:
+- **Authentication Issues**: Judy or UVA IT Azure team
+- **Application Issues**: GitHub Issues on BattenIT/RoomTool repository
+- **Developer**: Ben Hartless (bh4hb@virginia.edu)

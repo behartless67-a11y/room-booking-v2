@@ -780,3 +780,37 @@ select:focus, input[type="date"]:focus, input[type="file"]:focus {
     color: #6c757d;
     font-size: 0.9rem;
 }
+
+/* User Info Styles */
+.user-info {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    gap: 15px;
+}
+
+.user-name {
+    color: #232d4b;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.logout-link {
+    color: #e57200;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 6px 12px;
+    border: 2px solid #e57200;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.logout-link:hover {
+    background-color: #e57200;
+    color: white;
+}
