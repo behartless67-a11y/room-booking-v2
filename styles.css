@@ -1,4 +1,22 @@
 /* UVA Batten School Room Availability Dashboard Styles */
+/* Design system matches APPExplorer */
+
+:root {
+    --brand-bg: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+    --brand-card: #FFFFFF;
+    --brand-border: #E2E8F0;
+    --brand-text: #232D4B;
+    --brand-muted: #64748B;
+    --brand-accent: #E57200;
+    --brand-accent-hover: #FF8C00;
+    --brand-accent-contrast: #FFFFFF;
+    --brand-header-bg: linear-gradient(135deg, #1E293B 0%, #232D4B 100%);
+    --brand-header-text: #FFFFFF;
+    --radius: 16px;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
 
 * {
     margin: 0;
@@ -7,34 +25,64 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f5f5;
-    color: #333;
+    font-family: 'Libre Baskerville', Georgia, serif;
+    background: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url('./garrett-hall-sunset.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    color: var(--brand-text);
     line-height: 1.6;
 }
 
+body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url('./garrett-hall-sunset.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    filter: grayscale(100%);
+    z-index: -2;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(255, 255, 255, 0.85);
+    z-index: -1;
+}
+
 .container {
-    max-width: 1400px;
+    max-width: 1840px;
     margin: 0 auto;
-    padding: 20px;
-    background-color: white;
+    padding: 24px;
+    background-color: var(--brand-card);
     min-height: 100vh;
-    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    box-shadow: var(--shadow-lg);
+    border-radius: var(--radius);
 }
 
 /* Header Styles */
 header {
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 3px solid #232d4b; /* UVA Navy */
+    margin-bottom: 32px;
+    padding: 20px 24px;
+    background: var(--brand-header-bg);
+    color: var(--brand-header-text);
+    border-bottom: 3px solid var(--brand-accent);
+    border-radius: 24px 24px 0 0;
+    box-shadow: var(--shadow-lg);
 }
 
 h1 {
-    color: #232d4b; /* UVA Navy */
-    font-size: 2.5rem;
-    margin-bottom: 20px;
+    color: var(--brand-header-text);
+    font-size: 2rem;
+    margin-bottom: 0;
     text-align: center;
-    font-weight: 300;
+    font-weight: 700;
+    letter-spacing: -0.02em;
 }
 
 .controls {
@@ -52,22 +100,27 @@ h1 {
 }
 
 .control-group label {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     font-weight: 600;
-    color: #555;
-    font-size: 0.9rem;
+    color: var(--brand-text);
+    font-size: 0.875rem;
 }
 
 select, input[type="date"], input[type="file"] {
-    padding: 8px 12px;
-    border: 2px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    padding: 12px 16px;
+    border: 1px solid var(--brand-border);
+    border-radius: 8px;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    background-color: var(--brand-card);
 }
 
 select:focus, input[type="date"]:focus, input[type="file"]:focus {
-    outline: none;
-    border-color: #e57200; /* UVA Orange */
+    outline: 2px solid var(--brand-accent);
+    outline-offset: 0;
+    border-color: var(--brand-accent);
+    box-shadow: 0 0 0 3px rgba(229, 114, 0, 0.1);
 }
 
 /* View Toggle Styles */
@@ -79,24 +132,29 @@ select:focus, input[type="date"]:focus, input[type="file"]:focus {
 }
 
 .view-btn {
-    padding: 10px 20px;
-    border: 2px solid #232d4b;
-    background-color: white;
-    color: #232d4b;
-    border-radius: 5px;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    padding: 12px 24px;
+    border: 1px solid var(--brand-border);
+    background-color: var(--brand-card);
+    color: var(--brand-text);
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 0.875rem;
     font-weight: 600;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow);
 }
 
 .view-btn:hover {
-    background-color: #f8f9fa;
+    background-color: #F8FAFC;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lg);
 }
 
 .view-btn.active {
-    background-color: #232d4b;
-    color: white;
+    background: linear-gradient(135deg, var(--brand-accent) 0%, var(--brand-accent-hover) 100%);
+    color: var(--brand-accent-contrast);
+    border-color: var(--brand-accent);
 }
 
 .view-content {
@@ -115,18 +173,20 @@ select:focus, input[type="date"]:focus, input[type="file"]:focus {
 }
 
 .event-item {
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    background-color: var(--brand-card);
+    border: 1px solid var(--brand-border);
+    border-radius: var(--radius);
     margin-bottom: 15px;
-    padding: 20px;
+    padding: 24px;
     cursor: pointer;
     transition: all 0.2s ease;
+    box-shadow: var(--shadow);
 }
 
 .event-item:hover {
-    border-color: #e57200;
-    box-shadow: 0 2px 8px rgba(229, 114, 0, 0.1);
+    border-color: var(--brand-accent);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
 }
 
 .event-header {
@@ -137,18 +197,21 @@ select:focus, input[type="date"]:focus, input[type="file"]:focus {
 }
 
 .event-header h3 {
-    color: #232d4b;
+    color: var(--brand-text);
     margin: 0;
-    font-size: 1.2rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: -0.025em;
     flex: 1;
 }
 
 .event-time {
-    background-color: #e57200;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 15px;
-    font-size: 0.9rem;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, var(--brand-accent) 0%, var(--brand-accent-hover) 100%);
+    color: var(--brand-accent-contrast);
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.75rem;
     font-weight: 600;
     white-space: nowrap;
     margin-left: 15px;
@@ -160,17 +223,18 @@ select:focus, input[type="date"]:focus, input[type="file"]:focus {
 }
 
 .event-room, .event-location, .event-organizer {
-    font-size: 0.9rem;
-    color: #555;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 0.875rem;
+    color: var(--brand-muted);
 }
 
 .event-description {
-    font-size: 0.9rem;
-    color: #666;
-    padding: 10px;
-    background-color: #f8f9fa;
-    border-radius: 5px;
-    border-left: 3px solid #e57200;
+    font-size: 0.875rem;
+    color: var(--brand-text);
+    padding: 12px;
+    background-color: #FAFAFA;
+    border-radius: 8px;
+    border-left: 3px solid var(--brand-accent);
 }
 
 /* Debug View Styles */
@@ -180,18 +244,20 @@ select:focus, input[type="date"]:focus, input[type="file"]:focus {
 }
 
 .debug-section {
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
+    background-color: var(--brand-card);
+    border: 1px solid var(--brand-border);
+    border-radius: var(--radius);
+    padding: 24px;
     margin-bottom: 20px;
+    box-shadow: var(--shadow);
 }
 
 .debug-section h3 {
-    color: #232d4b;
+    color: var(--brand-text);
     margin-top: 0;
     margin-bottom: 15px;
-    font-size: 1.3rem;
+    font-size: 1.25rem;
+    font-weight: 600;
 }
 
 .debug-event {
@@ -231,13 +297,15 @@ select:focus, input[type="date"]:focus, input[type="file"]:focus {
 }
 
 .time-header {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     display: flex;
-    background-color: #232d4b; /* UVA Navy */
-    color: white;
+    background: var(--brand-header-bg);
+    color: var(--brand-header-text);
     font-weight: 600;
     position: sticky;
     top: 0;
     z-index: 100;
+    box-shadow: var(--shadow-lg);
 }
 
 .room-label {
@@ -280,14 +348,15 @@ select:focus, input[type="date"]:focus, input[type="file"]:focus {
 }
 
 .room-name {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     min-width: 120px;
     padding: 15px;
-    border-right: 1px solid #ddd;
-    background-color: #f8f9fa;
+    border-right: 1px solid var(--brand-border);
+    background-color: #F8FAFC;
     display: flex;
     align-items: center;
     font-weight: 600;
-    color: #232d4b;
+    color: var(--brand-text);
 }
 
 .time-slots-container {
@@ -451,19 +520,23 @@ select:focus, input[type="date"]:focus, input[type="file"]:focus {
 }
 
 #closeDetails {
-    background-color: #232d4b;
-    color: white;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, var(--brand-accent) 0%, var(--brand-accent-hover) 100%);
+    color: var(--brand-accent-contrast);
     border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    padding: 12px 24px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
     margin-top: 20px;
-    transition: background-color 0.3s ease;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow);
 }
 
 #closeDetails:hover {
-    background-color: #1a2332;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
 }
 
 /* Status Messages */
@@ -474,27 +547,28 @@ select:focus, input[type="date"]:focus, input[type="file"]:focus {
 }
 
 .loading {
-    color: #232d4b;
+    color: var(--brand-text);
     font-weight: 600;
 }
 
 .error {
-    color: #dc3545;
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    border-radius: 5px;
+    color: #dc2626;
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
     margin: 20px 0;
+    padding: 16px 20px;
 }
 
 .success {
-    color: #155724;
-    background-color: #d4edda;
-    border: 1px solid #c3e6cb;
-    border-radius: 5px;
+    color: #166534;
+    background-color: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 8px;
     margin: 20px 0;
     padding: 40px;
     text-align: center;
-    font-size: 1.2rem;
+    font-size: 1.125rem;
 }
 
 .no-data {
@@ -589,13 +663,15 @@ select:focus, input[type="date"]:focus, input[type="file"]:focus {
 
 /* Week View Styles */
 .week-header {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     display: flex;
-    background-color: #232d4b;
-    color: white;
+    background: var(--brand-header-bg);
+    color: var(--brand-header-text);
     font-weight: 600;
     position: sticky;
     top: 0;
     z-index: 100;
+    box-shadow: var(--shadow-lg);
 }
 
 .week-row {
@@ -672,17 +748,19 @@ select:focus, input[type="date"]:focus, input[type="file"]:focus {
 .month-title {
     text-align: center;
     font-size: 1.5rem;
-    font-weight: 600;
-    color: #232d4b;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--brand-text);
     margin-bottom: 15px;
 }
 
 .weekdays-header {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 1px;
-    background-color: #232d4b;
-    color: white;
+    background: var(--brand-header-bg);
+    color: var(--brand-header-text);
     font-weight: 600;
     text-align: center;
     padding: 10px 0;
@@ -735,12 +813,13 @@ select:focus, input[type="date"]:focus, input[type="file"]:focus {
 .day-number {
     font-weight: 600;
     margin-bottom: 5px;
-    color: #232d4b;
+    color: var(--brand-text);
 }
 
 .day-events {
-    font-size: 0.8rem;
-    color: #e57200;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 0.75rem;
+    color: var(--brand-accent);
     font-weight: 600;
 }
 
@@ -754,63 +833,72 @@ select:focus, input[type="date"]:focus, input[type="file"]:focus {
 
 /* Day Events Summary Modal Styles */
 .day-events-summary h4 {
-    color: #232d4b;
+    color: var(--brand-text);
     margin-bottom: 15px;
     text-align: center;
+    font-weight: 600;
 }
 
 .event-summary {
-    background-color: #f8f9fa;
-    padding: 10px;
+    background-color: #FAFAFA;
+    padding: 12px;
     margin-bottom: 10px;
-    border-radius: 5px;
-    border-left: 4px solid #e57200;
+    border-radius: 8px;
+    border-left: 4px solid var(--brand-accent);
 }
 
 .event-summary strong {
-    color: #232d4b;
+    color: var(--brand-text);
 }
 
 .event-time {
-    color: #e57200;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--brand-accent);
     font-weight: 600;
 }
 
 .event-room {
-    color: #6c757d;
-    font-size: 0.9rem;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--brand-muted);
+    font-size: 0.875rem;
 }
 
 /* User Info Styles */
 .user-info {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    padding: 10px 20px;
-    background-color: #f8f9fa;
+    padding: 12px 20px;
+    background-color: #F8FAFC;
     border-radius: 8px;
     margin-bottom: 20px;
     gap: 15px;
 }
 
 .user-name {
-    color: #232d4b;
+    color: var(--brand-text);
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.875rem;
 }
 
 .logout-link {
-    color: #e57200;
+    color: var(--brand-accent);
     text-decoration: none;
     font-weight: 600;
-    padding: 6px 12px;
-    border: 2px solid #e57200;
-    border-radius: 5px;
-    transition: all 0.3s ease;
-    font-size: 0.9rem;
+    padding: 8px 16px;
+    border: 1px solid var(--brand-border);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+    background-color: var(--brand-card);
+    box-shadow: var(--shadow);
 }
 
 .logout-link:hover {
-    background-color: #e57200;
-    color: white;
+    background: linear-gradient(135deg, var(--brand-accent) 0%, var(--brand-accent-hover) 100%);
+    color: var(--brand-accent-contrast);
+    border-color: var(--brand-accent);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lg);
 }
