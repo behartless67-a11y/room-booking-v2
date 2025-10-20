@@ -310,6 +310,150 @@ Judy mentioned setting up Managed Identity (MSI) for automatic secret access. Th
 
 ---
 
+## How to Display Dynamic User Info in Header
+
+### Overview
+The header dynamically displays the logged-in user's name and role from Azure Entra ID authentication. This approach can be reused in other applications.
+
+### Implementation Steps
+
+**1. HTML Structure**
+Add a div with an ID to target from JavaScript:
+```html
+<div class="user-info" id="headerUserInfo">
+    <span class="user-name">Loading...</span>
+    <span class="user-role"></span>
+</div>
+```
+
+**2. JavaScript to Fetch User Info**
+Add this function to fetch and display user data from Azure Static Web Apps authentication:
+
+```javascript
+async function loadHeaderUserInfo() {
+    try {
+        const response = await fetch('/.auth/me');
+        const payload = await response.json();
+        const userInfo = payload.clientPrincipal;
+
+        if (userInfo) {
+            // Extract display name from claims or userDetails
+            let displayName = userInfo.userDetails;
+
+            // Try to get name from claims first (best approach)
+            const claims = userInfo.claims;
+            if (claims) {
+                const givenName = claims.find(c => c.typ === 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname')?.val;
+                const surname = claims.find(c => c.typ === 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname')?.val;
+
+                if (givenName && surname) {
+                    displayName = `${givenName} ${surname}`;
+                } else {
+                    // Try alternative claim types
+                    const name = claims.find(c => c.typ === 'name' || c.typ === 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name')?.val;
+                    if (name) displayName = name;
+
+                    const displayNameClaim = claims.find(c => c.typ === 'http://schemas.microsoft.com/identity/claims/displayname')?.val;
+                    if (displayNameClaim) displayName = displayNameClaim;
+                }
+            }
+
+            // If it's an email, extract the name part before @
+            if (displayName.includes('@')) {
+                const namePart = displayName.split('@')[0];
+                // Convert something like "john.doe" to "John Doe"
+                displayName = namePart.split('.').map(part =>
+                    part.charAt(0).toUpperCase() + part.slice(1)
+                ).join(' ');
+            }
+
+            // Extract and format roles (filter out 'anonymous' and 'authenticated')
+            const roles = userInfo.userRoles.filter(role => role !== 'anonymous' && role !== 'authenticated');
+            const roleDisplay = roles.join(', ') || 'Staff';
+
+            // Update header elements
+            const userInfoDiv = document.getElementById('headerUserInfo');
+            if (userInfoDiv) {
+                userInfoDiv.innerHTML = `
+                    <span class="user-name">${displayName}</span>
+                    <span class="user-role">${roleDisplay}</span>
+                `;
+            }
+
+            console.log('Authenticated user:', displayName, 'Roles:', roleDisplay);
+        } else {
+            console.log('No authenticated user found');
+            // If not authenticated, show generic message
+            const userInfoDiv = document.getElementById('headerUserInfo');
+            if (userInfoDiv) {
+                userInfoDiv.innerHTML = `
+                    <span class="user-name">Guest</span>
+                    <span class="user-role"></span>
+                `;
+            }
+        }
+    } catch (error) {
+        console.error('Error loading user info:', error);
+        // On error, hide loading message
+        const userInfoDiv = document.getElementById('headerUserInfo');
+        if (userInfoDiv) {
+            userInfoDiv.innerHTML = `
+                <span class="user-name">Error loading user</span>
+                <span class="user-role"></span>
+            `;
+        }
+    }
+}
+
+// Load user info when page loads
+document.addEventListener('DOMContentLoaded', loadHeaderUserInfo);
+```
+
+**3. CSS Styling**
+```css
+.user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.125rem;
+    text-align: right;
+}
+
+.user-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: white;
+}
+
+.user-role {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: #d1d5db;
+}
+```
+
+**4. Key Points**
+- The `/.auth/me` endpoint is provided by Azure Static Web Apps authentication
+- It returns user info including claims and roles
+- Claims provide the most accurate user name (givenname/surname from Azure AD)
+- Fallback to userDetails if claims aren't available
+- Filter roles to exclude default 'anonymous' and 'authenticated' values
+- Handle errors gracefully to avoid breaking the UI
+
+**5. Testing**
+```javascript
+// In browser console, test the endpoint
+fetch('/.auth/me')
+  .then(r => r.json())
+  .then(d => console.log(d))
+```
+
+This approach works for any application using Azure Static Web Apps with Azure Entra ID authentication.
+
+---
+
 ## Files Modified in This Implementation
 
 ```
@@ -320,6 +464,7 @@ Judy mentioned setting up Managed Identity (MSI) for automatic secret access. Th
 │       ├── __init__.py
 │       └── function.json
 ├── dashboard.js                      # MODIFIED - User info display
+├── index.html                        # MODIFIED - Dynamic header user info
 ├── styles.css                        # MODIFIED - User info styling
 └── ENTRA-ID-SETUP-GUIDE.md          # NEW - This guide
 ```
