@@ -117,44 +117,93 @@
         }
         
         header {
-            background: linear-gradient(135deg, var(--secondary) 0%, #1a2235 100%);
+            background: #232D4B;
             color: white;
             padding: 1rem 2rem;
-            text-align: left;
-            position: relative;
-            border-bottom: 4px solid var(--primary);
-            box-shadow: 0 8px 32px rgba(35, 45, 75, 0.3);
-            overflow: hidden;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        header > div {
+            max-width: 80rem;
+            margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        
-        header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(229, 114, 0, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(229, 114, 0, 0.08) 0%, transparent 50%);
-            pointer-events: none;
+
+        .header-left {
+            display: flex;
+            flex-direction: column;
+            gap: 0.125rem;
         }
-        
-        header > div {
-            position: relative;
-            z-index: 1;
+
+        .header-left h1 {
+            font-family: 'Libre Baskerville', Georgia, serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+            color: white;
         }
-        
+
+        .header-subtitle {
+            font-family: 'Libre Baskerville', Georgia, serif;
+            font-size: 0.875rem;
+            font-weight: 400;
+            margin: 0;
+            color: #d1d5db;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.125rem;
+            text-align: right;
+        }
+
+        .user-name {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .user-role {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: #d1d5db;
+        }
+
+        .sign-out-btn {
+            font-family: 'Inter', sans-serif;
+            background: #E57200;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 150ms;
+        }
+
+        .sign-out-btn:hover {
+            background: #F28C28;
+        }
+
         h1 {
-            font-family: 'Crimson Text', serif;
+            font-family: 'Libre Baskerville', Georgia, serif;
             font-size: 1.5rem;
             font-weight: 600;
             margin-bottom: 0;
             color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
             letter-spacing: -0.02em;
         }
         
@@ -2065,11 +2114,18 @@
 <body>
     <div class="container">
         <header>
-            <div class="header-left">
-                <img src="bat_rgb_ko.png" alt="UVA Batten School" class="batten-logo" style="height: 60px;">
-            </div>
-            <div class="header-right">
-                <img src="img/uva-karsh-logo-horizontal.png" alt="Karsh Institute of Democracy" class="karsh-logo" style="height: 60px;">
+            <div>
+                <div class="header-left">
+                    <h1>The Batten Space</h1>
+                    <p class="header-subtitle">Frank Batten School Digital Tools</p>
+                </div>
+                <div class="header-right">
+                    <div class="user-info">
+                        <span class="user-name">Bh4hb</span>
+                        <span class="user-role">Staff</span>
+                    </div>
+                    <button class="sign-out-btn">Sign Out</button>
+                </div>
             </div>
         </header>
         
