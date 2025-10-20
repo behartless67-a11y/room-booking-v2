@@ -73,47 +73,48 @@
         
         body {
             font-family: 'Libre Baskerville', Georgia, serif;
-            background: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), url('/garrett-hall-sunset.jpg');
-            background-size: cover;
-            background-position: center center;
-            background-attachment: fixed;
-            background-repeat: no-repeat;
+            background-color: #fafafa;
             min-height: 100vh;
             color: var(--gray-900);
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            margin: 0;
+            padding: 0;
         }
 
-        body::before {
-            content: '';
+        .container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Background Image Layer */
+        .background-image {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background-image: url('/garrett-hall-sunset.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
+            background-repeat: no-repeat;
             filter: grayscale(100%);
-            z-index: -2;
+            z-index: -10;
         }
 
-        body::after {
-            content: '';
+        /* Background Overlay Layer */
+        .background-overlay {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background: rgba(255, 255, 255, 0.85);
-            z-index: -1;
-        }
-
-        .container {
-            max-width: 1840px;
-            width: 95%;
-            margin: 0 auto;
-            background: var(--white);
-            border-radius: var(--radius-2xl);
-            box-shadow: var(--shadow-xl);
-            overflow: hidden;
-            margin: 2rem auto;
+            z-index: -10;
         }
         
         header {
@@ -206,20 +207,51 @@
             color: white;
             letter-spacing: -0.02em;
         }
-        
 
-        
+        /* Main Content Area */
+        main {
+            flex: 1;
+            max-width: 1840px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 2rem 3rem 2rem;
+        }
+
+        /* Page Title Section */
+        .page-title-section {
+            padding: 3rem 0 2rem 0;
+        }
+
+        .page-title {
+            font-family: 'Libre Baskerville', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 400;
+            color: #232D4B;
+            margin: 0 0 1rem 0;
+            letter-spacing: -0.02em;
+            padding-bottom: 0.75rem;
+            border-bottom: 4px solid #E57200;
+            display: inline-block;
+        }
+
+        .page-description {
+            font-family: 'Libre Baskerville', Georgia, serif;
+            font-size: 1.125rem;
+            line-height: 1.75;
+            color: #232D4B;
+            margin: 0;
+            max-width: 60rem;
+        }
+
         .controls {
             display: flex;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
             gap: 0.75rem;
-            padding: 1.5rem;
-            background: var(--gray-50);
-            border-bottom: 1px solid var(--gray-200);
-            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+            padding: 2rem 0;
+            flex-wrap: wrap;
             overflow-x: visible;
-            overflow-y: visible; /* Prevent clipping date picker dropdown */
+            overflow-y: visible;
         }
         
         .control-group {
@@ -2113,6 +2145,11 @@
 </head>
 <body>
     <div class="container">
+        <!-- Background Image -->
+        <div class="background-image"></div>
+        <!-- Background Overlay -->
+        <div class="background-overlay"></div>
+
         <header>
             <div>
                 <div class="header-left">
@@ -2128,9 +2165,16 @@
                 </div>
             </div>
         </header>
-        
-        <!-- Compact Navigation Bar -->
-        <div class="navigation-bar">
+
+        <main>
+            <!-- Page Title Section -->
+            <div class="page-title-section">
+                <h2 class="page-title">Room Reservations</h2>
+                <p class="page-description">View real-time room availability and reservations for all Batten School facilities. Track room usage, identify booking patterns, and find available spaces efficiently.</p>
+            </div>
+
+            <!-- Compact Navigation Bar -->
+            <div class="navigation-bar">
             <div class="nav-compact">
                 <div class="current-date-display" id="currentDateDisplay">
                     Thursday, August 29, 2025
@@ -5245,5 +5289,7 @@
             }
         });
     </script>
+        </main>
+    </div><!-- container -->
 </body>
 </html>
