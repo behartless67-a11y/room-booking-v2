@@ -2157,9 +2157,9 @@
                     <p class="header-subtitle">Frank Batten School Digital Tools</p>
                 </div>
                 <div class="header-right">
-                    <div class="user-info">
-                        <span class="user-name">Bh4hb</span>
-                        <span class="user-role">Staff</span>
+                    <div class="user-info" id="headerUserInfo">
+                        <span class="user-name">Loading...</span>
+                        <span class="user-role"></span>
                     </div>
                     <button class="sign-out-btn" onclick="window.location.href='/.auth/logout'">Sign Out</button>
                 </div>
@@ -2305,6 +2305,85 @@
 
             <script src="config.js?v=5"></script>
     <script>
+        // Load user info from Azure authentication
+        async function loadHeaderUserInfo() {
+            try {
+                const response = await fetch('/.auth/me');
+                const payload = await response.json();
+                const userInfo = payload.clientPrincipal;
+
+                if (userInfo) {
+                    // Extract display name from claims or userDetails
+                    let displayName = userInfo.userDetails;
+
+                    // Try to get name from claims first (matching BattenSpaceFrontEnd pattern)
+                    const claims = userInfo.claims;
+                    if (claims) {
+                        const givenName = claims.find(c => c.typ === 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname')?.val;
+                        const surname = claims.find(c => c.typ === 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname')?.val;
+
+                        if (givenName && surname) {
+                            displayName = `${givenName} ${surname}`;
+                        } else {
+                            // Try alternative claim types
+                            const name = claims.find(c => c.typ === 'name' || c.typ === 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name')?.val;
+                            if (name) displayName = name;
+
+                            const displayNameClaim = claims.find(c => c.typ === 'http://schemas.microsoft.com/identity/claims/displayname')?.val;
+                            if (displayNameClaim) displayName = displayNameClaim;
+                        }
+                    }
+
+                    // If it's an email, extract the name part before @
+                    if (displayName.includes('@')) {
+                        const namePart = displayName.split('@')[0];
+                        // Convert something like "john.doe" to "John Doe"
+                        displayName = namePart.split('.').map(part =>
+                            part.charAt(0).toUpperCase() + part.slice(1)
+                        ).join(' ');
+                    }
+
+                    // Extract and format roles (filter out 'anonymous' and 'authenticated')
+                    const roles = userInfo.userRoles.filter(role => role !== 'anonymous' && role !== 'authenticated');
+                    const roleDisplay = roles.join(', ') || 'Staff';
+
+                    // Update header elements
+                    const userInfoDiv = document.getElementById('headerUserInfo');
+                    if (userInfoDiv) {
+                        userInfoDiv.innerHTML = `
+                            <span class="user-name">${displayName}</span>
+                            <span class="user-role">${roleDisplay}</span>
+                        `;
+                    }
+
+                    console.log('Authenticated user:', displayName, 'Roles:', roleDisplay);
+                } else {
+                    console.log('No authenticated user found');
+                    // If not authenticated, show generic message
+                    const userInfoDiv = document.getElementById('headerUserInfo');
+                    if (userInfoDiv) {
+                        userInfoDiv.innerHTML = `
+                            <span class="user-name">Guest</span>
+                            <span class="user-role"></span>
+                        `;
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading user info:', error);
+                // On error, hide loading message
+                const userInfoDiv = document.getElementById('headerUserInfo');
+                if (userInfoDiv) {
+                    userInfoDiv.innerHTML = `
+                        <span class="user-name">Error loading user</span>
+                        <span class="user-role"></span>
+                    `;
+                }
+            }
+        }
+
+        // Load user info when page loads
+        document.addEventListener('DOMContentLoaded', loadHeaderUserInfo);
+
         // Add error handling for config loading
         if (typeof window.DashboardConfig === 'undefined') {
             console.warn('Config.js not loaded, using defaults');
