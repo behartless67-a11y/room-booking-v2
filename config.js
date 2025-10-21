@@ -84,13 +84,23 @@ window.DashboardConfig = {
             // Room name mappings to match event locations with our tracked rooms
             roomMappings: {
                 "Great Hall (100)": "Great Hall 100",
-                "Conference Room A": "Conference Room A L014", 
+                "Conference Room A": "Conference Room A L014",
                 "Seminar Room": "Seminar Room L039",
                 "Student Lounge": "Student Lounge 206",
                 "Garrett Hall": "Garrett Hall" // Generic building reference
             }
         }
     ],
+
+    // Out of Office calendar
+    outOfOfficeCalendar: {
+        name: "Staff Out of Office",
+        id: "staff-ooo",
+        url: "https://www.trumba.com/calendars/staff-ooo.ics",
+        description: "Staff out of office calendar",
+        bookingUrl: "https://outlook.office365.com/calendar/0/action/compose?path=/calendar/action/compose&rru=addevent&subject=Out%20of%20Office&body=I%20will%20be%20out%20of%20the%20office",
+        enabled: true
+    },
     
     // Legacy support - flatten buildings into single array for older dashboard versions
     icsFiles: [
