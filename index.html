@@ -3429,19 +3429,16 @@
                         'https://outlook.office365.com/calendar/0/action/compose?path=/calendar/action/compose&rru=addevent&subject=Out%20of%20Office';
                     oooBtn.href = bookingUrl;
 
-                    // Fetch OOO calendar data
+                    // Fetch OOO calendar data using proxy to avoid CORS issues
                     const calendar = this.config.outOfOfficeCalendar;
                     console.log(`Fetching OOO calendar from: ${calendar.url}`);
 
                     // Convert webcal:// to https://
                     const fetchUrl = calendar.url.replace('webcal://', 'https://');
 
-                    const response = await fetch(fetchUrl, {
-                        mode: 'cors',
-                        headers: {
-                            'Accept': 'text/calendar'
-                        }
-                    });
+                    // Use proxy approach for CORS issues
+                    const proxyUrl = `calendar-proxy.php?url=${encodeURIComponent(fetchUrl)}`;
+                    const response = await fetch(proxyUrl);
 
                     if (!response.ok) {
                         throw new Error(`Failed to fetch OOO calendar: ${response.status}`);
