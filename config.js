@@ -98,7 +98,7 @@ window.DashboardConfig = {
         id: "staff-ooo",
         url: "https://www.trumba.com/calendars/staff-ooo.ics",
         description: "Staff out of office calendar",
-        bookingUrl: "https://outlook.office365.com/calendar/0/action/compose?path=/calendar/action/compose&rru=addevent&subject=Out%20of%20Office&body=I%20will%20be%20out%20of%20the%20office",
+        bookingUrl: "https://outlook.office365.com/calendar/0/action/compose?path=/calendar/action/compose&rru=addevent&subject=Out%20of%20Office&location=FBS-StaffOOO&body=I%20will%20be%20out%20of%20the%20office",
         enabled: true
     },
     
