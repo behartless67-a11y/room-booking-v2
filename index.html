@@ -3460,14 +3460,33 @@
                     const tomorrow = new Date(today);
                     tomorrow.setDate(tomorrow.getDate() + 1);
 
+                    console.log('🔍 OOO Debug - Today:', today.toISOString());
+                    console.log('🔍 OOO Debug - Tomorrow:', tomorrow.toISOString());
+                    console.log('🔍 OOO Debug - All events:', events.map(e => ({
+                        summary: e.summary,
+                        start: e.startTime,
+                        end: e.endTime
+                    })));
+
                     const peopleOutToday = events.filter(event => {
-                        if (!event.startTime || !event.endTime) return false;
+                        if (!event.startTime || !event.endTime) {
+                            console.log('⚠️ Event missing dates:', event.summary);
+                            return false;
+                        }
 
                         // Check if event overlaps with today
                         const eventStart = new Date(event.startTime);
                         const eventEnd = new Date(event.endTime);
 
-                        return eventStart < tomorrow && eventEnd >= today;
+                        const overlapsToday = eventStart < tomorrow && eventEnd >= today;
+
+                        console.log(`📅 ${event.summary}:`, {
+                            start: eventStart.toISOString(),
+                            end: eventEnd.toISOString(),
+                            overlapsToday
+                        });
+
+                        return overlapsToday;
                     }).map(event => {
                         // Extract person's name from summary
                         return event.summary || 'Unknown';
@@ -3476,7 +3495,7 @@
                     // Remove duplicates and sort
                     const uniquePeople = [...new Set(peopleOutToday)].sort();
 
-                    console.log(`${uniquePeople.length} people out today:`, uniquePeople);
+                    console.log(`✅ ${uniquePeople.length} people out today:`, uniquePeople);
 
                     // Update the UI
                     if (uniquePeople.length === 0) {
