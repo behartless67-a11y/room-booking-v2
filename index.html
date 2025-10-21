@@ -3412,18 +3412,29 @@
             }
 
             async loadOutOfOfficeCalendar() {
-                console.log('🔍 Loading Out of Office calendar...');
-
-                const oooList = document.getElementById('oooList');
-                const oooBtn = document.getElementById('oooBtn');
-
-                if (!this.config.outOfOfficeCalendar || !this.config.outOfOfficeCalendar.enabled) {
-                    console.log('❌ OOO calendar not configured');
-                    oooList.innerHTML = '<span class="ooo-empty">Not configured</span>';
-                    return;
-                }
-
                 try {
+                    console.log('🔍 Loading Out of Office calendar...');
+                    console.log('🔍 OOO Config:', this.config.outOfOfficeCalendar);
+
+                    const oooList = document.getElementById('oooList');
+                    const oooBtn = document.getElementById('oooBtn');
+
+                    if (!oooList) {
+                        console.error('❌ OOO list element not found');
+                        return;
+                    }
+
+                    if (!oooBtn) {
+                        console.error('❌ OOO button element not found');
+                        return;
+                    }
+
+                    if (!this.config.outOfOfficeCalendar || !this.config.outOfOfficeCalendar.enabled) {
+                        console.log('❌ OOO calendar not configured');
+                        oooList.innerHTML = '<span class="ooo-empty">Not configured</span>';
+                        return;
+                    }
+
                     // Set up the booking button
                     const bookingUrl = this.config.outOfOfficeCalendar.bookingUrl ||
                         'https://outlook.office365.com/calendar/0/action/compose?path=/calendar/action/compose&rru=addevent&subject=Out%20of%20Office';
@@ -3507,8 +3518,12 @@
                     }
 
                 } catch (error) {
-                    console.error('Failed to load OOO calendar:', error);
-                    oooList.innerHTML = '<span class="ooo-empty">Unable to load</span>';
+                    console.error('❌ Failed to load OOO calendar:', error);
+                    console.error('❌ Error stack:', error.stack);
+                    const oooList = document.getElementById('oooList');
+                    if (oooList) {
+                        oooList.innerHTML = '<span class="ooo-empty">Unable to load</span>';
+                    }
                 }
             }
 
