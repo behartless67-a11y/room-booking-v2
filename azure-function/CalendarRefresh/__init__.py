@@ -24,7 +24,8 @@ def main(mytimer: func.TimerRequest) -> None:
         'https://outlook.office365.com/owa/calendar/52b9b2d41868473fac5d3e9963512a9b@virginia.edu/311e34fd14384759b006ccf185c1db677813060047149602177/calendar.ics',
         'https://outlook.office365.com/owa/calendar/fa3ecb9b47824ac0a36733c7212ccc97@virginia.edu/d23afabf93da4fa4b49d2be3ce290f7911116129854936607531/calendar.ics',
         'https://outlook.office365.com/owa/calendar/3f60cb3359dd40f7943b9de3b062b18d@virginia.edu/1e78265cf5eb44da903745ca3d872e6910017444746788834359/calendar.ics',
-        'https://outlook.office365.com/owa/calendar/4df4134c83844cef9d9357180ccfb48c@virginia.edu/e46a84ae5d8842d4b33a842ddc5ff66c11207228220277930183/calendar.ics'
+        'https://outlook.office365.com/owa/calendar/4df4134c83844cef9d9357180ccfb48c@virginia.edu/e46a84ae5d8842d4b33a842ddc5ff66c11207228220277930183/calendar.ics',
+        'https://www.trumba.com/calendars/staff-ooo.ics'
     ]
 
     # Room mapping for better organization
@@ -35,8 +36,9 @@ def main(mytimer: func.TimerRequest) -> None:
         'bfd63ea7933c4c3d965a632e5d6b703d': 'studentlounge206',
         '52b9b2d41868473fac5d3e9963512a9b': 'pavx-upper',
         'fa3ecb9b47824ac0a36733c7212ccc97': 'pavx-b1',
-        '3f60cb3359dd40f7943b9de3b062b18d': 'pavx-b2',
-        '4df4134c83844cef9d9357180ccfb48c': 'pavx-exhibit'
+        '3f60cb3359dd40f7943b9de3b2b18d': 'pavx-b2',
+        '4df4134c83844cef9d9357180ccfb48c': 'pavx-exhibit',
+        'staff-ooo': 'staff-ooo'
     }
 
     # Initialize Azure Blob Storage
