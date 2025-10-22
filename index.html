@@ -2751,6 +2751,8 @@
                     const timezone = tzidMatch ? tzidMatch[1] : null;
                     const cleanValue = value.trim();
 
+                    console.log('🕐 parseDateTime - key:', key, 'value:', value, 'timezone:', timezone, 'cleanValue:', cleanValue);
+
                     if (cleanValue.length === 8) {
                         // Date only (YYYYMMDD)
                         const year = parseInt(cleanValue.substring(0, 4));
