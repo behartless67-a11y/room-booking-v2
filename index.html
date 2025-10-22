@@ -2595,10 +2595,18 @@
                             currentEvent = {};
                             eventCount++;
                         } else if (line === 'END:VEVENT' && inEvent) {
+                            console.log('🎫 Event ended:', {
+                                summary: currentEvent?.summary,
+                                startTime: currentEvent?.startTime,
+                                endTime: currentEvent?.endTime,
+                                location: currentEvent?.location,
+                                isValid: this.isValidEvent(currentEvent)
+                            });
+
                             if (currentEvent && this.isValidEvent(currentEvent)) {
                                 this.processEvent(currentEvent);
                                 this.events.push(currentEvent);
-                                
+
                                 // Handle recurring events (RRULE)
                                 if (currentEvent.rrule && currentEvent.startTime && currentEvent.endTime) {
                                     console.log(`Ben 🔁 Found recurring event: "${currentEvent.summary}" with RRULE: ${currentEvent.rrule}`);
