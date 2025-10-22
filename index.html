@@ -3245,9 +3245,13 @@
                     try {
                         console.log(`🔄 Attempting to load ${fileName}...`);
                         
-                        // Check if this should use Azure Function for cached data
+                        // Check calendar data source configuration
                         let fetchUrl = fileName;
-                        if (fileName.startsWith('http://') || fileName.startsWith('https://')) {
+                        if (this.config.calendarDataSource === 'static' && !fileName.includes('/') && !fileName.includes('.ics')) {
+                            // Load from static files (GitHub Actions)
+                            fetchUrl = `${this.config.staticCalendarPath}${fileName}.ics`;
+                            console.log(`📁 Using static file: ${fileName} -> ${fetchUrl}`);
+                        } else if (fileName.startsWith('http://') || fileName.startsWith('https://')) {
                             // Legacy direct URL support
                             fetchUrl = `calendar-proxy.php?url=${encodeURIComponent(fileName)}`;
                             console.log(`🌐 Using proxy for external URL: ${fetchUrl}`);
@@ -3466,8 +3470,15 @@
                     console.log(`Fetching OOO calendar from Azure Function`);
 
                     // Use the same Azure Function endpoint as room calendars
-                    const azureFunctionUrl = this.config.azureFunctionUrl || 'https://roomtool-calendar-function.azurewebsites.net/api/getcalendar';
-                    const fetchUrl = `${azureFunctionUrl}?calendar=staff-ooo`;
+                    let fetchUrl;
+                    if (this.config.calendarDataSource === 'static') {
+                        fetchUrl = `${this.config.staticCalendarPath}staff-ooo.ics`;
+                        console.log(`📁 Loading OOO from static file: ${fetchUrl}`);
+                    } else {
+                        const azureFunctionUrl = this.config.azureFunctionUrl || 'https://roomtool-calendar-function.azurewebsites.net/api/getcalendar';
+                        fetchUrl = `${azureFunctionUrl}?calendar=staff-ooo`;
+                        console.log(`☁️ Loading OOO from Azure Function: ${fetchUrl}`);
+                    }
 
                     const response = await fetch(fetchUrl);
 

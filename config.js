@@ -1,7 +1,11 @@
 // Configuration for BattenSpace
 window.DashboardConfig = {
-    // Azure Function endpoint for cached calendar data
-    azureFunctionUrl: "https://roomtool-calendar-function.azurewebsites.net/api/getcalendar",
+    // Calendar data source configuration
+    // GitHub Actions fetches calendars every 15 minutes and saves them as static files
+    calendarDataSource: "static", // "static" = load from static files, "azureFunction" = use Azure Function
+    staticCalendarPath: "calendars/", // Path to static calendar files
+    azureFunctionUrl: "https://roomtool-calendar-function.azurewebsites.net/api/getcalendar", // Azure Function endpoint (legacy)
+
 
     // Room organization by building/location
     // Each building can have multiple rooms with their ICS files
