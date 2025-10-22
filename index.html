@@ -3626,17 +3626,31 @@
             
             getDefaultRoomForFile(fileName) {
                 // Map calendar URLs/files to their default rooms
-                if (fileName.includes('4207f27aa0d54d318d660537325a3856') || fileName.includes('ConfA')) {
+                const lowerFileName = fileName.toLowerCase();
+
+                if (lowerFileName.includes('4207f27aa0d54d318d660537325a3856') || lowerFileName.includes('confa')) {
                     return 'Conference Room A L014';
                 }
-                if (fileName.includes('cf706332e50c45009e2b3164e0b68ca0') || fileName.includes('GreatHall')) {
+                if (lowerFileName.includes('cf706332e50c45009e2b3164e0b68ca0') || lowerFileName.includes('greathall')) {
                     return 'Great Hall 100';
                 }
-                if (fileName.includes('4cedc3f0284648fcbee80dd7f6563bab') || fileName.includes('SeminarRoom')) {
+                if (lowerFileName.includes('4cedc3f0284648fcbee80dd7f6563bab') || lowerFileName.includes('seminarroom') || lowerFileName.includes('seminar')) {
                     return 'Seminar Room L039';
                 }
-                if (fileName.includes('StudentLounge')) {
+                if (lowerFileName.includes('studentlounge')) {
                     return 'Student Lounge 206';
+                }
+                if (lowerFileName.includes('pavx-upper')) {
+                    return 'Pavilion X Upper Garden';
+                }
+                if (lowerFileName.includes('pavx-b1')) {
+                    return 'Pavilion X Basement Room 1';
+                }
+                if (lowerFileName.includes('pavx-b2')) {
+                    return 'Pavilion X Basement Room 2';
+                }
+                if (lowerFileName.includes('pavx-exhibit')) {
+                    return 'Pavilion X Basement Exhibit';
                 }
                 return null;
             }
