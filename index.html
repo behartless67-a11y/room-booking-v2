@@ -3123,15 +3123,23 @@
             }
             
             init() {
+                console.log('🚨 INIT STARTED');
                 this.bindElements();
+                console.log('🚨 bindElements done');
                 this.bindEvents();
+                console.log('🚨 bindEvents done');
                 this.setDefaultDate();
+                console.log('🚨 setDefaultDate done');
                 this.loadCalendarData();
+                console.log('🚨 loadCalendarData called');
                 this.loadEventCalendars();
+                console.log('🚨 loadEventCalendars called');
                 this.loadOutOfOfficeCalendar();
+                console.log('🚨 loadOutOfOfficeCalendar called');
 
                 // Start automatic refresh every 30 seconds
                 this.startAutoRefresh();
+                console.log('🚨 INIT COMPLETED');
             }
             
             bindElements() {
