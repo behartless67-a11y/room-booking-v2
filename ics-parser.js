@@ -494,7 +494,10 @@ class ICSParser {
         const roomPatterns = [
             // UVA FBS format (like "FBS-GreatHall-100", "FBS-SeminarRoom-L039", "FBS-ConfA-L014")
             /FBS-(GreatHall|BattenHall|SeminarRoom|ConfA)-(L?\d{1,4}[a-z]?)/i,
-            
+
+            // FBS format with spaces (like "FBS - Great Hall", "FBS - Seminar Room", "FBS - ConfA")
+            /FBS\s*-\s*(Great\s+Hall|Batten\s+Hall|Seminar\s+Room|ConfA|Conf\s*A)\b/i,
+
             // Hall with room number patterns (like "Great Hall 100", "Batten Hall 201")
             /\b(great\s+hall|batten\s+hall|alumni\s+hall)\s+(\d{1,4}[a-z]?)\b/i,
             
@@ -519,19 +522,36 @@ class ICSParser {
                 let room = '';
                 
                 // Handle FBS format specially
-                if (match[0].includes('FBS-')) {
-                    const building = match[1].toLowerCase();
-                    const roomNum = match[2];
-                    console.log(`FBS format - building: "${building}", roomNum: "${roomNum}"`);
-                    if (building === 'greathall') {
-                        room = `Great Hall ${roomNum}`;
-                    } else if (building === 'battenhall') {
-                        room = `Batten Hall ${roomNum}`;
-                    } else if (building === 'seminarroom') {
-                        room = `Seminar Room ${roomNum}`;
-                    } else if (building.toLowerCase() === 'confa') {
-                        room = `Conference Room A ${roomNum}`;
-                        console.log(`✅ ConfA matched! Created room: "${room}"`);
+                if (match[0].includes('FBS')) {
+                    if (match[2]) {
+                        // FBS-Building-RoomNum format
+                        const building = match[1].toLowerCase();
+                        const roomNum = match[2];
+                        console.log(`FBS format - building: "${building}", roomNum: "${roomNum}"`);
+                        if (building === 'greathall') {
+                            room = `Great Hall ${roomNum}`;
+                        } else if (building === 'battenhall') {
+                            room = `Batten Hall ${roomNum}`;
+                        } else if (building === 'seminarroom') {
+                            room = `Seminar Room ${roomNum}`;
+                        } else if (building.toLowerCase() === 'confa') {
+                            room = `Conference Room A ${roomNum}`;
+                            console.log(`✅ ConfA matched! Created room: "${room}"`);
+                        }
+                    } else if (match[1]) {
+                        // FBS - Building format (no room number)
+                        const building = match[1].toLowerCase().replace(/\s+/g, '');
+                        console.log(`FBS format with spaces - building: "${building}"`);
+                        if (building === 'greathall') {
+                            room = 'Great Hall 100';  // Default room number for Great Hall
+                        } else if (building === 'battenhall') {
+                            room = 'Batten Hall';
+                        } else if (building === 'seminarroom') {
+                            room = 'Seminar Room L039';  // Default room number
+                        } else if (building === 'confa' || building === 'conferenceroma') {
+                            room = 'Conference Room A L014';  // Default room number
+                        }
+                        console.log(`✅ FBS building matched! Created room: "${room}"`);
                     }
                 } else if (match.length > 2 && match[2]) {
                     // Pattern with building and room number
