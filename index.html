@@ -2579,6 +2579,8 @@
                 let eventCount = 0;
 
                 console.log(`Processing ${lines.length} lines of ICS content`);
+                console.log('📄 First 20 lines of ICS:', lines.slice(0, 20));
+                console.log('📄 Lines with BEGIN:VEVENT:', lines.filter(l => l.includes('BEGIN:VEVENT')));
 
                 for (let i = 0; i < lines.length; i++) {
                     try {
