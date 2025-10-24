@@ -363,22 +363,16 @@
             position: relative;
             z-index: 1;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-        }
-
-        .ooo-section {
-            flex: 1;
-            min-width: 250px;
+            flex-direction: column;
+            gap: 1rem;
         }
 
         .ooo-header {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.75rem;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
 
         .ooo-header h3 {
@@ -388,35 +382,70 @@
             margin: 0;
             color: white;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .ooo-list {
+        .ooo-week-view {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .ooo-day {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all var(--transition-normal);
+        }
+
+        .ooo-day:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .ooo-day.today {
+            background: rgba(229, 114, 0, 0.2);
+            border: 2px solid var(--primary);
+        }
+
+        .ooo-day-header {
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .ooo-day-date {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: normal;
+        }
+
+        .ooo-day-list {
             display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
+            flex-direction: column;
+            gap: 0.375rem;
         }
 
         .ooo-person {
             background: rgba(255, 255, 255, 0.15);
-            padding: 0.375rem 0.75rem;
-            border-radius: var(--radius-md);
-            font-size: 0.875rem;
+            padding: 0.375rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
             color: white;
-            backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .ooo-empty {
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(255, 255, 255, 0.5);
             font-style: italic;
-            font-size: 0.875rem;
-        }
-
-        .ooo-button-section {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
+            font-size: 0.75rem;
         }
 
         .ooo-btn {
@@ -434,6 +463,7 @@
             gap: 0.5rem;
             text-decoration: none;
             box-shadow: var(--shadow-md);
+            white-space: nowrap;
         }
 
         .ooo-btn:hover {
@@ -2410,19 +2440,12 @@
     <!-- Out of Office Footer -->
     <footer class="ooo-footer">
         <div class="ooo-footer-content">
-            <div class="ooo-section">
-                <div class="ooo-header">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                    <h3>Out of Office Today</h3>
-                </div>
-                <div id="oooList" class="ooo-list">
-                    <span class="ooo-loading">Loading...</span>
-                </div>
-            </div>
-            <div class="ooo-button-section">
+            <div class="ooo-header">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <h3>Staff Out of Office This Week</h3>
                 <a href="#" id="oooBtn" class="ooo-btn">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
@@ -2432,6 +2455,9 @@
                     </svg>
                     Add My Out of Office
                 </a>
+            </div>
+            <div id="oooWeekView" class="ooo-week-view">
+                <span class="ooo-loading">Loading...</span>
             </div>
         </div>
     </footer>
@@ -3499,64 +3525,84 @@
 
                     console.log(`Parsed ${events.length} OOO events`);
 
-                    // Filter for events happening today
+                    // Get the week view container
+                    const weekView = document.getElementById('oooWeekView');
+                    if (!weekView) {
+                        console.error('❌ Week view container not found');
+                        return;
+                    }
+
+                    // Build week view (7 days starting from today)
                     const today = new Date();
                     today.setHours(0, 0, 0, 0);
-                    const tomorrow = new Date(today);
-                    tomorrow.setDate(tomorrow.getDate() + 1);
 
-                    console.log('🔍 OOO Debug - Today:', today.toISOString());
-                    console.log('🔍 OOO Debug - Tomorrow:', tomorrow.toISOString());
-                    console.log('🔍 OOO Debug - All events:', events.map(e => ({
-                        summary: e.summary,
-                        start: e.startTime,
-                        end: e.endTime
-                    })));
+                    const weekDays = [];
+                    for (let i = 0; i < 7; i++) {
+                        const day = new Date(today);
+                        day.setDate(today.getDate() + i);
+                        weekDays.push(day);
+                    }
 
-                    const peopleOutToday = events.filter(event => {
-                        if (!event.startTime || !event.endTime) {
-                            console.log('⚠️ Event missing dates:', event.summary);
-                            return false;
-                        }
+                    console.log('🔍 Building week view for:', weekDays.map(d => d.toDateString()));
 
-                        // Check if event overlaps with today
-                        const eventStart = new Date(event.startTime);
-                        const eventEnd = new Date(event.endTime);
+                    // For each day, find people out
+                    const weekData = weekDays.map((day, index) => {
+                        const nextDay = new Date(day);
+                        nextDay.setDate(day.getDate() + 1);
 
-                        const overlapsToday = eventStart < tomorrow && eventEnd >= today;
+                        const peopleOut = events.filter(event => {
+                            if (!event.startTime || !event.endTime) return false;
 
-                        console.log(`📅 ${event.summary}:`, {
-                            start: eventStart.toISOString(),
-                            end: eventEnd.toISOString(),
-                            overlapsToday
-                        });
+                            const eventStart = new Date(event.startTime);
+                            const eventEnd = new Date(event.endTime);
 
-                        return overlapsToday;
-                    }).map(event => {
-                        // Extract person's name from summary
-                        return event.summary || 'Unknown';
+                            // Check if event overlaps with this day
+                            return eventStart < nextDay && eventEnd >= day;
+                        }).map(event => event.summary || 'Unknown');
+
+                        // Remove duplicates
+                        const uniquePeople = [...new Set(peopleOut)].sort();
+
+                        return {
+                            day: day,
+                            isToday: index === 0,
+                            peopleOut: uniquePeople
+                        };
                     });
 
-                    // Remove duplicates and sort
-                    const uniquePeople = [...new Set(peopleOutToday)].sort();
+                    console.log('✅ Week data:', weekData);
 
-                    console.log(`✅ ${uniquePeople.length} people out today:`, uniquePeople);
+                    // Render the week view
+                    weekView.innerHTML = weekData.map(dayData => {
+                        const dayName = dayData.day.toLocaleDateString('en-US', { weekday: 'short' });
+                        const dayDate = dayData.day.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                        const todayClass = dayData.isToday ? ' today' : '';
 
-                    // Update the UI
-                    if (uniquePeople.length === 0) {
-                        oooList.innerHTML = '<span class="ooo-empty">Everyone is in the office today</span>';
-                    } else {
-                        oooList.innerHTML = uniquePeople
-                            .map(name => `<span class="ooo-person">${this.escapeHtml(name)}</span>`)
-                            .join('');
-                    }
+                        const peopleHTML = dayData.peopleOut.length === 0
+                            ? '<span class="ooo-empty">All in office</span>'
+                            : dayData.peopleOut
+                                .map(name => `<span class="ooo-person">${this.escapeHtml(name)}</span>`)
+                                .join('');
+
+                        return `
+                            <div class="ooo-day${todayClass}">
+                                <div class="ooo-day-header">
+                                    ${dayName}
+                                    <span class="ooo-day-date">${dayDate}</span>
+                                </div>
+                                <div class="ooo-day-list">
+                                    ${peopleHTML}
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
 
                 } catch (error) {
                     console.error('❌ Failed to load OOO calendar:', error);
                     console.error('❌ Error stack:', error.stack);
-                    const oooList = document.getElementById('oooList');
-                    if (oooList) {
-                        oooList.innerHTML = '<span class="ooo-empty">Unable to load</span>';
+                    const weekView = document.getElementById('oooWeekView');
+                    if (weekView) {
+                        weekView.innerHTML = '<span class="ooo-empty">Unable to load out of office calendar</span>';
                     }
                 }
             }
