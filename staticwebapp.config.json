@@ -24,7 +24,7 @@
   },
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["*.{css,js,png,jpg,gif,svg,ico}", "/api/*"]
+    "exclude": ["*.css", "*.js", "*.ics", "*.png", "*.jpg", "*.gif", "*.svg", "*.ico", "*.json", "/api/*", "/calendars/*"]
   },
   "globalHeaders": {
     "X-Content-Type-Options": "nosniff",
