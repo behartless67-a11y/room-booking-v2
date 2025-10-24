@@ -3570,32 +3570,49 @@
                 const result = this.parser.parseICS(icsData);
                 
                 // Assign default room for events without location based on the calendar source
+                console.log(`🔍 PARSE ICS DATA: fileName="${fileName}"`);
                 if (fileName) {
                     const defaultRoom = this.getDefaultRoomForFile(fileName);
+                    console.log(`🔍 PARSE ICS DATA: defaultRoom="${defaultRoom}" for file "${fileName}"`);
                     if (defaultRoom) {
+                        console.log(`🔍 PARSE ICS DATA: Will check ${this.parser.events.length} events for room assignment`);
                         // Find events that were just added and have no room assigned
+                        let assignedCount = 0;
                         this.parser.events.forEach(event => {
                             // Check for events with no room OR events with empty location fields
                             const hasEmptyLocation = event.location !== undefined && (!event.location || !event.location.trim());
+                            const needsAssignment = !event.room || hasEmptyLocation;
+
+                            // Debug for ALL events when loading greathall
+                            if (fileName.toLowerCase().includes('greathall') && needsAssignment) {
+                                console.log(`🔍 GREATHALL EVENT NEEDS ROOM:`);
+                                console.log(`  Summary: "${event.summary}"`);
+                                console.log(`  Location: "${event.location}" (type: ${typeof event.location})`);
+                                console.log(`  Current room: "${event.room}"`);
+                                console.log(`  Has empty location: ${hasEmptyLocation}`);
+                                console.log(`  Will assign: ${needsAssignment}`);
+                            }
+
                             // Debug for tomorrow's events specifically
                             const tomorrow = new Date();
                             tomorrow.setDate(tomorrow.getDate() + 1);
                             const isTomorrowEvent = event.startTime && event.startTime.toDateString() === tomorrow.toDateString();
-                            
+
                             if (isTomorrowEvent && defaultRoom === 'Seminar Room L039') {
                                 console.log(`📅 TOMORROW SEMINAR EVENT - Summary: "${event.summary}"`);
                                 console.log(`📅 Location: "${event.location}"`);
                                 console.log(`📅 Current room: "${event.room}"`);
                                 console.log(`📅 Has empty location: ${hasEmptyLocation}`);
-                                console.log(`📅 Needs room assignment: ${!event.room || hasEmptyLocation}`);
+                                console.log(`📅 Needs room assignment: ${needsAssignment}`);
                                 console.log(`📅 Start time: ${event.startTime}`);
                                 console.log(`📅 End time: ${event.endTime}`);
                             }
-                            
-                            if (!event.room || hasEmptyLocation) {
+
+                            if (needsAssignment) {
                                 console.log(`🔧 Assigning default room "${defaultRoom}" to event: ${event.summary}`);
                                 event.room = defaultRoom;
                                 this.parser.rooms.add(defaultRoom);
+                                assignedCount++;
                                 
                                 // Special logging for specific events
                                 if (event.summary && event.summary.toLowerCase().includes('sally hudson')) {
@@ -3618,25 +3635,44 @@
                                 }
                             }
                         });
+                        console.log(`🔍 PARSE ICS DATA: Assigned default room to ${assignedCount} events from file "${fileName}"`);
+                    } else {
+                        console.log(`🔍 PARSE ICS DATA: No defaultRoom found for file "${fileName}"`);
                     }
+                } else {
+                    console.log(`🔍 PARSE ICS DATA: No fileName provided`);
                 }
-                
+
                 console.log(`Added events from file. Parser now has ${this.parser.events.length} total events`);
             }
             
             getDefaultRoomForFile(fileName) {
                 // Map calendar URLs/files to their default rooms
-                if (fileName.includes('4207f27aa0d54d318d660537325a3856') || fileName.includes('ConfA')) {
+                const lowerFileName = fileName.toLowerCase();
+
+                if (lowerFileName.includes('4207f27aa0d54d318d660537325a3856') || lowerFileName.includes('confa')) {
                     return 'Conference Room A L014';
                 }
-                if (fileName.includes('cf706332e50c45009e2b3164e0b68ca0') || fileName.includes('GreatHall')) {
+                if (lowerFileName.includes('cf706332e50c45009e2b3164e0b68ca0') || lowerFileName.includes('greathall')) {
                     return 'Great Hall 100';
                 }
-                if (fileName.includes('4cedc3f0284648fcbee80dd7f6563bab') || fileName.includes('SeminarRoom')) {
+                if (lowerFileName.includes('4cedc3f0284648fcbee80dd7f6563bab') || lowerFileName.includes('seminarroom') || lowerFileName.includes('seminar')) {
                     return 'Seminar Room L039';
                 }
-                if (fileName.includes('StudentLounge')) {
+                if (lowerFileName.includes('studentlounge')) {
                     return 'Student Lounge 206';
+                }
+                if (lowerFileName.includes('pavx-upper')) {
+                    return 'Pavilion X Upper Garden';
+                }
+                if (lowerFileName.includes('pavx-b1')) {
+                    return 'Pavilion X Basement Room 1';
+                }
+                if (lowerFileName.includes('pavx-b2')) {
+                    return 'Pavilion X Basement Room 2';
+                }
+                if (lowerFileName.includes('pavx-exhibit')) {
+                    return 'Pavilion X Basement Exhibit';
                 }
                 return null;
             }

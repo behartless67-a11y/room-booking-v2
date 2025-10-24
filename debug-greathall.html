@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Great Hall Events</title>
+</head>
+<body>
+    <h1>Debug Great Hall Events</h1>
+    <pre id="output"></pre>
+
+    <script src="config.js"></script>
+    <script src="ics-parser.js"></script>
+    <script>
+        const output = document.getElementById('output');
+
+        function log(msg) {
+            output.textContent += msg + '\n';
+            console.log(msg);
+        }
+
+        async function debugGreatHall() {
+            log('=== DEBUGGING GREAT HALL ===\n');
+
+            // Check config
+            log('Config calendarDataSource: ' + window.DashboardConfig.calendarDataSource);
+            log('Config staticCalendarPath: ' + window.DashboardConfig.staticCalendarPath);
+            log('\nBuildings in config:');
+            window.DashboardConfig.buildings.forEach(building => {
+                log(`  ${building.name}:`);
+                building.rooms.forEach(room => {
+                    log(`    - ${room.name} (icsFile: ${room.icsFile})`);
+                });
+            });
+
+            // Try to load greathall.ics
+            log('\n=== LOADING GREATHALL.ICS ===');
+            const fetchUrl = 'calendars/greathall.ics';
+            log('Fetching: ' + fetchUrl);
+
+            try {
+                const response = await fetch(fetchUrl);
+                log('Response status: ' + response.status);
+
+                if (response.ok) {
+                    const icsData = await response.text();
+                    log('File size: ' + icsData.length + ' bytes');
+
+                    // Parse with ICS parser
+                    log('\n=== PARSING ICS ===');
+                    const parser = new ICSParser();
+                    parser.parseICS(icsData);
+
+                    log('Total events parsed: ' + parser.events.length);
+                    log('Total rooms found: ' + parser.rooms.size);
+                    log('Rooms: ' + Array.from(parser.rooms).join(', '));
+
+                    // Find today's events
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    const tomorrow = new Date(today);
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+
+                    const todayEvents = parser.events.filter(event => {
+                        if (!event.startTime) return false;
+                        const eventDate = new Date(event.startTime);
+                        eventDate.setHours(0, 0, 0, 0);
+                        return eventDate.getTime() === today.getTime();
+                    });
+
+                    log('\n=== TODAY\'S EVENTS (' + today.toDateString() + ') ===');
+                    log('Count: ' + todayEvents.length);
+
+                    todayEvents.forEach((event, i) => {
+                        log(`\nEvent ${i + 1}:`);
+                        log(`  Summary: ${event.summary}`);
+                        log(`  Start: ${event.startTime}`);
+                        log(`  End: ${event.endTime}`);
+                        log(`  Location: "${event.location}"`);
+                        log(`  Room: ${event.room || 'NO ROOM ASSIGNED'}`);
+                    });
+
+                    // Check for the specific events
+                    log('\n=== SEARCHING FOR SPECIFIC EVENTS ===');
+                    const engaging = parser.events.find(e => e.summary && e.summary.includes('Engaging Policy'));
+                    const instant = parser.events.find(e => e.summary && e.summary.includes('Instant Meeting') &&
+                                                        e.startTime && e.startTime.toDateString() === today.toDateString());
+
+                    log('Found "Engaging Policy": ' + (engaging ? 'YES' : 'NO'));
+                    if (engaging) {
+                        log('  Location: "' + engaging.location + '"');
+                        log('  Room: ' + (engaging.room || 'NONE'));
+                        log('  Start: ' + engaging.startTime);
+                    }
+
+                    log('\nFound "Instant Meeting" (today): ' + (instant ? 'YES' : 'NO'));
+                    if (instant) {
+                        log('  Location: "' + instant.location + '"');
+                        log('  Room: ' + (instant.room || 'NONE'));
+                        log('  Start: ' + instant.startTime);
+                    }
+
+                } else {
+                    log('ERROR: Failed to load file');
+                }
+            } catch (error) {
+                log('ERROR: ' + error.message);
+                log(error.stack);
+            }
+        }
+
+        debugGreatHall();
+    </script>
+</body>
+</html>
