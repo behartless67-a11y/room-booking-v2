@@ -12,6 +12,14 @@
   },
   "routes": [
     {
+      "route": "/calendars/*",
+      "allowedRoles": ["anonymous", "authenticated"]
+    },
+    {
+      "route": "/config.js",
+      "allowedRoles": ["anonymous", "authenticated"]
+    },
+    {
       "route": "/*",
       "allowedRoles": ["authenticated"]
     }
@@ -21,10 +29,6 @@
       "redirect": "/.auth/login/aad",
       "statusCode": 302
     }
-  },
-  "navigationFallback": {
-    "rewrite": "/index.html",
-    "exclude": ["*.css", "*.js", "*.ics", "*.png", "*.jpg", "*.gif", "*.svg", "*.ico", "*.json", "/api/*", "/calendars/*"]
   },
   "globalHeaders": {
     "X-Content-Type-Options": "nosniff",
