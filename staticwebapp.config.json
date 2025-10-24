@@ -30,6 +30,9 @@
       "statusCode": 302
     }
   },
+  "navigationFallback": {
+    "rewrite": "/index.html"
+  },
   "globalHeaders": {
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "DENY",
