@@ -12,16 +12,8 @@
   },
   "routes": [
     {
-      "route": "/calendars/*",
-      "allowedRoles": ["anonymous", "authenticated"]
-    },
-    {
-      "route": "/config.js",
-      "allowedRoles": ["anonymous", "authenticated"]
-    },
-    {
       "route": "/*",
-      "allowedRoles": ["authenticated"]
+      "allowedRoles": ["anonymous", "authenticated"]
     }
   ],
   "responseOverrides": {
