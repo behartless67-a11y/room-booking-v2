@@ -2568,7 +2568,7 @@
                 this.rooms = new Set();
             }
 
-            parseICS(icsContent) {
+            parseICS(icsContent, skipRoomFilter = false) {
                 if (!icsContent || typeof icsContent !== 'string') {
                     throw new Error('Invalid ICS content provided');
                 }
@@ -2630,7 +2630,10 @@
                 }
 
                 console.log(`Processed ${eventCount} events, ${this.events.length} valid events added`);
-                this.finalizeRooms();
+
+                if (!skipRoomFilter) {
+                    this.finalizeRooms();
+                }
 
                 return {
                     events: this.events,
@@ -3489,9 +3492,9 @@
                     const icsContent = await response.text();
                     console.log('OOO calendar fetched successfully');
 
-                    // Parse the ICS content
+                    // Parse the ICS content (skip room filtering for OOO events)
                     const oooParser = new ICSParser();
-                    const parseResult = oooParser.parseICS(icsContent);
+                    const parseResult = oooParser.parseICS(icsContent, true);
                     const events = parseResult.events || [];
 
                     console.log(`Parsed ${events.length} OOO events`);
