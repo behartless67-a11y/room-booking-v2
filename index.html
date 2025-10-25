@@ -3470,13 +3470,7 @@
                     console.log('🔍 Loading Out of Office calendar...');
                     console.log('🔍 OOO Config:', this.config.outOfOfficeCalendar);
 
-                    const oooList = document.getElementById('oooList');
                     const oooBtn = document.getElementById('oooBtn');
-
-                    if (!oooList) {
-                        console.error('❌ OOO list element not found');
-                        return;
-                    }
 
                     if (!oooBtn) {
                         console.error('❌ OOO button element not found');
@@ -3485,7 +3479,10 @@
 
                     if (!this.config.outOfOfficeCalendar || !this.config.outOfOfficeCalendar.enabled) {
                         console.log('❌ OOO calendar not configured');
-                        oooList.innerHTML = '<span class="ooo-empty">Not configured</span>';
+                        const weekView = document.getElementById('oooWeekView');
+                        if (weekView) {
+                            weekView.innerHTML = '<span class="ooo-empty">Not configured</span>';
+                        }
                         return;
                     }
 
