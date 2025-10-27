@@ -2304,11 +2304,7 @@
                     <p class="header-subtitle">Frank Batten School Digital Tools</p>
                 </div>
                 <div class="header-right">
-                    <div class="user-info" id="headerUserInfo">
-                        <span class="user-name">Loading...</span>
-                        <span class="user-role"></span>
-                    </div>
-                    <button class="sign-out-btn" onclick="window.location.href='/.auth/logout'">Sign Out</button>
+                    <!-- Authentication disabled -->
                 </div>
             </div>
         </header>
@@ -2554,7 +2550,8 @@
         }
 
         // Load user info when page loads
-        document.addEventListener('DOMContentLoaded', loadHeaderUserInfo);
+        // Authentication disabled - no longer loading user info
+        // document.addEventListener('DOMContentLoaded', loadHeaderUserInfo);
 
         // Add error handling for config loading
         if (typeof window.DashboardConfig === 'undefined') {
