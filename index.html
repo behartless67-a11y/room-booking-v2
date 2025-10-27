@@ -3625,9 +3625,9 @@
                         // Find events that were just added and have no room assigned
                         let assignedCount = 0;
                         this.parser.events.forEach(event => {
-                            // ALWAYS assign room based on calendar source, regardless of location field
-                            // This ensures all events from a room calendar show up for that room
-                            const needsAssignment = true;
+                            // Check for events with no room OR events with empty location fields
+                            const hasEmptyLocation = event.location !== undefined && (!event.location || !event.location.trim());
+                            const needsAssignment = !event.room || hasEmptyLocation;
 
                             // Debug for ALL events when loading greathall
                             if (fileName.toLowerCase().includes('greathall') && needsAssignment) {
