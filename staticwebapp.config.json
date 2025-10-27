@@ -12,8 +12,40 @@
   },
   "routes": [
     {
-      "route": "/*",
+      "route": "/calendars/*",
       "allowedRoles": ["anonymous", "authenticated"]
+    },
+    {
+      "route": "/config.js",
+      "allowedRoles": ["anonymous", "authenticated"]
+    },
+    {
+      "route": "/*.css",
+      "allowedRoles": ["anonymous", "authenticated"]
+    },
+    {
+      "route": "/*.js",
+      "allowedRoles": ["anonymous", "authenticated"]
+    },
+    {
+      "route": "/*.ico",
+      "allowedRoles": ["anonymous", "authenticated"]
+    },
+    {
+      "route": "/*.png",
+      "allowedRoles": ["anonymous", "authenticated"]
+    },
+    {
+      "route": "/*.jpg",
+      "allowedRoles": ["anonymous", "authenticated"]
+    },
+    {
+      "route": "/*.svg",
+      "allowedRoles": ["anonymous", "authenticated"]
+    },
+    {
+      "route": "/*",
+      "allowedRoles": ["authenticated"]
     }
   ],
   "responseOverrides": {
