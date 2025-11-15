@@ -23,61 +23,6 @@ RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU
 END:DAYLIGHT
 END:VTIMEZONE
 BEGIN:VEVENT
-SUMMARY:Downs\, Heather L. (hld8m)
-DTSTART;VALUE=DATE:20251114
-DTEND;VALUE=DATE:20251115
-X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
-X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
- vent Template
-DTSTAMP:20251114T071458Z
-CATEGORIES:Staff OOO
-UID:http://uid.trumba.com/event/191120220
-X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d191120220
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:Licata\, Gianpaolo Francesco (yvq4ez)
-LOCATION:FBS-StaffOOO
-DTSTART;VALUE=DATE:20251114
-DTEND;VALUE=DATE:20251115
-X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
-X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
- vent Template
-DTSTAMP:20251114T071458Z
-CATEGORIES:Staff OOO
-UID:http://uid.trumba.com/event/192170234
-X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d192170234
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:Nelson\, Kristine L (kln8n)
-LOCATION:FBS-StaffOOO
-DTSTART;TZID=America/New_York:20251114T080000
-DTEND;TZID=America/New_York:20251114T170000
-X-MICROSOFT-CDO-ALLDAYEVENT:FALSE
-X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
- vent Template
-DTSTAMP:20251114T071458Z
-CATEGORIES:Staff OOO
-UID:http://uid.trumba.com/event/193130884
-X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d193130884
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:Flattery\, Sean Michael (yzm8ug)
-LOCATION:FBS-StaffOOO
-DTSTART;TZID=America/New_York:20251114T133000
-DTEND;TZID=America/New_York:20251114T170000
-X-MICROSOFT-CDO-ALLDAYEVENT:FALSE
-X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
- vent Template
-DTSTAMP:20251114T071458Z
-CATEGORIES:Staff OOO
-UID:http://uid.trumba.com/event/192272222
-X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d192272222
-END:VEVENT
-BEGIN:VEVENT
 SUMMARY:Nelson\, Kristine L (kln8n)
 LOCATION:FBS-StaffOOO
 DTSTART;TZID=America/New_York:20251118T090000
