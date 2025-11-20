@@ -79,11 +79,13 @@ This repository contains comprehensive documentation across multiple files:
 ### Phase 2: GitHub Repository Setup
 **Goal**: Establish proper version control and collaboration
 
+**Current Repository**: https://github.com/behartless67-a11y/room-booking-v2
+
 **Repository Structure Setup**:
 ```bash
 # Initialize repository
 git init
-git remote add origin https://github.com/BattenIT/RoomTool.git
+git remote add origin https://github.com/behartless67-a11y/room-booking-v2.git
 
 # Essential files to include
 echo "node_modules/" > .gitignore
@@ -321,6 +323,93 @@ For enhanced security, contact Judy to enable Managed Identity:
 - Azure handles authentication automatically
 - More secure than storing secrets in app settings
 
+### Phase 5: Analytics & Usage Tracking (CURRENT)
+**Goal**: Track user behavior and room popularity with Azure Application Insights
+
+**Analytics Implementation**:
+
+1. **Azure Application Insights Setup**
+   - **Instrumentation Key**: `99b03178-5fa4-40a6-8d6c-9023f5dca71b`
+   - **Connection**: `InstrumentationKey=99b03178-5fa4-40a6-8d6c-9023f5dca71b;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/`
+   - **SDK**: JavaScript SDK loaded from CDN (https://js.monitor.azure.com/scripts/b/ai.2.min.js)
+   - **Data Endpoint**: https://dc.services.visualstudio.com/v2/track
+
+2. **Implementation Components**
+   - **[analytics.js](analytics.js)**: Core tracking engine with BattenAnalytics class
+   - **[analytics-dashboard.html](analytics-dashboard.html)**: Visualization dashboard for analytics data
+   - **[ANALYTICS-SETUP.md](ANALYTICS-SETUP.md)**: Complete setup and usage guide
+   - **Analytics Button**: Orange button in main dashboard header (index.html)
+
+3. **What Gets Tracked**
+   - **Page Views**: Automatic tracking of all page visits
+   - **View Mode Changes**: When users switch between day/week/month views
+   - **Room Views**: Which rooms users are viewing (with timestamp and day/hour)
+   - **Dashboard Views**: Which dashboard type is being used (main/advanced/simple)
+   - **Event Clicks**: When users click on calendar events
+   - **Room Searches**: Search terms and result counts
+   - **Session Duration**: How long users stay on the site
+   - **Errors**: Any JavaScript errors that occur
+
+4. **Technical Configuration**
+   - **CSP Headers**: Updated to allow Application Insights domains:
+     - `https://js.monitor.azure.com` (SDK)
+     - `https://*.in.applicationinsights.azure.com` (ingestion)
+     - `https://*.livediagnostics.monitor.azure.com` (live metrics)
+     - `https://dc.services.visualstudio.com` (telemetry endpoint)
+   - **Fallback Mode**: Console-only logging if SDK fails to load
+   - **Privacy**: No PII collected, anonymous usage patterns only
+
+5. **Viewing Analytics Data**
+
+   **In Azure Portal:**
+   ```
+   Go to: Application Insights → Logs
+
+   # Most viewed rooms
+   customEvents
+   | where name == "RoomViewed"
+   | summarize views = count() by tostring(customDimensions.roomName)
+   | order by views desc
+
+   # Peak usage hours
+   customEvents
+   | where name == "DashboardViewed"
+   | extend hour = datetime_part("hour", timestamp)
+   | summarize visits = count() by hour
+   | order by hour asc
+
+   # View mode preferences
+   customEvents
+   | where name == "ViewModeChanged"
+   | summarize switches = count() by tostring(customDimensions.toMode)
+   | order by switches desc
+   ```
+
+   **In Analytics Dashboard:**
+   - Click "Analytics" button in header
+   - Currently shows "Setup Required" for stats (mock data for charts)
+   - Real data integration requires API endpoint development (future enhancement)
+
+6. **Data Flow Timeline**
+   - **Immediate**: SDK loads and starts tracking locally
+   - **5-10 minutes**: Data appears in Azure Application Insights
+   - **Real-time**: View in Azure Portal → Live Metrics
+
+7. **Cost & Privacy**
+   - **Free Tier**: First 5 GB/month free
+   - **Expected Usage**: <1000 visits/day stays within free tier
+   - **Data Retention**: 90 days (default, configurable)
+   - **GDPR Compliance**: Yes, no PII collected
+
+8. **Files Modified for Analytics**
+   - `analytics.js`: Created - main tracking logic
+   - `analytics-dashboard.html`: Created - visualization page
+   - `index.html`: Updated - added Analytics button and tracking calls
+   - `staticwebapp.config.json`: Updated - CSP headers for App Insights domains
+   - `api/HealthCheck/`: Created - minimal function to enable App Insights integration
+   - `api/host.json`: Created - App Insights configuration for Azure Functions
+   - `.github/workflows/azure-static-web-apps-*.yml`: Updated - api_location to deploy functions
+
 ## Support & Maintenance
 
 For ongoing maintenance:
@@ -333,5 +422,6 @@ For ongoing maintenance:
 
 **Contact**:
 - **Authentication Issues**: Judy or UVA IT Azure team
-- **Application Issues**: GitHub Issues on BattenIT/RoomTool repository
+- **Application Issues**: GitHub Issues on behartless67-a11y/room-booking-v2 repository
+- **Analytics Issues**: Check Azure Portal → Application Insights → Logs
 - **Developer**: Ben Hartless (bh4hb@virginia.edu)
