@@ -187,6 +187,25 @@
             color: #d1d5db;
         }
 
+        .analytics-btn {
+            font-family: 'Inter', sans-serif;
+            background: #232D4B;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 150ms;
+            margin-right: 0.5rem;
+        }
+
+        .analytics-btn:hover {
+            background: #1a2338;
+            transform: translateY(-1px);
+        }
+
         .sign-out-btn {
             font-family: 'Inter', sans-serif;
             background: #E57200;
@@ -2289,6 +2308,9 @@
             }
         }
     </style>
+
+    <!-- Analytics Integration -->
+    <script src="analytics.js"></script>
 </head>
 <body>
     <div class="container">
@@ -2304,7 +2326,7 @@
                     <p class="header-subtitle">Frank Batten School Digital Tools</p>
                 </div>
                 <div class="header-right">
-                    <!-- Authentication disabled -->
+                    <button class="analytics-btn" onclick="window.location.href='analytics-dashboard.html'">📊 Analytics</button>
                 </div>
             </div>
         </header>
@@ -3178,6 +3200,11 @@
                 // Start automatic refresh every 30 seconds
                 this.startAutoRefresh();
                 console.log('🚨 INIT COMPLETED');
+
+                // Track dashboard view
+                if (window.BattenAnalytics) {
+                    window.BattenAnalytics.trackDashboardView('main');
+                }
             }
             
             bindElements() {
@@ -3744,8 +3771,14 @@
             }
             
             switchView(viewType) {
+                const oldView = this.currentView;
                 this.currentView = viewType;
-                
+
+                // Track view mode change
+                if (window.BattenAnalytics && oldView !== viewType) {
+                    window.BattenAnalytics.trackViewModeChange(oldView, viewType);
+                }
+
                 // Update button states
                 document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
                 document.getElementById(`${viewType}Btn`).classList.add('active');
