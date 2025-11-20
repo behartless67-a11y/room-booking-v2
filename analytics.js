@@ -13,8 +13,7 @@ class BattenAnalytics {
 
     initialize() {
         // Application Insights Instrumentation Key
-        // This will be replaced with your actual key from Azure Portal
-        const instrumentationKey = window.APPINSIGHTS_INSTRUMENTATION_KEY || 'YOUR_INSTRUMENTATION_KEY_HERE';
+        const instrumentationKey = window.APPINSIGHTS_INSTRUMENTATION_KEY || '99b03178-5fa4-40a6-8d6c-9023f5dca71b';
 
         if (!instrumentationKey || instrumentationKey === 'YOUR_INSTRUMENTATION_KEY_HERE') {
             console.log('📊 Analytics: Application Insights key not configured');
