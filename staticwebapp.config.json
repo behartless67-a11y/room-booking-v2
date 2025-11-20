@@ -25,6 +25,6 @@
   "globalHeaders": {
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "DENY",
-    "Content-Security-Policy": "default-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.azurewebsites.net https://*.azurestaticapps.net https://*.virginia.edu https://*.office365.com https://*.trumba.com https://fonts.googleapis.com https://fonts.gstatic.com https://js.monitor.azure.com https://*.in.applicationinsights.azure.com https://*.livediagnostics.monitor.azure.com data: blob:;"
+    "Content-Security-Policy": "default-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.azurewebsites.net https://*.azurestaticapps.net https://*.virginia.edu https://*.office365.com https://*.trumba.com https://fonts.googleapis.com https://fonts.gstatic.com https://js.monitor.azure.com https://*.in.applicationinsights.azure.com https://*.livediagnostics.monitor.azure.com https://dc.services.visualstudio.com data: blob:;"
   }
 }
