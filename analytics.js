@@ -7,57 +7,79 @@ class BattenAnalytics {
         this.appInsights = null;
         this.sessionStartTime = Date.now();
 
-        // Initialize Application Insights if connection string is available
+        // Initialize Application Insights
         this.initialize();
     }
 
     initialize() {
-        // Application Insights connection string will be injected via Azure Static Web Apps configuration
-        // For now, we'll set it up to work with environment variables
-        const connectionString = window.APPINSIGHTS_CONNECTION_STRING || null;
+        // Application Insights Instrumentation Key
+        // This will be replaced with your actual key from Azure Portal
+        const instrumentationKey = window.APPINSIGHTS_INSTRUMENTATION_KEY || 'YOUR_INSTRUMENTATION_KEY_HERE';
 
-        if (!connectionString) {
-            console.log('📊 Analytics: Application Insights not configured (running locally)');
-            // In local mode, log events to console instead
+        if (!instrumentationKey || instrumentationKey === 'YOUR_INSTRUMENTATION_KEY_HERE') {
+            console.log('📊 Analytics: Application Insights key not configured');
+            console.log('📊 Analytics: Running in console-only mode');
+            // Enable console logging mode
             this.enabled = true;
+            this.setupConsoleMode();
             return;
         }
 
         try {
-            // Initialize Application Insights SDK
-            const snippet = {
-                config: {
-                    connectionString: connectionString,
-                    enableAutoRouteTracking: true,
-                    enableCorsCorrelation: true,
-                    enableRequestHeaderTracking: true,
-                    enableResponseHeaderTracking: true,
-                    disableFetchTracking: false,
-                    enableAjaxPerfTracking: true
-                }
-            };
-
-            // Load App Insights SDK
-            this.loadAppInsightsSDK(snippet);
+            // Load Application Insights SDK from CDN
+            this.loadAppInsightsScript(instrumentationKey);
             this.enabled = true;
-            console.log('📊 Analytics: Application Insights initialized');
+            console.log('📊 Analytics: Application Insights SDK loading...');
         } catch (error) {
             console.error('📊 Analytics initialization failed:', error);
+            this.setupConsoleMode();
         }
     }
 
-    loadAppInsightsSDK(snippet) {
-        // This will be replaced with actual Application Insights SDK loading
-        // For now, create a mock implementation that logs to console
+    loadAppInsightsScript(instrumentationKey) {
+        // Application Insights JavaScript SDK snippet
+        const sdkScript = document.createElement('script');
+        sdkScript.type = 'text/javascript';
+        sdkScript.async = true;
+        sdkScript.src = 'https://js.monitor.azure.com/scripts/b/ai.2.min.js';
+
+        sdkScript.onload = () => {
+            // Initialize App Insights after SDK loads
+            const snippet = {
+                config: {
+                    instrumentationKey: instrumentationKey,
+                    enableAutoRouteTracking: true,
+                    disableFetchTracking: false,
+                    enableCorsCorrelation: true,
+                    enableRequestHeaderTracking: true,
+                    enableResponseHeaderTracking: true,
+                    autoTrackPageVisitTime: true,
+                    disableAjaxTracking: false
+                }
+            };
+
+            // Initialize ApplicationInsights
+            this.appInsights = new Microsoft.ApplicationInsights.ApplicationInsights(snippet);
+            this.appInsights.loadAppInsights();
+            this.appInsights.trackPageView();
+
+            console.log('📊 Analytics: Application Insights SDK loaded successfully');
+        };
+
+        document.head.appendChild(sdkScript);
+    }
+
+    setupConsoleMode() {
+        // Create mock implementation that logs to console
         this.appInsights = {
-            trackPageView: (properties) => {
-                console.log('📊 Page View:', properties);
+            trackPageView: (data) => {
+                console.log('📊 Page View:', data?.name || window.location.pathname);
             },
-            trackEvent: (event) => {
-                console.log('📊 Event:', event.name, event.properties);
+            trackEvent: (data) => {
+                console.log('📊 Event:', data.name, data.properties);
             },
-            trackMetric: (metric) => {
-                console.log('📊 Metric:', metric.name, metric.average);
+            trackMetric: (data) => {
+                console.log('📊 Metric:', data.name, data.average);
             }
         };
     }
@@ -183,9 +205,8 @@ class BattenAnalytics {
     }
 
     // Get analytics data (for analytics dashboard)
-    // This will fetch data from Application Insights API
     async getAnalyticsData(timeRange = '7d') {
-        // This will be implemented to fetch from Application Insights API
+        // This would fetch from Application Insights API
         // For now, return mock data structure
         return {
             visitors: {
