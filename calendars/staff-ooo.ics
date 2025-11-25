@@ -1,5 +1,5 @@
 BEGIN:VCALENDAR
-PRODID:-//Trumba Corporation//Trumba Calendar Services 0.11.25120//EN
+PRODID:-//Trumba Corporation//Trumba Calendar Services 0.11.25125//EN
 VERSION:2.0
 CALSCALE:GREGORIAN
 X-WR-CALNAME:Staff OOO
@@ -48,20 +48,6 @@ CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/193130885
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
  ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d193130885
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:Outten\, Mark (wmo4b)
-LOCATION:FBS-StaffOOO
-DTSTART;VALUE=DATE:20251124
-DTEND;VALUE=DATE:20251125
-X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
-X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
- vent Template
-DTSTAMP:20251124T071746Z
-CATEGORIES:Staff OOO
-UID:http://uid.trumba.com/event/193376508
-X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d193376508
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:Outten\, Mark (wmo4b)
