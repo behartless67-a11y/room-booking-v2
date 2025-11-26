@@ -23,61 +23,6 @@ RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU
 END:DAYLIGHT
 END:VTIMEZONE
 BEGIN:VEVENT
-SUMMARY:Downs\, Heather L. (hld8m)
-DTSTART;VALUE=DATE:20251124
-DTEND;VALUE=DATE:20251126
-X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
-X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
- vent Template
-DTSTAMP:20251125T071843Z
-CATEGORIES:Staff OOO
-UID:http://uid.trumba.com/event/193539704
-X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d193539704
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:McMullin\, Michael (hcx3mz)
-LOCATION:FBS-StaffOOO
-DTSTART;VALUE=DATE:20251124
-DTEND;VALUE=DATE:20251126
-X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
-X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
- vent Template
-DTSTAMP:20251125T071843Z
-CATEGORIES:Staff OOO
-UID:http://uid.trumba.com/event/193130885
-X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d193130885
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:Outten\, Mark (wmo4b)
-LOCATION:FBS-StaffOOO
-DTSTART;VALUE=DATE:20251125
-DTEND;VALUE=DATE:20251126
-X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
-X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
- vent Template
-DTSTAMP:20251125T071844Z
-CATEGORIES:Staff OOO
-UID:http://uid.trumba.com/event/193376509
-X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d193376509
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:Nelson\, Kristine L (kln8n)
-LOCATION:FBS-StaffOOO
-DTSTART;TZID=America/New_York:20251125T090000
-DTEND;TZID=America/New_York:20251125T170000
-X-MICROSOFT-CDO-ALLDAYEVENT:FALSE
-X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
- vent Template
-DTSTAMP:20251125T071842Z
-CATEGORIES:Staff OOO
-UID:http://uid.trumba.com/event/189356754
-X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d189356754
-END:VEVENT
-BEGIN:VEVENT
 SUMMARY:Cathro\, James (jrc2jc)
 LOCATION:FBS-StaffOOO
 DTSTART;VALUE=DATE:20251126
