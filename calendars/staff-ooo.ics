@@ -162,4 +162,18 @@ UID:http://uid.trumba.com/event/193590984
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
  ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d193590984
 END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Licata\, Gianpaolo Francesco (yvq4ez)
+LOCATION:fbs-ooo
+DTSTART;VALUE=DATE:20260526
+DTEND;VALUE=DATE:20260601
+X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
+X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
+ vent Template
+DTSTAMP:20251127T072032Z
+CATEGORIES:Staff OOO
+UID:http://uid.trumba.com/event/191690323
+X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
+ ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d191690323
+END:VEVENT
 END:VCALENDAR
