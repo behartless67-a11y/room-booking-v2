@@ -520,6 +520,31 @@ Error: Could not find either 'build' or 'build:azure' node under 'scripts' in pa
 - Google Fonts: https://fonts.google.com/
 
 ---
-*Last updated: October 20, 2025*
+
+## December 11, 2025 - Student Lounge 206 Resource Fix
+
+### Issue
+When clicking "Reserve Room" for Student Lounge 206, the Outlook booking form was pre-populating with the wrong resource name (`FBS-Commons-206`) instead of the correct one (`FBS-StudentLounge-206`).
+
+### Fix
+Updated the `roomEmailMap` in `index.html` (line 4315):
+
+```javascript
+// Before
+"Student Lounge 206": "FBS-Commons-206@virginia.edu",
+
+// After
+"Student Lounge 206": "FBS-StudentLounge-206@virginia.edu",
+```
+
+### Commit
+**Hash:** `992522a2`
+**Message:** "Fix Student Lounge 206 reserve room resource name"
+
+### Impact
+Users can now click "Reserve Room" on Student Lounge 206 and have Outlook correctly pre-populate with the `FBS-StudentLounge-206` resource.
+
+---
+*Last updated: December 11, 2025*
 *System Status: ✅ Fully Operational*
 *Design Version: 2.0 (APPExplorer Integrated)*
