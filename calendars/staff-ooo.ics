@@ -23,34 +23,6 @@ RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU
 END:DAYLIGHT
 END:VTIMEZONE
 BEGIN:VEVENT
-SUMMARY:Hartless\, Ben (bh4hb)
-LOCATION:FBS-StaffOOO
-DTSTART;VALUE=DATE:20251212
-DTEND;VALUE=DATE:20251213
-X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
-X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
- vent Template
-DTSTAMP:20251212T080949Z
-CATEGORIES:Staff OOO
-UID:http://uid.trumba.com/event/194533529
-X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d194533529
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:Nelson\, Kristine L (kln8n)
-LOCATION:FBS-StaffOOO
-DTSTART;TZID=America/New_York:20251212T090000
-DTEND;TZID=America/New_York:20251212T170000
-X-MICROSOFT-CDO-ALLDAYEVENT:FALSE
-X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
- vent Template
-DTSTAMP:20251212T080949Z
-CATEGORIES:Staff OOO
-UID:http://uid.trumba.com/event/193539707
-X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d193539707
-END:VEVENT
-BEGIN:VEVENT
 SUMMARY:Nelson\, Kristine L (kln8n)
 LOCATION:FBS-StaffOOO
 DTSTART;TZID=America/New_York:20251216T090000
