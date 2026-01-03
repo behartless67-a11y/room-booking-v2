@@ -23,19 +23,6 @@ RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU
 END:DAYLIGHT
 END:VTIMEZONE
 BEGIN:VEVENT
-SUMMARY:Jeffrey Whelchel - OOO
-DTSTART;VALUE=DATE:20251222
-DTEND;VALUE=DATE:20260103
-X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
-X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
- vent Template
-DTSTAMP:20260102T094636Z
-CATEGORIES:Staff OOO
-UID:http://uid.trumba.com/event/194679937
-X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d194679937
-END:VEVENT
-BEGIN:VEVENT
 SUMMARY:Turner\, Kim (kdt4d)
 LOCATION:FBS-StaffOOO
 DTSTART;VALUE=DATE:20251223
@@ -48,48 +35,6 @@ CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/194793255
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
  ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d194793255
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:Crenshaw\, Bryan A (bac7d)
-LOCATION:FBS-StaffOOO
-DTSTART;VALUE=DATE:20260102
-DTEND;VALUE=DATE:20260103
-X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
-X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
- vent Template
-DTSTAMP:20260102T094636Z
-CATEGORIES:Staff OOO
-UID:http://uid.trumba.com/event/194807220
-X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d194807220
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:Lindqvist\, Craig Selwyn (csl3g)
-LOCATION:Cville
-DTSTART;VALUE=DATE:20260102
-DTEND;VALUE=DATE:20260103
-X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
-X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
- vent Template
-DTSTAMP:20260102T094636Z
-CATEGORIES:Staff OOO
-UID:http://uid.trumba.com/event/194793256
-X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d194793256
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:Outten\, Mark (wmo4b)
-LOCATION:FBS-StaffOOO
-DTSTART;VALUE=DATE:20260102
-DTEND;VALUE=DATE:20260103
-X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
-X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
- vent Template
-DTSTAMP:20260102T094636Z
-CATEGORIES:Staff OOO
-UID:http://uid.trumba.com/event/194651606
-X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d194651606
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:Cathro\, James (jrc2jc)
