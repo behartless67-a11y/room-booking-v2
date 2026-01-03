@@ -30,7 +30,7 @@ DTEND;VALUE=DATE:20260112
 X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
 X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
  vent Template
-DTSTAMP:20260102T094636Z
+DTSTAMP:20260103T094630Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/194793255
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
@@ -44,7 +44,7 @@ DTEND;VALUE=DATE:20260110
 X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
 X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
  vent Template
-DTSTAMP:20260102T094636Z
+DTSTAMP:20260103T094630Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/194793257
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
@@ -57,7 +57,7 @@ DTEND;VALUE=DATE:20260113
 X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
 X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
  vent Template
-DTSTAMP:20260102T094636Z
+DTSTAMP:20260103T094630Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/194533530
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
@@ -71,7 +71,7 @@ DTEND;TZID=America/New_York:20260109T170000
 X-MICROSOFT-CDO-ALLDAYEVENT:FALSE
 X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
  vent Template
-DTSTAMP:20260102T094636Z
+DTSTAMP:20260103T094630Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/194651607
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
@@ -85,7 +85,7 @@ DTEND;VALUE=DATE:20260117
 X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
 X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
  vent Template
-DTSTAMP:20260102T094636Z
+DTSTAMP:20260103T094630Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/194910082
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
@@ -99,10 +99,66 @@ DTEND;VALUE=DATE:20260601
 X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
 X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
  vent Template
-DTSTAMP:20260102T094636Z
+DTSTAMP:20260103T094630Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/191690323
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
  ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d191690323
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Outten\, Mark (wmo4b)
+LOCATION:FBS-StaffOOO
+DTSTART;VALUE=DATE:20260602
+DTEND;VALUE=DATE:20260603
+X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
+X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
+ vent Template
+DTSTAMP:20260103T094630Z
+CATEGORIES:Staff OOO
+UID:http://uid.trumba.com/event/194920610
+X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
+ ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d194920610
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Outten\, Mark (wmo4b)
+LOCATION:FBS-StaffOOO
+DTSTART;VALUE=DATE:20260603
+DTEND;VALUE=DATE:20260604
+X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
+X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
+ vent Template
+DTSTAMP:20260103T094630Z
+CATEGORIES:Staff OOO
+UID:http://uid.trumba.com/event/194920611
+X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
+ ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d194920611
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Outten\, Mark (wmo4b)
+LOCATION:FBS-StaffOOO
+DTSTART;VALUE=DATE:20260604
+DTEND;VALUE=DATE:20260605
+X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
+X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
+ vent Template
+DTSTAMP:20260103T094630Z
+CATEGORIES:Staff OOO
+UID:http://uid.trumba.com/event/194920612
+X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
+ ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d194920612
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Outten\, Mark (wmo4b)
+LOCATION:FBS-StaffOOO
+DTSTART;VALUE=DATE:20260605
+DTEND;VALUE=DATE:20260606
+X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
+X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
+ vent Template
+DTSTAMP:20260103T094630Z
+CATEGORIES:Staff OOO
+UID:http://uid.trumba.com/event/194920613
+X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
+ ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d194920613
 END:VEVENT
 END:VCALENDAR
