@@ -37,20 +37,6 @@ X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
  ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d194793255
 END:VEVENT
 BEGIN:VEVENT
-SUMMARY:Cathro\, James (jrc2jc)
-LOCATION:FBS-StaffOOO
-DTSTART;VALUE=DATE:20260105
-DTEND;VALUE=DATE:20260110
-X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
-X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
- vent Template
-DTSTAMP:20260109T094221Z
-CATEGORIES:Staff OOO
-UID:http://uid.trumba.com/event/194793257
-X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d194793257
-END:VEVENT
-BEGIN:VEVENT
 SUMMARY:Downs\, Heather L. (hld8m)
 DTSTART;VALUE=DATE:20260105
 DTEND;VALUE=DATE:20260113
@@ -62,20 +48,6 @@ CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/194533530
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
  ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d194533530
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:Outten\, Mark (wmo4b)
-LOCATION:FBS-StaffOOO
-DTSTART;TZID=America/New_York:20260109T120000
-DTEND;TZID=America/New_York:20260109T170000
-X-MICROSOFT-CDO-ALLDAYEVENT:FALSE
-X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
- vent Template
-DTSTAMP:20260109T094221Z
-CATEGORIES:Staff OOO
-UID:http://uid.trumba.com/event/194651607
-X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d194651607
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:McMullin\, Michael (hcx3mz)
