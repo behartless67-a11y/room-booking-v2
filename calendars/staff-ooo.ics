@@ -30,7 +30,7 @@ DTEND;VALUE=DATE:20260202
 X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
 X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
  vent Template
-DTSTAMP:20260126T114220Z
+DTSTAMP:20260127T114552Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/196065844
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
@@ -44,11 +44,24 @@ DTEND;TZID=America/New_York:20260130T170000
 X-MICROSOFT-CDO-ALLDAYEVENT:FALSE
 X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
  vent Template
-DTSTAMP:20260126T114221Z
+DTSTAMP:20260127T114552Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/195034414
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
  ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d195034414
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Downs\, Heather L. (hld8m)
+DTSTART;VALUE=DATE:20260202
+DTEND;VALUE=DATE:20260203
+X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
+X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
+ vent Template
+DTSTAMP:20260127T114552Z
+CATEGORIES:Staff OOO
+UID:http://uid.trumba.com/event/196236159
+X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
+ ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d196236159
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:Jeffrey Whelchel - OOO
@@ -57,7 +70,7 @@ DTEND;TZID=America/New_York:20260202T110000
 X-MICROSOFT-CDO-ALLDAYEVENT:FALSE
 X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
  vent Template
-DTSTAMP:20260126T114221Z
+DTSTAMP:20260127T114552Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/195952087
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
@@ -70,11 +83,39 @@ DTEND;VALUE=DATE:20260206
 X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
 X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
  vent Template
-DTSTAMP:20260126T114221Z
+DTSTAMP:20260127T114552Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/195952088
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
  ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d195952088
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Murphy\, Jennett V (tyz3ay)
+LOCATION:FBS-StaffOOO
+DTSTART;VALUE=DATE:20260216
+DTEND;VALUE=DATE:20260217
+X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
+X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
+ vent Template
+DTSTAMP:20260127T114552Z
+CATEGORIES:Staff OOO
+UID:http://uid.trumba.com/event/196236160
+X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
+ ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d196236160
+END:VEVENT
+BEGIN:VEVENT
+SUMMARY:Murphy\, Jennett V (tyz3ay)
+LOCATION:FBS-StaffOOO
+DTSTART;VALUE=DATE:20260228
+DTEND;VALUE=DATE:20260309
+X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
+X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
+ vent Template
+DTSTAMP:20260127T114552Z
+CATEGORIES:Staff OOO
+UID:http://uid.trumba.com/event/196236161
+X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
+ ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d196236161
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:Licata\, Gianpaolo Francesco (yvq4ez)
@@ -84,7 +125,7 @@ DTEND;VALUE=DATE:20260601
 X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
 X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
  vent Template
-DTSTAMP:20260126T114221Z
+DTSTAMP:20260127T114552Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/191690323
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
@@ -98,7 +139,7 @@ DTEND;VALUE=DATE:20260603
 X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
 X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
  vent Template
-DTSTAMP:20260126T114221Z
+DTSTAMP:20260127T114552Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/194920610
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
@@ -112,7 +153,7 @@ DTEND;VALUE=DATE:20260604
 X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
 X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
  vent Template
-DTSTAMP:20260126T114221Z
+DTSTAMP:20260127T114552Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/194920611
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
@@ -126,7 +167,7 @@ DTEND;VALUE=DATE:20260605
 X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
 X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
  vent Template
-DTSTAMP:20260126T114221Z
+DTSTAMP:20260127T114552Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/194920612
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
@@ -140,7 +181,7 @@ DTEND;VALUE=DATE:20260606
 X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
 X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
  vent Template
-DTSTAMP:20260126T114221Z
+DTSTAMP:20260127T114552Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/194920613
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
