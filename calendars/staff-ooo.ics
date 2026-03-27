@@ -6,19 +6,6 @@ X-WR-CALNAME:Staff OOO
 X-WR-TIMEZONE:America/New_York
 METHOD:PUBLISH
 BEGIN:VEVENT
-SUMMARY:Porto\, Nicolo William (cqk8gh)
-DTSTART;VALUE=DATE:20260326
-DTEND;VALUE=DATE:20260327
-X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
-X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
- vent Template
-DTSTAMP:20260326T125056Z
-CATEGORIES:Staff OOO
-UID:http://uid.trumba.com/event/199564785
-X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d199564785
-END:VEVENT
-BEGIN:VEVENT
 SUMMARY:McMullin\, Michael (hcx3mz)
 LOCATION:FBS-StaffOOO
 DTSTART;VALUE=DATE:20260327
