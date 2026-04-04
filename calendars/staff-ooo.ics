@@ -6,20 +6,6 @@ X-WR-CALNAME:Staff OOO
 X-WR-TIMEZONE:America/New_York
 METHOD:PUBLISH
 BEGIN:VEVENT
-SUMMARY:Licata\, Gianpaolo Francesco (yvq4ez)
-LOCATION:FBS-StaffOOO
-DTSTART;VALUE=DATE:20260402
-DTEND;VALUE=DATE:20260404
-X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
-X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
- vent Template
-DTSTAMP:20260403T125749Z
-CATEGORIES:Staff OOO
-UID:http://uid.trumba.com/event/199968857
-X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d199968857
-END:VEVENT
-BEGIN:VEVENT
 SUMMARY:Nelson\, Kristine L (kln8n)
 LOCATION:FBS-StaffOOO
 DTSTART;VALUE=DATE:20260414
