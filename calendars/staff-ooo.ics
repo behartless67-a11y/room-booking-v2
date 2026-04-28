@@ -6,20 +6,6 @@ X-WR-CALNAME:Staff OOO
 X-WR-TIMEZONE:America/New_York
 METHOD:PUBLISH
 BEGIN:VEVENT
-SUMMARY:Outten\, Mark (wmo4b)
-LOCATION:FBS-StaffOOO
-DTSTART;VALUE=DATE:20260427
-DTEND;VALUE=DATE:20260428
-X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
-X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
- vent Template
-DTSTAMP:20260427T154844Z
-CATEGORIES:Staff OOO
-UID:http://uid.trumba.com/event/201729503
-X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d201729503
-END:VEVENT
-BEGIN:VEVENT
 SUMMARY:Licata\, Gianpaolo Francesco (yvq4ez)
 LOCATION:fbs-ooo
 DTSTART;VALUE=DATE:20260526
