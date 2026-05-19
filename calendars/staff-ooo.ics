@@ -1,5 +1,5 @@
 BEGIN:VCALENDAR
-PRODID:-//Trumba Corporation//Trumba Calendar Services 0.11.25718//EN
+PRODID:-//Trumba Corporation//Trumba Calendar Services 0.11.25719//EN
 VERSION:2.0
 CALSCALE:GREGORIAN
 X-WR-CALNAME:Staff OOO
@@ -34,7 +34,7 @@ DTSTAMP:20260519T164719Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/203619943
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d203619943
+ ages/CollabHome.aspx?trumbaEmbed=view%3Devent%26eventid%3D203619943
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:Licata\, Gianpaolo Francesco (yvq4ez)
@@ -48,7 +48,7 @@ DTSTAMP:20260519T164719Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/191690323
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d191690323
+ ages/CollabHome.aspx?trumbaEmbed=view%3Devent%26eventid%3D191690323
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:Flattery\, Sean Michael (yzm8ug)
@@ -62,7 +62,7 @@ DTSTAMP:20260519T164719Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/200744966
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d200744966
+ ages/CollabHome.aspx?trumbaEmbed=view%3Devent%26eventid%3D200744966
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:Outten\, Mark (wmo4b)
@@ -76,7 +76,7 @@ DTSTAMP:20260519T164719Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/202816448
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d202816448
+ ages/CollabHome.aspx?trumbaEmbed=view%3Devent%26eventid%3D202816448
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:Outten\, Mark (wmo4b)
@@ -90,7 +90,7 @@ DTSTAMP:20260519T164719Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/194920610
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d194920610
+ ages/CollabHome.aspx?trumbaEmbed=view%3Devent%26eventid%3D194920610
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:Nelson\, Kristine L (kln8n)
@@ -104,7 +104,7 @@ DTSTAMP:20260519T164719Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/203854301
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d203854301
+ ages/CollabHome.aspx?trumbaEmbed=view%3Devent%26eventid%3D203854301
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:Outten\, Mark (wmo4b)
@@ -118,7 +118,7 @@ DTSTAMP:20260519T164719Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/194920611
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d194920611
+ ages/CollabHome.aspx?trumbaEmbed=view%3Devent%26eventid%3D194920611
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:Outten\, Mark (wmo4b)
@@ -132,7 +132,7 @@ DTSTAMP:20260519T164719Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/194920612
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d194920612
+ ages/CollabHome.aspx?trumbaEmbed=view%3Devent%26eventid%3D194920612
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:Outten\, Mark (wmo4b)
@@ -146,7 +146,7 @@ DTSTAMP:20260519T164719Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/194920613
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d194920613
+ ages/CollabHome.aspx?trumbaEmbed=view%3Devent%26eventid%3D194920613
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:Nelson\, Kristine L (kln8n)
@@ -160,7 +160,7 @@ DTSTAMP:20260519T164719Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/203854302
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d203854302
+ ages/CollabHome.aspx?trumbaEmbed=view%3Devent%26eventid%3D203854302
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:Nelson\, Kristine L (kln8n)
@@ -174,7 +174,7 @@ DTSTAMP:20260519T164719Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/203854303
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d203854303
+ ages/CollabHome.aspx?trumbaEmbed=view%3Devent%26eventid%3D203854303
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:Nelson\, Kristine L (kln8n)
@@ -188,7 +188,7 @@ DTSTAMP:20260519T164720Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/203854304
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d203854304
+ ages/CollabHome.aspx?trumbaEmbed=view%3Devent%26eventid%3D203854304
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:Jeffrey Whelchel - OOO
@@ -201,7 +201,7 @@ DTSTAMP:20260519T164720Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/199094318
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d199094318
+ ages/CollabHome.aspx?trumbaEmbed=view%3Devent%26eventid%3D199094318
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:Flattery\, Sean Michael (yzm8ug)
@@ -215,6 +215,6 @@ DTSTAMP:20260519T164720Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/200744967
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3devent%26eventid%3d200744967
+ ages/CollabHome.aspx?trumbaEmbed=view%3Devent%26eventid%3D200744967
 END:VEVENT
 END:VCALENDAR
