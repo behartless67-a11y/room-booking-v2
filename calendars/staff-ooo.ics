@@ -23,20 +23,6 @@ RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU
 END:DAYLIGHT
 END:VTIMEZONE
 BEGIN:VEVENT
-SUMMARY:Cook\, Ellen C (ecc5qn)
-LOCATION:FBS-StaffOOO
-DTSTART;VALUE=DATE:20260518
-DTEND;VALUE=DATE:20260530
-X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
-X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
- vent Template
-DTSTAMP:20260529T175320Z
-CATEGORIES:Staff OOO
-UID:http://uid.trumba.com/event/203619943
-X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3Devent%26eventid%3D203619943
-END:VEVENT
-BEGIN:VEVENT
 SUMMARY:Licata\, Gianpaolo Francesco (yvq4ez)
 LOCATION:fbs-ooo\; FBS-StaffOOO
 DTSTART;VALUE=DATE:20260523
@@ -49,20 +35,6 @@ CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/191690323
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
  ages/CollabHome.aspx?trumbaEmbed=view%3Devent%26eventid%3D191690323
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:Flattery\, Sean Michael (yzm8ug)
-LOCATION:FBS-StaffOOO
-DTSTART;VALUE=DATE:20260528
-DTEND;VALUE=DATE:20260530
-X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
-X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
- vent Template
-DTSTAMP:20260529T175321Z
-CATEGORIES:Staff OOO
-UID:http://uid.trumba.com/event/200744966
-X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3Devent%26eventid%3D200744966
 END:VEVENT
 BEGIN:VEVENT
 SUMMARY:Outten\, Mark (wmo4b)
