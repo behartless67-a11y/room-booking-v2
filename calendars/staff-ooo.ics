@@ -12,7 +12,7 @@ DTEND;VALUE=DATE:20260619
 X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
 X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
  vent Template
-DTSTAMP:20260615T174311Z
+DTSTAMP:20260616T174057Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/199094318
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
@@ -25,7 +25,7 @@ DTEND;VALUE=DATE:20260620
 X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
 X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
  vent Template
-DTSTAMP:20260615T174311Z
+DTSTAMP:20260616T174057Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/204359398
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
@@ -39,55 +39,7 @@ DTEND;VALUE=DATE:20260706
 X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
 X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
  vent Template
-DTSTAMP:20260615T174311Z
-CATEGORIES:Staff OOO
-UID:http://uid.trumba.com/event/200744967
-X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3Devent%26eventid%3D200744967
-END:VEVENT
-END:VCALENDAR
-BEGIN:VCALENDAR
-PRODID:-//Trumba Corporation//Trumba Calendar Services 0.11.25810//EN
-VERSION:2.0
-CALSCALE:GREGORIAN
-X-WR-CALNAME:Staff OOO
-X-WR-TIMEZONE:America/New_York
-METHOD:PUBLISH
-BEGIN:VEVENT
-SUMMARY:Jeffrey Whelchel - OOO
-DTSTART;VALUE=DATE:20260617
-DTEND;VALUE=DATE:20260619
-X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
-X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
- vent Template
-DTSTAMP:20260615T174311Z
-CATEGORIES:Staff OOO
-UID:http://uid.trumba.com/event/199094318
-X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3Devent%26eventid%3D199094318
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:Juneteenth
-DTSTART;VALUE=DATE:20260619
-DTEND;VALUE=DATE:20260620
-X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
-X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
- vent Template
-DTSTAMP:20260615T174311Z
-CATEGORIES:Staff OOO
-UID:http://uid.trumba.com/event/204359398
-X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
- ages/CollabHome.aspx?trumbaEmbed=view%3Devent%26eventid%3D204359398
-END:VEVENT
-BEGIN:VEVENT
-SUMMARY:Flattery\, Sean Michael (yzm8ug)
-LOCATION:FBS-StaffOOO
-DTSTART;VALUE=DATE:20260620
-DTEND;VALUE=DATE:20260706
-X-MICROSOFT-CDO-ALLDAYEVENT:TRUE
-X-TRUMBA-CUSTOMFIELD;NAME="Event Type";ID=21;TYPE=number:Batten School E
- vent Template
-DTSTAMP:20260615T174311Z
+DTSTAMP:20260616T174057Z
 CATEGORIES:Staff OOO
 UID:http://uid.trumba.com/event/200744967
 X-TRUMBA-LINK:https://myuva.sharepoint.com/sites/UVABattenIntranet/SiteP
